@@ -112,7 +112,7 @@
             this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.panelPaso2.Controls.Add(this.textboxPaso2_DNI_Reserva, 2, 1);
             this.panelPaso2.Controls.Add(this.labelPaso2_DNI_Reserva, 1, 1);
-            this.panelPaso2.Controls.Add(this.onscreenkeyboardDNI, 2, 2);
+            this.panelPaso2.Controls.Add(this.onscreenkeyboardDNI, 3, 2);
             this.panelPaso2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPaso2.Location = new System.Drawing.Point(0, 0);
             this.panelPaso2.Name = "panelPaso2";
@@ -128,11 +128,12 @@
             // 
             this.textboxPaso2_DNI_Reserva.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.textboxPaso2_DNI_Reserva.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.textboxPaso2_DNI_Reserva.Enabled = false;
             this.textboxPaso2_DNI_Reserva.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.textboxPaso2_DNI_Reserva.Location = new System.Drawing.Point(460, 154);
+            this.textboxPaso2_DNI_Reserva.Location = new System.Drawing.Point(452, 154);
             this.textboxPaso2_DNI_Reserva.MaxLength = 8;
             this.textboxPaso2_DNI_Reserva.Name = "textboxPaso2_DNI_Reserva";
-            this.textboxPaso2_DNI_Reserva.Size = new System.Drawing.Size(134, 35);
+            this.textboxPaso2_DNI_Reserva.Size = new System.Drawing.Size(150, 35);
             this.textboxPaso2_DNI_Reserva.TabIndex = 2;
             this.textboxPaso2_DNI_Reserva.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -141,7 +142,7 @@
             this.labelPaso2_DNI_Reserva.AutoSize = true;
             this.labelPaso2_DNI_Reserva.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelPaso2_DNI_Reserva.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.labelPaso2_DNI_Reserva.Location = new System.Drawing.Point(199, 151);
+            this.labelPaso2_DNI_Reserva.Location = new System.Drawing.Point(191, 151);
             this.labelPaso2_DNI_Reserva.Name = "labelPaso2_DNI_Reserva";
             this.labelPaso2_DNI_Reserva.Size = new System.Drawing.Size(255, 41);
             this.labelPaso2_DNI_Reserva.TabIndex = 1;
@@ -152,9 +153,9 @@
             // 
             this.onscreenkeyboardDNI.DestinationTextBox = this.textboxPaso2_DNI_Reserva;
             this.onscreenkeyboardDNI.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.onscreenkeyboardDNI.Location = new System.Drawing.Point(460, 195);
+            this.onscreenkeyboardDNI.Location = new System.Drawing.Point(608, 195);
             this.onscreenkeyboardDNI.Name = "onscreenkeyboardDNI";
-            this.onscreenkeyboardDNI.Size = new System.Drawing.Size(134, 146);
+            this.onscreenkeyboardDNI.Size = new System.Drawing.Size(183, 146);
             this.onscreenkeyboardDNI.TabIndex = 3;
             this.onscreenkeyboardDNI.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DNINumeroTipeado);
             // 
@@ -393,13 +394,13 @@
         private System.Windows.Forms.Label labelInicio_LeyendaIniciar;
         private AxWMPLib.AxWindowsMediaPlayer wmInicio_Player;
         private System.Windows.Forms.TableLayoutPanel panelPaso2;
-        private System.Windows.Forms.TextBox textboxPaso2_DNI_Reserva;
         private System.Windows.Forms.Label labelPaso2_DNI_Reserva;
         private System.Windows.Forms.Panel panelUser;
         private System.Windows.Forms.RadioButton radioPaso1_DNI;
         private System.Windows.Forms.RadioButton radioPaso1_Reserva;
         private System.Windows.Forms.PictureBox pictureboxPasosLogoCompaniaSoftware;
         private CS_Control_OnScreenKeyboard_Numeric onscreenkeyboardDNI;
+        private System.Windows.Forms.TextBox textboxPaso2_DNI_Reserva;
     }
 }
 
