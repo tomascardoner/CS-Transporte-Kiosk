@@ -12,7 +12,7 @@ namespace CSTransporteKiosk.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.1.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -94,6 +94,24 @@ namespace CSTransporteKiosk.Properties {
         public global::System.Drawing.Font FontStyle {
             get {
                 return ((global::System.Drawing.Font)(this["FontStyle"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Segoe UI, 15.75pt, style=Bold")]
+        public global::System.Drawing.Font KeyboardNumericNumberFont {
+            get {
+                return ((global::System.Drawing.Font)(this["KeyboardNumericNumberFont"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Segoe UI, 11pt, style=Bold")]
+        public global::System.Drawing.Font KeyboardNumericSpecialFont {
+            get {
+                return ((global::System.Drawing.Font)(this["KeyboardNumericSpecialFont"]));
             }
         }
     }

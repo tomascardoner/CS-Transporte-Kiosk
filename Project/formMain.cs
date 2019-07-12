@@ -28,6 +28,9 @@ namespace CSTransporteKiosk
             // Version del assembly
             labelPasosVersion.Text = My.Application.Info.Version.ToString();
             pictureboxPasosLogoCompaniaSoftware.ImageLocation = Properties.Settings.Default.CompaniaSoftwareLogotipo;
+
+            // Propiedades del teclado numérico en pantalla
+            onscreenkeyboardDNI.Font = My.Settings.KeyboardNumericNumberFont;
         }
 
         private void KeyCombinationManager(object sender, KeyEventArgs e)
@@ -154,6 +157,12 @@ namespace CSTransporteKiosk
         private void ButtonPasoAnterior_Click(object sender, EventArgs e)
         {
             RetrocederPaso();
+        }
+
+        private void DNINumeroTipeado(object sender, KeyPressEventArgs e)
+        {
+            textboxPaso2_DNI_Reserva.Focus();
+            SendKeys.Send(e.KeyChar.ToString());
         }
     }
 }
