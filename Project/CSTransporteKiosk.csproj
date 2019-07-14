@@ -73,6 +73,11 @@
     <Compile Include="My.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ThisMachine.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>ThisMachine.settings</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="..\..\..\framework-csharp\Control_OnScreenKeyboard_Numeric.resx">
       <Link>Control_OnScreenKeyboard_Numeric.resx</Link>
       <DependentUpon>Control_OnScreenKeyboard_Numeric.cs</DependentUpon>
@@ -101,6 +106,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="ThisMachine.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>ThisMachine.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

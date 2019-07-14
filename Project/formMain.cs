@@ -7,6 +7,8 @@ namespace CSTransporteKiosk
     {
         byte pasoActual = 0;
         Boolean porDNI;
+        DateTime logoFirstClickTime = new DateTime(0);
+        DateTime logoSecondClickTime = new DateTime(0);
 
         public formMain()
         {
@@ -159,10 +161,19 @@ namespace CSTransporteKiosk
             RetrocederPaso();
         }
 
-        private void DNINumeroTipeado(object sender, KeyPressEventArgs e)
+        private void SoftwareCompanyClick(object sender, EventArgs e)
         {
-            textboxPaso2_DNI_Reserva.Focus();
-            SendKeys.Send(e.KeyChar.ToString());
+            if (logoFirstClickTime.Ticks == 0)
+            {
+                logoFirstClickTime = DateTime.Now;
+            }
+            else
+            {
+                if (logoSecondClickTime.Ticks == 0)
+                {
+
+                }
+            }
         }
     }
 }

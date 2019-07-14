@@ -114,5 +114,50 @@ namespace CSTransporteKiosk.Properties {
                 return ((global::System.Drawing.Font)(this["KeyboardNumericSpecialFont"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public byte ExitApplicationIntervalBetweenFirstAndSecondClickInSeconds {
+            get {
+                return ((byte)(this["ExitApplicationIntervalBetweenFirstAndSecondClickInSeconds"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public byte ExitApplicationIntervalBetweenSecondAndThirdClickInSeconds {
+            get {
+                return ((byte)(this["ExitApplicationIntervalBetweenSecondAndThirdClickInSeconds"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public byte ExitApplicationThirdClickDurationInSeconds {
+            get {
+                return ((byte)(this["ExitApplicationThirdClickDurationInSeconds"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public short LugarDuracionPreviaMaxima {
+            get {
+                return ((short)(this["LugarDuracionPreviaMaxima"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public short LugarDuracionPreviaMinima {
+            get {
+                return ((short)(this["LugarDuracionPreviaMinima"]));
+            }
+        }
     }
 }
