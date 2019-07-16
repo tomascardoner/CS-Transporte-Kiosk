@@ -9,7 +9,7 @@ namespace CSTransporteKiosk
     static class Program
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Application for CS-Transporte Kiosk
         /// </summary>
         [STAThread]
         static void Main()

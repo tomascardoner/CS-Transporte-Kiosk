@@ -22,14 +22,14 @@ namespace CSTransporteKiosk
 
         void setAppearance()
         {
-            this.BackColor = My.Settings.MessageBoxBackColor;
+            this.BackColor = Properties.Settings.Default.MessageBoxBackColor;
 
-            labelMessage.ForeColor = My.Settings.MessageBoxForeColor;
-            labelMessage.Font = My.Settings.FontStyle;
+            labelMessage.ForeColor = Properties.Settings.Default.MessageBoxForeColor;
+            labelMessage.Font = Properties.Settings.Default.FontStyle;
 
-            buttonAceptar.BackColor = My.Settings.MessageBoxButtonBackColor;
-            buttonAceptar.ForeColor = My.Settings.MessageBoxButtonForeColor;
-            buttonAceptar.Font = My.Settings.FontStyle;
+            buttonAceptar.BackColor = Properties.Settings.Default.MessageBoxButtonBackColor;
+            buttonAceptar.ForeColor = Properties.Settings.Default.MessageBoxButtonForeColor;
+            buttonAceptar.Font = Properties.Settings.Default.FontStyle;
         }
 
         private void buttonAceptar_Click(object sender, System.EventArgs e)

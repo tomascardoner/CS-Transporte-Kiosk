@@ -5,20 +5,53 @@ namespace CSTransporteKiosk
 {
     public partial class formMain : Form
     {
+        #region "Declarations"
         byte pasoActual = 0;
         Boolean porDNI;
+
+        CardonerSistemas.Database_ADO_SQLServer mDatabase;
+
         DateTime logoFirstClickTime = new DateTime(0);
         DateTime logoSecondClickTime = new DateTime(0);
+        #endregion
 
-        public formMain()
+        #region "Form stuff"
+
+          public formMain()
         {
             InitializeComponent();
         }
 
-        private void formMain_Load(object sender, EventArgs e)
+        private void Form_Load(object sender, EventArgs e)
         {
+            prepararConexionABaseDeDatos();
             setAppearance();
             mostrarPasos();
+        }
+
+        private void prepararConexionABaseDeDatos()
+        {
+            mDatabase = new CardonerSistemas.Database_ADO_SQLServer();
+            mDatabase.applicationName = CardonerSistemas.My.Application.Info.Title;
+            mDatabase.datasource = ThisMachine.Default.DatabaseDatasource;
+            mDatabase.initialCatalog = ThisMachine.Default.DatabaseDatabase;
+            mDatabase.userID = ThisMachine.Default.DatabaseUserID;
+            if (ThisMachine.Default.DatabasePassword.Trim().Length == 0)
+            {
+                mDatabase.password = "";
+            }
+            else
+            {
+                CardonerSistemas.Encrypt_TripleDES decrypter = new CardonerSistemas.Encrypt_TripleDES(CardonerSistemas.Constants.PublicEncryptionPassword);
+                string decryptedPassword = "";
+                if (decrypter.Decrypt(ThisMachine.Default.DatabasePassword, ref decryptedPassword))
+                {
+                    mDatabase.password = decryptedPassword;
+                }
+                decrypter = null;
+            }
+            mDatabase.workstationID = "";
+            mDatabase.CreateConnectionString();
         }
 
         private void setAppearance()
@@ -28,12 +61,32 @@ namespace CSTransporteKiosk
             wmInicio_Player.URL = Properties.Settings.Default.EmpresaVideo;
 
             // Version del assembly
-            labelPasosVersion.Text = My.Application.Info.Version.ToString();
+            labelPasosVersion.Text = CardonerSistemas.My.Application.Info.Version.ToString();
             pictureboxPasosLogoCompaniaSoftware.ImageLocation = Properties.Settings.Default.CompaniaSoftwareLogotipo;
 
             // Propiedades del teclado numérico en pantalla
-            onscreenkeyboardDNI.Font = My.Settings.KeyboardNumericNumberFont;
+            onscreenkeyboardDNI.Font = Properties.Settings.Default.KeyboardNumericNumberFont;
         }
+
+        private void Form_Closing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                if (mDatabase.connection.State != System.Data.ConnectionState.Open)
+                {
+                    mDatabase.connection.Close();
+                    mDatabase = null;
+                }
+            }
+            catch (Exception)
+            {
+                mDatabase = null;
+            }
+        }
+
+        #endregion
+
+        #region "Controls stuff"
 
         private void KeyCombinationManager(object sender, KeyEventArgs e)
         {
@@ -74,6 +127,35 @@ namespace CSTransporteKiosk
             Click_ToStart();
             AvanzarPaso();
         }
+
+        private void ButtonPasoSiguiente_Click(object sender, EventArgs e)
+        {
+            AvanzarPaso();
+        }
+
+        private void ButtonPasoAnterior_Click(object sender, EventArgs e)
+        {
+            RetrocederPaso();
+        }
+
+        private void SoftwareCompanyClick(object sender, EventArgs e)
+        {
+            if (logoFirstClickTime.Ticks == 0)
+            {
+                logoFirstClickTime = DateTime.Now;
+            }
+            else
+            {
+                if (logoSecondClickTime.Ticks == 0)
+                {
+
+                }
+            }
+        }
+
+        #endregion
+
+        #region "Pasos stuff"
 
         private void AvanzarPaso()
         {
@@ -151,28 +233,17 @@ namespace CSTransporteKiosk
             buttonPasoSiguiente.Visible = (pasoActual > 0);
         }
 
-        private void ButtonPasoSiguiente_Click(object sender, EventArgs e)
-        {
-            AvanzarPaso();
-        }
+        #endregion
 
-        private void ButtonPasoAnterior_Click(object sender, EventArgs e)
+        private bool ConnectToDatabase()
         {
-            RetrocederPaso();
-        }
-
-        private void SoftwareCompanyClick(object sender, EventArgs e)
-        {
-            if (logoFirstClickTime.Ticks == 0)
+            if (mDatabase.connection == null || mDatabase.connection.State != System.Data.ConnectionState.Open)
             {
-                logoFirstClickTime = DateTime.Now;
+                return mDatabase.Connect();
             }
             else
             {
-                if (logoSecondClickTime.Ticks == 0)
-                {
-
-                }
+                return true;
             }
         }
     }

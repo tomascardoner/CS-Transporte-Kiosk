@@ -12,11 +12,11 @@ GO
 -- Description:	Busca todas las personas asociadas a una reserva,
 --              dentro de los próximos (x) minutos, a partir del DNI de una de ellas
 -- =============================================
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_BuscarPersonasPorDNI') AND type in (N'P', N'PC'))
-	 DROP PROCEDURE usp_BuscarPersonasPorDNI
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_ReservasPorDocumento') AND type in (N'P', N'PC'))
+	 DROP PROCEDURE usp_ReservasPorDocumento
 GO
 
-CREATE PROCEDURE usp_BuscarPersonasPorDNI
+CREATE PROCEDURE usp_ReservasPorDocumento
 	@IDLugar int,
 	@LugarDuracionPreviaMaxima smallint,
     @LugarDuracionPreviaMinima smallint,

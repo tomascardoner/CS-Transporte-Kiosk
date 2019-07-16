@@ -33,6 +33,8 @@
             this.panelPasos = new System.Windows.Forms.TableLayoutPanel();
             this.pictureboxLogoEmpresa = new System.Windows.Forms.PictureBox();
             this.panelUser = new System.Windows.Forms.Panel();
+            this.panelPaso3 = new System.Windows.Forms.TableLayoutPanel();
+            this.listviewPaso3Pasajeros = new System.Windows.Forms.ListView();
             this.panelPaso2 = new System.Windows.Forms.TableLayoutPanel();
             this.textboxPaso2_DNI_Reserva = new System.Windows.Forms.TextBox();
             this.labelPaso2_DNI_Reserva = new System.Windows.Forms.Label();
@@ -50,11 +52,10 @@
             this.panelInicio = new System.Windows.Forms.TableLayoutPanel();
             this.labelInicio_LeyendaIniciar = new System.Windows.Forms.Label();
             this.wmInicio_Player = new AxWMPLib.AxWindowsMediaPlayer();
-            this.panelPaso3 = new System.Windows.Forms.TableLayoutPanel();
-            this.listviewPaso3Pasajeros = new System.Windows.Forms.ListView();
             this.panelPasos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureboxLogoEmpresa)).BeginInit();
             this.panelUser.SuspendLayout();
+            this.panelPaso3.SuspendLayout();
             this.panelPaso2.SuspendLayout();
             this.panelPaso1.SuspendLayout();
             this.panelPasosNavegacion.SuspendLayout();
@@ -62,7 +63,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureboxPasosLogoCompaniaSoftware)).BeginInit();
             this.panelInicio.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.wmInicio_Player)).BeginInit();
-            this.panelPaso3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelPasos
@@ -105,6 +105,39 @@
             this.panelUser.Name = "panelUser";
             this.panelUser.Size = new System.Drawing.Size(794, 344);
             this.panelUser.TabIndex = 4;
+            // 
+            // panelPaso3
+            // 
+            this.panelPaso3.ColumnCount = 3;
+            this.panelPaso3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.panelPaso3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.panelPaso3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.panelPaso3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.panelPaso3.Controls.Add(this.listviewPaso3Pasajeros, 1, 0);
+            this.panelPaso3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelPaso3.Location = new System.Drawing.Point(0, 0);
+            this.panelPaso3.Name = "panelPaso3";
+            this.panelPaso3.RowCount = 1;
+            this.panelPaso3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.panelPaso3.Size = new System.Drawing.Size(794, 344);
+            this.panelPaso3.TabIndex = 7;
+            this.panelPaso3.Visible = false;
+            // 
+            // listviewPaso3Pasajeros
+            // 
+            this.listviewPaso3Pasajeros.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listviewPaso3Pasajeros.CheckBoxes = true;
+            this.listviewPaso3Pasajeros.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listviewPaso3Pasajeros.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.listviewPaso3Pasajeros.HideSelection = false;
+            this.listviewPaso3Pasajeros.LabelWrap = false;
+            this.listviewPaso3Pasajeros.Location = new System.Drawing.Point(33, 3);
+            this.listviewPaso3Pasajeros.MultiSelect = false;
+            this.listviewPaso3Pasajeros.Name = "listviewPaso3Pasajeros";
+            this.listviewPaso3Pasajeros.ShowGroups = false;
+            this.listviewPaso3Pasajeros.Size = new System.Drawing.Size(728, 338);
+            this.listviewPaso3Pasajeros.TabIndex = 0;
+            this.listviewPaso3Pasajeros.UseCompatibleStateImageBehavior = false;
             // 
             // panelPaso2
             // 
@@ -347,39 +380,6 @@
             this.wmInicio_Player.TabIndex = 1;
             this.wmInicio_Player.ClickEvent += new AxWMPLib._WMPOCXEvents_ClickEventHandler(this.Click_ToStart);
             // 
-            // panelPaso3
-            // 
-            this.panelPaso3.ColumnCount = 3;
-            this.panelPaso3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.panelPaso3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.panelPaso3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.panelPaso3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.panelPaso3.Controls.Add(this.listviewPaso3Pasajeros, 1, 0);
-            this.panelPaso3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelPaso3.Location = new System.Drawing.Point(0, 0);
-            this.panelPaso3.Name = "panelPaso3";
-            this.panelPaso3.RowCount = 1;
-            this.panelPaso3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.panelPaso3.Size = new System.Drawing.Size(794, 344);
-            this.panelPaso3.TabIndex = 7;
-            this.panelPaso3.Visible = false;
-            // 
-            // listviewPaso3Pasajeros
-            // 
-            this.listviewPaso3Pasajeros.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.listviewPaso3Pasajeros.CheckBoxes = true;
-            this.listviewPaso3Pasajeros.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listviewPaso3Pasajeros.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.listviewPaso3Pasajeros.HideSelection = false;
-            this.listviewPaso3Pasajeros.LabelWrap = false;
-            this.listviewPaso3Pasajeros.Location = new System.Drawing.Point(33, 3);
-            this.listviewPaso3Pasajeros.MultiSelect = false;
-            this.listviewPaso3Pasajeros.Name = "listviewPaso3Pasajeros";
-            this.listviewPaso3Pasajeros.ShowGroups = false;
-            this.listviewPaso3Pasajeros.Size = new System.Drawing.Size(728, 338);
-            this.listviewPaso3Pasajeros.TabIndex = 0;
-            this.listviewPaso3Pasajeros.UseCompatibleStateImageBehavior = false;
-            // 
             // formMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -395,12 +395,14 @@
             this.Name = "formMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.formMain_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Closing);
+            this.Load += new System.EventHandler(this.Form_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyCombinationManager);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Click_ToStart);
             this.panelPasos.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureboxLogoEmpresa)).EndInit();
             this.panelUser.ResumeLayout(false);
+            this.panelPaso3.ResumeLayout(false);
             this.panelPaso2.ResumeLayout(false);
             this.panelPaso2.PerformLayout();
             this.panelPaso1.ResumeLayout(false);
@@ -412,7 +414,6 @@
             this.panelInicio.ResumeLayout(false);
             this.panelInicio.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.wmInicio_Player)).EndInit();
-            this.panelPaso3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
