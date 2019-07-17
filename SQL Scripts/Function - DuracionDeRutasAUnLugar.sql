@@ -18,10 +18,9 @@ GO
 CREATE FUNCTION udf_DuracionDeRutasAUnLugar
 (	
 	@IDLugar int
-) RETURNS varchar(2) AS
-BEGIN
-	DECLARE @Result table(IDRuta char(20), Duracion smallint)
-
+) RETURNS TABLE
+AS
+RETURN
 SELECT rd.IDRuta, SUM(rd.Duracion) AS Duracion
 	FROM RutaDetalle AS rd
 	INNER JOIN (SELECT IDRuta, Indice FROM RutaDetalle WHERE IDLugar = @IDLugar) AS subrd ON rd.IDRuta = subrd.IDRuta
@@ -29,12 +28,4 @@ SELECT rd.IDRuta, SUM(rd.Duracion) AS Duracion
 	GROUP BY rd.IDRuta
 	HAVING SUM(rd.Duracion) IS NOT NULL
 
-	RETURN (CASE 
-				WHEN @CalificacionAnual < 4 THEN 'D'
-				WHEN @CalificacionAnual >= 4 AND @CalificacionAnual < 6 THEN 'R'
-				WHEN @CalificacionAnual >= 6 AND @CalificacionAnual < 7 THEN 'B'
-				WHEN @CalificacionAnual >= 7 AND @CalificacionAnual < 9 THEN 'MB'
-				WHEN @CalificacionAnual >= 9 THEN 'E'
-			END)
-END
 GO

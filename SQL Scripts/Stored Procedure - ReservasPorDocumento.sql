@@ -27,7 +27,11 @@ CREATE PROCEDURE usp_ReservasPorDocumento
 		-- SET NOCOUNT ON added to prevent extra result sets from interfering with SELECT statements.
 		SET NOCOUNT ON;
 
-		SELECT p.IDPersona, p.Apellido, p.Nombre, dt.Nombre AS DocumentoTipoNombre, p.DocumentoNumero
-            FROM (((Persona AS p INNER JOIN DocumentoTipo AS dt ON p.IDDocumentoTipo = dt.IDDocumentoTipo) INNER JOIN ViajeDetalle AS vd ON p.IDPersona = vd.IDPersona) INNER JOIN Viaje AS v ON vd.FechaHora = v.FechaHora AND vd.IDRuta = v.IDRuta) INNER JOIN RutaDetalle AS rd ON v.IDRuta = rd.IDRuta AND rd.IDLugar = @IDLugar
-			WHERE v.FechaHora BETWEEN 
+		SELECT p.IDPersona, p.Apellido, p.Nombre, dt.Nombre AS DocumentoTipoNombre, p.DocumentoNumero, v.FechaHora, RTRIM(v.IDRuta) AS Ruta
+            FROM (((Persona AS p INNER JOIN DocumentoTipo AS dt ON p.IDDocumentoTipo = dt.IDDocumentoTipo)
+				INNER JOIN ViajeDetalle AS vd ON p.IDPersona = vd.IDPersona)
+				INNER JOIN Viaje AS v ON vd.FechaHora = v.FechaHora AND vd.IDRuta = v.IDRuta)
+				INNER JOIN dbo.udf_DuracionDeRutasAUnLugar(@IDLugar) AS fdr ON v.IDRuta = fdr.IDRuta
+			WHERE DATEADD(minute, fdr.Duracion, v.FechaHora) BETWEEN DATEADD(minute, -@LugarDuracionPreviaMaxima, GETDATE()) AND DATEADD(minute, -@LugarDuracionPreviaMinima, GETDATE())
+				AND p.DocumentoNumero = @DocumentoNumero
 	END
