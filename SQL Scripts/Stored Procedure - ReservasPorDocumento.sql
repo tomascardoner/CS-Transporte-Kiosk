@@ -28,7 +28,7 @@ CREATE PROCEDURE usp_ReservasPorDocumento
 		-- SET NOCOUNT ON added to prevent extra result sets from interfering with SELECT statements.
 		SET NOCOUNT ON;
 
-		SELECT v.IDViaje, v.FechaHora, RTRIM(v.IDRuta) AS IDRuta, r.Nombre AS Ruta, vd.IDViajeDetalle, vd.ReservaCodigo, vd.GrupoNumero
+		SELECT v.FechaHora, r.Nombre AS Ruta, v.IDViaje, vd.IDViajeDetalle, vd.ReservaCodigo, vd.GrupoNumero
             FROM ((Persona AS p INNER JOIN ViajeDetalle AS vd ON p.IDPersona = vd.IDPersona)
 				INNER JOIN Viaje AS v ON vd.FechaHora = v.FechaHora AND vd.IDRuta = v.IDRuta)
 				INNER JOIN Ruta AS r ON v.IDRuta = r.IDRuta

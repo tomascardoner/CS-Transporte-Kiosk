@@ -27,12 +27,12 @@ CREATE PROCEDURE usp_PersonasPorReserva
 		SET NOCOUNT ON;
 
 		SELECT p.IDPersona, p.Apellido, p.Nombre, dt.Nombre AS DocumentoTipoNombre, p.DocumentoNumero
-            FROM (Persona AS p INNER JOIN DocumentoTipo AS dt ON p.IDDocumentoTipo = dt.IDDocumentoTipo)
+            FROM (Persona AS p LEFT JOIN DocumentoTipo AS dt ON p.IDDocumentoTipo = dt.IDDocumentoTipo)
 				INNER JOIN ViajeDetalle AS vd ON p.IDPersona = vd.IDPersona
 			WHERE vd.IDViaje = @IDViaje
 				AND ((@ReservaCodigo IS NOT NULL AND vd.ReservaCodigo = @ReservaCodigo)
-						OR (@ReservaCodigo IS NULL AND @GrupoNumero IS NOT NULL AND vd.GrupoNumero = @GrupoNumero)
-						OR (@ReservaCodigo IS NULL AND @GrupoNumero IS NULL AND vd.IDViajeDetalle = @IDViajeDetalle))
+						OR (@ReservaCodigo IS NULL AND ISNULL(@GrupoNumero, 0) > 0 AND vd.GrupoNumero = @GrupoNumero)
+						OR (@ReservaCodigo IS NULL AND ISNULL(@GrupoNumero, 0) = 0 AND vd.IDViajeDetalle = @IDViajeDetalle))
 	END
 GO
 

@@ -295,61 +295,144 @@ namespace CSTransporteKiosk
 
         private bool BuscarViajesPorDocumento()
         {
+            int IDViaje = 0;
+            int IDViajeDetalle = 0;
+            string ReservaCodigo = null;
+            byte GrupoNumero = 0;
+
             if (ConnectToDatabase())
             {
-                SqlCommand sqlCommand = new SqlCommand();
-                SqlDataReader sqlDataReader;
-
-                try
+                if (BuscarReservasPorDocumento(ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero))
                 {
-                    sqlCommand.Connection = mDatabase.connection;
-                    sqlCommand.CommandText = "usp_ReservasPorDocumento";
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@IDLugar", ThisMachine.Default.LugarID);
-                    sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMaxima", Properties.Settings.Default.LugarDuracionPreviaMaxima);
-                    sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMinima", Properties.Settings.Default.LugarDuracionPreviaMinima);
-                    sqlCommand.Parameters.AddWithValue("@DocumentoNumero", textboxPaso2_Valor.Text.Trim());
-
-                    sqlDataReader = sqlCommand.ExecuteReader(CommandBehavior.SingleRow);
-                    sqlCommand.Dispose();
-                    sqlCommand = null;
-
-                    if (sqlDataReader.HasRows)
+                    if (BuscarPersonasPorReserva(IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero))
                     {
-                        sqlDataReader.Read();
-                        DateTime dtFechaHora = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("FechaHora"));
-                        labelPaso3_ViajeFechaHora.Text = String.Format("{0} {1}", dtFechaHora.ToShortDateString(), dtFechaHora.ToShortTimeString());
-                        labelPaso3_ViajeRuta.Text = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Ruta"));
-
-                        sqlDataReader.Close();
-                        sqlDataReader = null;
-
                         return true;
                     }
                     else
                     {
-                        MessageBox.Show("No se han encontrado reservas.");
-
-                        sqlDataReader.Close();
-                        sqlDataReader = null;
-
                         return false;
                     }
-
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show("No se pudo obtener la información.");
-
-                    sqlCommand = null;
-
-                    sqlDataReader = null;
-
                     return false;
                 }
             }
             else
             {
+                return false;
+            }
+        }
+
+        private bool BuscarReservasPorDocumento(ref int IDViaje, ref int IDViajeDetalle, ref string ReservaCodigo, ref byte GrupoNumero)
+        {
+            SqlCommand sqlCommand = new SqlCommand();
+            SqlDataReader sqlDataReader;
+
+            try
+            {
+                sqlCommand.Connection = mDatabase.connection;
+                sqlCommand.CommandText = "usp_ReservasPorDocumento";
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@IDLugar", ThisMachine.Default.LugarID);
+                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMaxima", Properties.Settings.Default.LugarDuracionPreviaMaxima);
+                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMinima", Properties.Settings.Default.LugarDuracionPreviaMinima);
+                sqlCommand.Parameters.AddWithValue("@DocumentoNumero", textboxPaso2_Valor.Text.Trim());
+
+                sqlDataReader = sqlCommand.ExecuteReader(CommandBehavior.SingleRow);
+                sqlCommand.Dispose();
+                sqlCommand = null;
+
+                if (sqlDataReader.HasRows)
+                {
+                    sqlDataReader.Read();
+                    DateTime dtFechaHora = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("FechaHora"));
+                    labelPaso3_ViajeFechaHora.Text = String.Format("{0} {1}", dtFechaHora.ToShortDateString(), dtFechaHora.ToShortTimeString());
+                    labelPaso3_ViajeRuta.Text = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Ruta"));
+
+                    IDViaje = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("IDViaje"));
+                    IDViajeDetalle = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("IDViajeDetalle"));
+                    ReservaCodigo = sqlDataReader.GetString(sqlDataReader.GetOrdinal("ReservaCodigo"));
+                    GrupoNumero = sqlDataReader.GetByte(sqlDataReader.GetOrdinal("GrupoNumero"));
+
+                    sqlDataReader.Close();
+                    sqlDataReader = null;
+
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show("No se han encontrado reservas.");
+
+                    sqlDataReader.Close();
+                    sqlDataReader = null;
+
+                    return false;
+                }
+
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("No se pudo obtener la información.");
+
+                sqlCommand = null;
+
+                sqlDataReader = null;
+
+                return false;
+            }
+        }
+
+        private bool BuscarPersonasPorReserva(int IDViaje, int IDViajeDetalle, string ReservaCodigo, byte GrupoNumero)
+        {
+            SqlCommand sqlCommand = new SqlCommand();
+            SqlDataReader sqlDataReader;
+
+            try
+            {
+                sqlCommand.Connection = mDatabase.connection;
+                sqlCommand.CommandText = "usp_PersonasPorReserva";
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@IDViaje", IDViaje);
+                sqlCommand.Parameters.AddWithValue("@IDViajeDetalle", IDViajeDetalle);
+                sqlCommand.Parameters.AddWithValue("@ReservaCodigo", ReservaCodigo);
+                sqlCommand.Parameters.AddWithValue("@GrupoNumero", GrupoNumero);
+
+                sqlDataReader = sqlCommand.ExecuteReader(CommandBehavior.SingleResult);
+                sqlCommand.Dispose();
+                sqlCommand = null;
+
+                if (sqlDataReader.HasRows)
+                {
+                    sqlDataReader.Read();
+                    DateTime dtFechaHora = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("FechaHora"));
+                    labelPaso3_ViajeFechaHora.Text = String.Format("{0} {1}", dtFechaHora.ToShortDateString(), dtFechaHora.ToShortTimeString());
+                    labelPaso3_ViajeRuta.Text = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Ruta"));
+
+                    sqlDataReader.Close();
+                    sqlDataReader = null;
+
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show("No se han encontrado reservas.");
+
+                    sqlDataReader.Close();
+                    sqlDataReader = null;
+
+                    return false;
+                }
+
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("No se pudo obtener la información.");
+
+                sqlCommand = null;
+
+                sqlDataReader = null;
+
                 return false;
             }
         }
