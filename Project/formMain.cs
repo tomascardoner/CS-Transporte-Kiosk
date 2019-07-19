@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Data;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace CSTransporteKiosk
 {
     public partial class formMain : Form
     {
-        #region "Declarations"
+        #region Declaraciones
         byte pasoActual = 0;
-        Boolean porDNI;
+        Boolean buscarPorDocumento;
 
         CardonerSistemas.Database_ADO_SQLServer mDatabase;
 
@@ -15,7 +17,7 @@ namespace CSTransporteKiosk
         DateTime logoSecondClickTime = new DateTime(0);
         #endregion
 
-        #region "Form stuff"
+        #region Form stuff
 
           public formMain()
         {
@@ -24,12 +26,12 @@ namespace CSTransporteKiosk
 
         private void Form_Load(object sender, EventArgs e)
         {
-            prepararConexionABaseDeDatos();
-            setAppearance();
-            mostrarPasos();
+            PrepararConexionABaseDeDatos();
+            SetAppearance();
+            MostrarPasos();
         }
 
-        private void prepararConexionABaseDeDatos()
+        private void PrepararConexionABaseDeDatos()
         {
             mDatabase = new CardonerSistemas.Database_ADO_SQLServer();
             mDatabase.applicationName = CardonerSistemas.My.Application.Info.Title;
@@ -54,7 +56,7 @@ namespace CSTransporteKiosk
             mDatabase.CreateConnectionString();
         }
 
-        private void setAppearance()
+        private void SetAppearance()
         {
             pictureboxLogoEmpresa.ImageLocation = Properties.Settings.Default.EmpresaLogotipo;
             wmInicio_Player.uiMode = "none";
@@ -86,7 +88,7 @@ namespace CSTransporteKiosk
 
         #endregion
 
-        #region "Controls stuff"
+        #region Controls stuff
 
         private void KeyCombinationManager(object sender, KeyEventArgs e)
         {
@@ -155,72 +157,93 @@ namespace CSTransporteKiosk
 
         #endregion
 
-        #region "Pasos stuff"
+        #region Verificación de Pasos
 
-        private void AvanzarPaso()
+        private bool VerificarAvancePaso()
         {
             switch (pasoActual)
             {
-                case 1:
-                    if (radioPaso1_DNI.Checked == false & radioPaso1_Reserva.Checked == false)
-                    {
-                        MessageBox.Show("Debe seleccionar alguna de las dos opciones.");
-                        return;
-                    }
-                    porDNI = (radioPaso1_DNI.Checked);
-                    if (porDNI)
-                    {
-                        labelPaso2_DNI_Reserva.Text = "Ingrese el D.N.I.:";
-                    }
-                    else
-                    {
-                        labelPaso2_DNI_Reserva.Text = "Ingrese el Número de Reserva:";
-                    }
-                    break;
+                case 1: // Selección del tipo de búsqueda
+                    return VerificarPaso1();
 
-                case 2:
-                    if (porDNI)
-                    {
-                        if (textboxPaso2_DNI_Reserva.Text.Trim().Length < 6)
-                        {
-                            MessageBox.Show("EL D.N.I. debe contener al menos 6 (seis) dígitos.");
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        if (textboxPaso2_DNI_Reserva.Text.Trim().Length < 8)
-                        {
-                            MessageBox.Show("Debe ingresar los 8 (ocho) caracteres del número de reserva.");
-                            return;
-                        }
-                    }
-                    break;
+                case 2: // Introducción de los datos a buscar
+                    return VerificarPaso2();
 
                 default:
                     break;
             }
+            return true;
+        }
 
-            pasoActual++;
-            mostrarPasos();
+        private bool VerificarPaso1()
+        {
+            if (radioPaso1_Documento.Checked == false & radioPaso1_Reserva.Checked == false)
+            {
+                MessageBox.Show("Debe seleccionar alguna de las opciones de búsqueda.");
+                return false;
+            }
+            return true;
+        }
+
+        private bool VerificarPaso2()
+        {
+            // Verificar datos ingresados
+            if (buscarPorDocumento)
+            {
+                if (textboxPaso2_Valor.Text.Trim().Length < 6)
+                {
+                    MessageBox.Show("EL Nº de Documento debe contener al menos 6 (seis) dígitos.");
+                    return false;
+                }
+            }
+            else
+            {
+                if (textboxPaso2_Valor.Text.Trim().Length < 8)
+                {
+                    MessageBox.Show("Debe ingresar los 8 (ocho) caracteres del Nº de Reserva.");
+                    return false;
+                }
+            }
+
+            // Buscar datos en la base de datos
+            if (BuscarViajesPorDocumento())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Avance de Pasos
+
+        private void AvanzarPaso()
+        {
+            if (VerificarAvancePaso())
+            {
+                pasoActual++;
+                MostrarPasos();
+            }
         }
 
         private void RetrocederPaso()
         {
             pasoActual--;
-            mostrarPasos();
+            MostrarPasos();
         }
 
-        private void mostrarPasos()
+        private void MostrarPasos()
         {
             switch (pasoActual)
             {
                 case 1:
-                    radioPaso1_DNI.Checked = false;
-                    radioPaso1_Reserva.Checked = false;
+                    MostrarPaso1();
                     break;
                 case 2:
-                    textboxPaso2_DNI_Reserva.Text = "";
+                    MostrarPaso2();
                     break;
                 default:
                     break;
@@ -229,11 +252,34 @@ namespace CSTransporteKiosk
             panelPasos.Visible = (pasoActual > 0);
             panelPaso1.Visible = (pasoActual == 1);
             panelPaso2.Visible = (pasoActual == 2);
+            panelPaso3.Visible = (pasoActual == 3);
             buttonPasoAnterior.Visible = (pasoActual > 0);
             buttonPasoSiguiente.Visible = (pasoActual > 0);
         }
 
+        private void MostrarPaso1()
+        {
+            radioPaso1_Documento.Checked = false;
+            radioPaso1_Reserva.Checked = false;
+        }
+
+        private void MostrarPaso2()
+        {
+            buscarPorDocumento = (radioPaso1_Documento.Checked);
+            if (buscarPorDocumento)
+            {
+                labelPaso2_Valor.Text = "Ingrese el Nº de Documento:";
+            }
+            else
+            {
+                labelPaso2_Valor.Text = "Ingrese el Nº de Reserva:";
+            }
+            textboxPaso2_Valor.Text = "";
+        }
+
         #endregion
+
+        #region Database stuff
 
         private bool ConnectToDatabase()
         {
@@ -246,5 +292,68 @@ namespace CSTransporteKiosk
                 return true;
             }
         }
+
+        private bool BuscarViajesPorDocumento()
+        {
+            if (ConnectToDatabase())
+            {
+                SqlCommand sqlCommand = new SqlCommand();
+                SqlDataReader sqlDataReader;
+
+                try
+                {
+                    sqlCommand.Connection = mDatabase.connection;
+                    sqlCommand.CommandText = "usp_ReservasPorDocumento";
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@IDLugar", ThisMachine.Default.LugarID);
+                    sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMaxima", Properties.Settings.Default.LugarDuracionPreviaMaxima);
+                    sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMinima", Properties.Settings.Default.LugarDuracionPreviaMinima);
+                    sqlCommand.Parameters.AddWithValue("@DocumentoNumero", textboxPaso2_Valor.Text.Trim());
+
+                    sqlDataReader = sqlCommand.ExecuteReader(CommandBehavior.SingleRow);
+                    sqlCommand.Dispose();
+                    sqlCommand = null;
+
+                    if (sqlDataReader.HasRows)
+                    {
+                        sqlDataReader.Read();
+                        DateTime dtFechaHora = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("FechaHora"));
+                        labelPaso3_ViajeFechaHora.Text = String.Format("{0} {1}", dtFechaHora.ToShortDateString(), dtFechaHora.ToShortTimeString());
+                        labelPaso3_ViajeRuta.Text = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Ruta"));
+
+                        sqlDataReader.Close();
+                        sqlDataReader = null;
+
+                        return true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se han encontrado reservas.");
+
+                        sqlDataReader.Close();
+                        sqlDataReader = null;
+
+                        return false;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("No se pudo obtener la información.");
+
+                    sqlCommand = null;
+
+                    sqlDataReader = null;
+
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        #endregion
     }
 }
