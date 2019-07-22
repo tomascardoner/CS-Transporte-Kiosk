@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace CSTransporteKiosk
@@ -8,10 +7,9 @@ namespace CSTransporteKiosk
     public partial class formMain : Form
     {
         #region Declaraciones
+
         byte pasoActual = 0;
         Boolean buscarPorDocumento;
-
-        CardonerSistemas.Database_ADO_SQLServer mDatabase;
 
         DateTime logoFirstClickTime = new DateTime(0);
         DateTime logoSecondClickTime = new DateTime(0);
@@ -26,34 +24,9 @@ namespace CSTransporteKiosk
 
         private void Form_Load(object sender, EventArgs e)
         {
-            PrepararConexionABaseDeDatos();
+            DatabaseBusqueda.PrepararConexionABaseDeDatos();
             SetAppearance();
             MostrarPasos();
-        }
-
-        private void PrepararConexionABaseDeDatos()
-        {
-            mDatabase = new CardonerSistemas.Database_ADO_SQLServer();
-            mDatabase.applicationName = CardonerSistemas.My.Application.Info.Title;
-            mDatabase.datasource = ThisMachine.Default.DatabaseDatasource;
-            mDatabase.initialCatalog = ThisMachine.Default.DatabaseDatabase;
-            mDatabase.userID = ThisMachine.Default.DatabaseUserID;
-            if (ThisMachine.Default.DatabasePassword.Trim().Length == 0)
-            {
-                mDatabase.password = "";
-            }
-            else
-            {
-                CardonerSistemas.Encrypt_TripleDES decrypter = new CardonerSistemas.Encrypt_TripleDES(CardonerSistemas.Constants.PublicEncryptionPassword);
-                string decryptedPassword = "";
-                if (decrypter.Decrypt(ThisMachine.Default.DatabasePassword, ref decryptedPassword))
-                {
-                    mDatabase.password = decryptedPassword;
-                }
-                decrypter = null;
-            }
-            mDatabase.workstationID = "";
-            mDatabase.CreateConnectionString();
         }
 
         private void SetAppearance()
@@ -74,16 +47,16 @@ namespace CSTransporteKiosk
         {
             try
             {
-                if (mDatabase.connection.State != System.Data.ConnectionState.Open)
+                if (DatabaseBusqueda.Database != null)
                 {
-                    mDatabase.connection.Close();
-                    mDatabase = null;
+                    if (DatabaseBusqueda.Database.connection.State != System.Data.ConnectionState.Open)
+                    {
+                        DatabaseBusqueda.Database.connection.Close();
+                    }
                 }
             }
-            catch (Exception)
-            {
-                mDatabase = null;
-            }
+            catch (Exception) {}
+            DatabaseBusqueda.Database = null;
         }
 
         #endregion
@@ -206,8 +179,14 @@ namespace CSTransporteKiosk
             }
 
             // Buscar datos en la base de datos
-            if (BuscarViajesPorDocumento())
+            DateTime fechaHora = new DateTime();
+            string ruta = null;
+            var personaList = new List<DatabaseBusqueda.Persona>();
+
+            if (DatabaseBusqueda.BuscarViajesPorDocumento(textboxPaso2_Valor.Text.Trim(), ref fechaHora, ref ruta, personaList))
             {
+                labelPaso3_ViajeFechaHora.Text = String.Format("{0} {1}", fechaHora.ToShortDateString(), fechaHora.ToShortTimeString());
+                labelPaso3_ViajeRuta.Text = ruta;
                 return true;
             }
             else
@@ -275,166 +254,6 @@ namespace CSTransporteKiosk
                 labelPaso2_Valor.Text = "Ingrese el Nº de Reserva:";
             }
             textboxPaso2_Valor.Text = "";
-        }
-
-        #endregion
-
-        #region Database stuff
-
-        private bool ConnectToDatabase()
-        {
-            if (mDatabase.connection == null || mDatabase.connection.State != System.Data.ConnectionState.Open)
-            {
-                return mDatabase.Connect();
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        private bool BuscarViajesPorDocumento()
-        {
-            int IDViaje = 0;
-            int IDViajeDetalle = 0;
-            string ReservaCodigo = null;
-            byte GrupoNumero = 0;
-
-            if (ConnectToDatabase())
-            {
-                if (BuscarReservasPorDocumento(ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero))
-                {
-                    if (BuscarPersonasPorReserva(IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private bool BuscarReservasPorDocumento(ref int IDViaje, ref int IDViajeDetalle, ref string ReservaCodigo, ref byte GrupoNumero)
-        {
-            SqlCommand sqlCommand = new SqlCommand();
-            SqlDataReader sqlDataReader;
-
-            try
-            {
-                sqlCommand.Connection = mDatabase.connection;
-                sqlCommand.CommandText = "usp_ReservasPorDocumento";
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@IDLugar", ThisMachine.Default.LugarID);
-                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMaxima", Properties.Settings.Default.LugarDuracionPreviaMaxima);
-                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMinima", Properties.Settings.Default.LugarDuracionPreviaMinima);
-                sqlCommand.Parameters.AddWithValue("@DocumentoNumero", textboxPaso2_Valor.Text.Trim());
-
-                sqlDataReader = sqlCommand.ExecuteReader(CommandBehavior.SingleRow);
-                sqlCommand.Dispose();
-                sqlCommand = null;
-
-                if (sqlDataReader.HasRows)
-                {
-                    sqlDataReader.Read();
-                    DateTime dtFechaHora = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("FechaHora"));
-                    labelPaso3_ViajeFechaHora.Text = String.Format("{0} {1}", dtFechaHora.ToShortDateString(), dtFechaHora.ToShortTimeString());
-                    labelPaso3_ViajeRuta.Text = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Ruta"));
-
-                    IDViaje = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("IDViaje"));
-                    IDViajeDetalle = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("IDViajeDetalle"));
-                    ReservaCodigo = sqlDataReader.GetString(sqlDataReader.GetOrdinal("ReservaCodigo"));
-                    GrupoNumero = sqlDataReader.GetByte(sqlDataReader.GetOrdinal("GrupoNumero"));
-
-                    sqlDataReader.Close();
-                    sqlDataReader = null;
-
-                    return true;
-                }
-                else
-                {
-                    MessageBox.Show("No se han encontrado reservas.");
-
-                    sqlDataReader.Close();
-                    sqlDataReader = null;
-
-                    return false;
-                }
-
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("No se pudo obtener la información.");
-
-                sqlCommand = null;
-
-                sqlDataReader = null;
-
-                return false;
-            }
-        }
-
-        private bool BuscarPersonasPorReserva(int IDViaje, int IDViajeDetalle, string ReservaCodigo, byte GrupoNumero)
-        {
-            SqlCommand sqlCommand = new SqlCommand();
-            SqlDataReader sqlDataReader;
-
-            try
-            {
-                sqlCommand.Connection = mDatabase.connection;
-                sqlCommand.CommandText = "usp_PersonasPorReserva";
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@IDViaje", IDViaje);
-                sqlCommand.Parameters.AddWithValue("@IDViajeDetalle", IDViajeDetalle);
-                sqlCommand.Parameters.AddWithValue("@ReservaCodigo", ReservaCodigo);
-                sqlCommand.Parameters.AddWithValue("@GrupoNumero", GrupoNumero);
-
-                sqlDataReader = sqlCommand.ExecuteReader(CommandBehavior.SingleResult);
-                sqlCommand.Dispose();
-                sqlCommand = null;
-
-                if (sqlDataReader.HasRows)
-                {
-                    sqlDataReader.Read();
-                    DateTime dtFechaHora = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("FechaHora"));
-                    labelPaso3_ViajeFechaHora.Text = String.Format("{0} {1}", dtFechaHora.ToShortDateString(), dtFechaHora.ToShortTimeString());
-                    labelPaso3_ViajeRuta.Text = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Ruta"));
-
-                    sqlDataReader.Close();
-                    sqlDataReader = null;
-
-                    return true;
-                }
-                else
-                {
-                    MessageBox.Show("No se han encontrado reservas.");
-
-                    sqlDataReader.Close();
-                    sqlDataReader = null;
-
-                    return false;
-                }
-
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("No se pudo obtener la información.");
-
-                sqlCommand = null;
-
-                sqlDataReader = null;
-
-                return false;
-            }
         }
 
         #endregion

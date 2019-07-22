@@ -26,7 +26,7 @@ CREATE PROCEDURE usp_PersonasPorReserva
 		-- SET NOCOUNT ON added to prevent extra result sets from interfering with SELECT statements.
 		SET NOCOUNT ON;
 
-		SELECT p.IDPersona, p.Apellido, p.Nombre, dt.Nombre AS DocumentoTipoNombre, p.DocumentoNumero
+		SELECT p.IDPersona, p.Apellido, p.Nombre, dt.Nombre AS DocumentoTipo, p.DocumentoNumero
             FROM (Persona AS p LEFT JOIN DocumentoTipo AS dt ON p.IDDocumentoTipo = dt.IDDocumentoTipo)
 				INNER JOIN ViajeDetalle AS vd ON p.IDPersona = vd.IDPersona
 			WHERE vd.IDViaje = @IDViaje

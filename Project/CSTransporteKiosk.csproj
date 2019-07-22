@@ -80,6 +80,7 @@
     <Compile Include="..\..\..\framework-csharp\My.cs">
       <Link>My.cs</Link>
     </Compile>
+    <Compile Include="DatabaseBusqueda.cs" />
     <Compile Include="formMain.cs">
       <SubType>Form</SubType>
     </Compile>
