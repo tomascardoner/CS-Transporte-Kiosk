@@ -29,17 +29,20 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            C1.Win.C1Tile.PanelElement panelElement1 = new C1.Win.C1Tile.PanelElement();
+            C1.Win.C1Tile.ImageElement imageElement1 = new C1.Win.C1Tile.ImageElement();
+            C1.Win.C1Tile.TextElement textElement1 = new C1.Win.C1Tile.TextElement();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formMain));
             this.panelPasos = new System.Windows.Forms.TableLayoutPanel();
             this.pictureboxLogoEmpresa = new System.Windows.Forms.PictureBox();
             this.panelUser = new System.Windows.Forms.Panel();
             this.panelPaso3 = new System.Windows.Forms.TableLayoutPanel();
             this.panelPaso3_Personas = new System.Windows.Forms.TableLayoutPanel();
-            this.listviewPaso3_Pasajeros = new System.Windows.Forms.ListView();
             this.panelPaso3_Viaje = new System.Windows.Forms.TableLayoutPanel();
-            this.labelPaso3_Titulo = new System.Windows.Forms.Label();
             this.labelPaso3_ViajeFechaHora = new System.Windows.Forms.Label();
             this.labelPaso3_ViajeRuta = new System.Windows.Forms.Label();
+            this.tilecontrolPaso3_Pasajeros = new C1.Win.C1Tile.C1TileControl();
+            this.groupMain = new C1.Win.C1Tile.Group();
             this.panelPaso2 = new System.Windows.Forms.TableLayoutPanel();
             this.textboxPaso2_Valor = new System.Windows.Forms.TextBox();
             this.labelPaso2_Valor = new System.Windows.Forms.Label();
@@ -134,61 +137,31 @@
             // 
             this.panelPaso3_Personas.ColumnCount = 1;
             this.panelPaso3_Personas.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.panelPaso3_Personas.Controls.Add(this.listviewPaso3_Pasajeros, 0, 1);
             this.panelPaso3_Personas.Controls.Add(this.panelPaso3_Viaje, 0, 0);
+            this.panelPaso3_Personas.Controls.Add(this.tilecontrolPaso3_Pasajeros, 0, 1);
             this.panelPaso3_Personas.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPaso3_Personas.Location = new System.Drawing.Point(33, 3);
             this.panelPaso3_Personas.Name = "panelPaso3_Personas";
             this.panelPaso3_Personas.RowCount = 2;
-            this.panelPaso3_Personas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 130F));
+            this.panelPaso3_Personas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.panelPaso3_Personas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.panelPaso3_Personas.Size = new System.Drawing.Size(728, 338);
             this.panelPaso3_Personas.TabIndex = 0;
-            // 
-            // listviewPaso3_Pasajeros
-            // 
-            this.listviewPaso3_Pasajeros.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.listviewPaso3_Pasajeros.CheckBoxes = true;
-            this.listviewPaso3_Pasajeros.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listviewPaso3_Pasajeros.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.listviewPaso3_Pasajeros.HideSelection = false;
-            this.listviewPaso3_Pasajeros.LabelWrap = false;
-            this.listviewPaso3_Pasajeros.Location = new System.Drawing.Point(3, 133);
-            this.listviewPaso3_Pasajeros.MultiSelect = false;
-            this.listviewPaso3_Pasajeros.Name = "listviewPaso3_Pasajeros";
-            this.listviewPaso3_Pasajeros.ShowGroups = false;
-            this.listviewPaso3_Pasajeros.Size = new System.Drawing.Size(722, 202);
-            this.listviewPaso3_Pasajeros.TabIndex = 1;
-            this.listviewPaso3_Pasajeros.UseCompatibleStateImageBehavior = false;
             // 
             // panelPaso3_Viaje
             // 
             this.panelPaso3_Viaje.ColumnCount = 1;
             this.panelPaso3_Viaje.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.panelPaso3_Viaje.Controls.Add(this.labelPaso3_Titulo, 0, 2);
             this.panelPaso3_Viaje.Controls.Add(this.labelPaso3_ViajeFechaHora, 0, 0);
             this.panelPaso3_Viaje.Controls.Add(this.labelPaso3_ViajeRuta, 0, 1);
             this.panelPaso3_Viaje.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPaso3_Viaje.Location = new System.Drawing.Point(3, 3);
             this.panelPaso3_Viaje.Name = "panelPaso3_Viaje";
-            this.panelPaso3_Viaje.RowCount = 3;
-            this.panelPaso3_Viaje.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.panelPaso3_Viaje.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.panelPaso3_Viaje.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.panelPaso3_Viaje.Size = new System.Drawing.Size(722, 124);
+            this.panelPaso3_Viaje.RowCount = 2;
+            this.panelPaso3_Viaje.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelPaso3_Viaje.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelPaso3_Viaje.Size = new System.Drawing.Size(722, 74);
             this.panelPaso3_Viaje.TabIndex = 2;
-            // 
-            // labelPaso3_Titulo
-            // 
-            this.labelPaso3_Titulo.AutoSize = true;
-            this.labelPaso3_Titulo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelPaso3_Titulo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPaso3_Titulo.Location = new System.Drawing.Point(3, 74);
-            this.labelPaso3_Titulo.Name = "labelPaso3_Titulo";
-            this.labelPaso3_Titulo.Size = new System.Drawing.Size(716, 50);
-            this.labelPaso3_Titulo.TabIndex = 2;
-            this.labelPaso3_Titulo.Text = "Seleccione los Pasajeros:";
-            this.labelPaso3_Titulo.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             // 
             // labelPaso3_ViajeFechaHora
             // 
@@ -213,6 +186,37 @@
             this.labelPaso3_ViajeRuta.TabIndex = 1;
             this.labelPaso3_ViajeRuta.Text = "Ruta";
             this.labelPaso3_ViajeRuta.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tilecontrolPaso3_Pasajeros
+            // 
+            this.tilecontrolPaso3_Pasajeros.AllowChecking = true;
+            this.tilecontrolPaso3_Pasajeros.CellSpacing = 20;
+            this.tilecontrolPaso3_Pasajeros.CellWidth = 200;
+            // 
+            // 
+            // 
+            panelElement1.Alignment = System.Drawing.ContentAlignment.BottomLeft;
+            panelElement1.Children.Add(imageElement1);
+            panelElement1.Children.Add(textElement1);
+            panelElement1.Margin = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.tilecontrolPaso3_Pasajeros.DefaultTemplate.Elements.Add(panelElement1);
+            this.tilecontrolPaso3_Pasajeros.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tilecontrolPaso3_Pasajeros.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tilecontrolPaso3_Pasajeros.GroupPadding = new System.Windows.Forms.Padding(20, 60, 20, 20);
+            this.tilecontrolPaso3_Pasajeros.Groups.Add(this.groupMain);
+            this.tilecontrolPaso3_Pasajeros.Location = new System.Drawing.Point(3, 83);
+            this.tilecontrolPaso3_Pasajeros.Name = "tilecontrolPaso3_Pasajeros";
+            this.tilecontrolPaso3_Pasajeros.Orientation = C1.Win.C1Tile.LayoutOrientation.Vertical;
+            this.tilecontrolPaso3_Pasajeros.Size = new System.Drawing.Size(722, 252);
+            this.tilecontrolPaso3_Pasajeros.SurfaceContentAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tilecontrolPaso3_Pasajeros.TabIndex = 3;
+            this.tilecontrolPaso3_Pasajeros.UncheckTilesOnClick = false;
+            this.tilecontrolPaso3_Pasajeros.TileClicked += new System.EventHandler<C1.Win.C1Tile.TileEventArgs>(this.ClickEnPasajero);
+            // 
+            // groupMain
+            // 
+            this.groupMain.Name = "groupMain";
+            this.groupMain.Text = "Seleccione las Personas que van a viajar:";
             // 
             // panelPaso2
             // 
@@ -520,11 +524,11 @@
         private System.Windows.Forms.TextBox textboxPaso2_Valor;
         private System.Windows.Forms.TableLayoutPanel panelPaso3;
         private System.Windows.Forms.TableLayoutPanel panelPaso3_Personas;
-        private System.Windows.Forms.ListView listviewPaso3_Pasajeros;
         private System.Windows.Forms.TableLayoutPanel panelPaso3_Viaje;
         private System.Windows.Forms.Label labelPaso3_ViajeFechaHora;
         private System.Windows.Forms.Label labelPaso3_ViajeRuta;
-        private System.Windows.Forms.Label labelPaso3_Titulo;
+        private C1.Win.C1Tile.C1TileControl tilecontrolPaso3_Pasajeros;
+        private C1.Win.C1Tile.Group groupMain;
     }
 }
 

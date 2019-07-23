@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CSTransporteKiosk
@@ -31,12 +32,14 @@ namespace CSTransporteKiosk
 
         private void SetAppearance()
         {
+            this.Icon = Properties.Resources.ICON_APP;
+
             pictureboxLogoEmpresa.ImageLocation = Properties.Settings.Default.EmpresaLogotipo;
             wmInicio_Player.uiMode = "none";
             wmInicio_Player.URL = Properties.Settings.Default.EmpresaVideo;
 
             // Version del assembly
-            labelPasosVersion.Text = CardonerSistemas.My.Application.Info.Version.ToString();
+            labelPasosVersion.Text = Application.ProductVersion; //CardonerSistemas.My.Application.Info.Version.ToString();
             pictureboxPasosLogoCompaniaSoftware.ImageLocation = Properties.Settings.Default.CompaniaSoftwareLogotipo;
 
             // Propiedades del teclado numérico en pantalla
@@ -113,6 +116,11 @@ namespace CSTransporteKiosk
             RetrocederPaso();
         }
 
+        private void ClickEnPasajero(object sender, C1.Win.C1Tile.TileEventArgs e)
+        {
+            e.Tile.Checked = !e.Tile.Checked;
+        }
+
         private void SoftwareCompanyClick(object sender, EventArgs e)
         {
             if (logoFirstClickTime.Ticks == 0)
@@ -139,8 +147,11 @@ namespace CSTransporteKiosk
                 case 1: // Selección del tipo de búsqueda
                     return VerificarPaso1();
 
-                case 2: // Introducción de los datos a buscar
+                case 2: // Introducción de los datos a buscar y búsqueda
                     return VerificarPaso2();
+
+                case 3: // Selección de Pasajeros
+                    return VerificarPaso3();
 
                 default:
                     break;
@@ -165,7 +176,7 @@ namespace CSTransporteKiosk
             {
                 if (textboxPaso2_Valor.Text.Trim().Length < 6)
                 {
-                    MessageBox.Show("EL Nº de Documento debe contener al menos 6 (seis) dígitos.");
+                    MessageBox.Show("El Nº de Documento debe contener al menos 6 (seis) dígitos.");
                     return false;
                 }
             }
@@ -178,6 +189,11 @@ namespace CSTransporteKiosk
                 }
             }
 
+            return VerificarPaso2BuscarViajesYPersonas();
+        }
+
+        private bool VerificarPaso2BuscarViajesYPersonas()
+        {
             // Buscar datos en la base de datos
             DateTime fechaHora = new DateTime();
             string ruta = null;
@@ -187,6 +203,35 @@ namespace CSTransporteKiosk
             {
                 labelPaso3_ViajeFechaHora.Text = String.Format("{0} {1}", fechaHora.ToShortDateString(), fechaHora.ToShortTimeString());
                 labelPaso3_ViajeRuta.Text = ruta;
+
+                foreach (DatabaseBusqueda.Persona persona in personaList)
+                {
+                    C1.Win.C1Tile.Tile tileNuevo = new C1.Win.C1Tile.Tile();
+                    tileNuevo.Text = persona.Apellido;
+                    if (persona.Nombre != null)
+                    {
+                        tileNuevo.Text += ", " + persona.Nombre;
+                    }
+                    switch (tilecontrolPaso3_Pasajeros.Groups[0].Tiles.Count % 4)
+                    {
+                        case 0:
+                            tileNuevo.BackColor = Color.LightCoral;
+                            break;
+                        case 1:
+                            tileNuevo.BackColor = Color.Teal;
+                            break;
+                        case 2:
+                            tileNuevo.BackColor = Color.SteelBlue;
+                            break;
+                        case 3:
+                            tileNuevo.BackColor = Color.ForestGreen;
+                            break;
+                        default:
+                            break;
+                    }
+                    tilecontrolPaso3_Pasajeros.Groups[0].Tiles.Add(tileNuevo);
+                    tileNuevo = null;
+                }
                 return true;
             }
             else
@@ -195,67 +240,80 @@ namespace CSTransporteKiosk
             }
         }
 
+        private bool VerificarPaso3()
+        {
+            if (tilecontrolPaso3_Pasajeros.CheckedTiles.Length == 0)
+            {
+                MessageBox.Show("Debe seleccionar al menos una Persona.");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         #endregion
 
         #region Avance de Pasos
 
         private void AvanzarPaso()
+    {
+        if (VerificarAvancePaso())
         {
-            if (VerificarAvancePaso())
-            {
-                pasoActual++;
-                MostrarPasos();
-            }
-        }
-
-        private void RetrocederPaso()
-        {
-            pasoActual--;
+            pasoActual++;
             MostrarPasos();
         }
+    }
 
-        private void MostrarPasos()
+    private void RetrocederPaso()
+    {
+        pasoActual--;
+        MostrarPasos();
+    }
+
+    private void MostrarPasos()
+    {
+        switch (pasoActual)
         {
-            switch (pasoActual)
-            {
-                case 1:
-                    MostrarPaso1();
-                    break;
-                case 2:
-                    MostrarPaso2();
-                    break;
-                default:
-                    break;
-            }
-            panelInicio.Visible = (pasoActual == 0);
-            panelPasos.Visible = (pasoActual > 0);
-            panelPaso1.Visible = (pasoActual == 1);
-            panelPaso2.Visible = (pasoActual == 2);
-            panelPaso3.Visible = (pasoActual == 3);
-            buttonPasoAnterior.Visible = (pasoActual > 0);
-            buttonPasoSiguiente.Visible = (pasoActual > 0);
+            case 1:
+                MostrarPaso1();
+                break;
+            case 2:
+                MostrarPaso2();
+                break;
+            default:
+                break;
         }
+        panelInicio.Visible = (pasoActual == 0);
+        panelPasos.Visible = (pasoActual > 0);
+        panelPaso1.Visible = (pasoActual == 1);
+        panelPaso2.Visible = (pasoActual == 2);
+        panelPaso3.Visible = (pasoActual == 3);
+        buttonPasoAnterior.Visible = (pasoActual > 0);
+        buttonPasoSiguiente.Visible = (pasoActual > 0);
+    }
 
-        private void MostrarPaso1()
+    private void MostrarPaso1()
+    {
+        radioPaso1_Documento.Checked = false;
+        radioPaso1_Reserva.Checked = false;
+    }
+
+    private void MostrarPaso2()
+    {
+        buscarPorDocumento = (radioPaso1_Documento.Checked);
+        if (buscarPorDocumento)
         {
-            radioPaso1_Documento.Checked = false;
-            radioPaso1_Reserva.Checked = false;
+            labelPaso2_Valor.Text = "Ingrese el Nº de Documento:";
         }
-
-        private void MostrarPaso2()
+        else
         {
-            buscarPorDocumento = (radioPaso1_Documento.Checked);
-            if (buscarPorDocumento)
-            {
-                labelPaso2_Valor.Text = "Ingrese el Nº de Documento:";
-            }
-            else
-            {
-                labelPaso2_Valor.Text = "Ingrese el Nº de Reserva:";
-            }
-            textboxPaso2_Valor.Text = "";
+            labelPaso2_Valor.Text = "Ingrese el Nº de Reserva:";
         }
+        textboxPaso2_Valor.Text = "";
+    }
 
-        #endregion
+    #endregion
     }
 }
