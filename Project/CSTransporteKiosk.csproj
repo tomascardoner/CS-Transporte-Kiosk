@@ -85,11 +85,11 @@
       <Link>My.cs</Link>
     </Compile>
     <Compile Include="DatabaseBusqueda.cs" />
-    <Compile Include="formMain.cs">
+    <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="formMain.Designer.cs">
-      <DependentUpon>formMain.cs</DependentUpon>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="formMessageBox.cs">
       <SubType>Form</SubType>
@@ -113,8 +113,8 @@
       <Link>ErrorMessageBox.resx</Link>
       <DependentUpon>ErrorMessageBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="formMain.resx">
-      <DependentUpon>formMain.cs</DependentUpon>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="formMessageBox.resx">
       <DependentUpon>formMessageBox.cs</DependentUpon>

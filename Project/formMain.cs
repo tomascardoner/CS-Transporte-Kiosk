@@ -2,23 +2,25 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using C1.Win.C1Tile;
 
 namespace CSTransporteKiosk
 {
-    public partial class formMain : Form
+    public partial class FormMain : Form
     {
         #region Declaraciones
 
         byte pasoActual = 0;
         Boolean buscarPorDocumento;
 
-        DateTime logoFirstClickTime = new DateTime(0);
-        DateTime logoSecondClickTime = new DateTime(0);
+        private DateTime logoFirstClickTime = new DateTime(0);
+        private DateTime logoSecondClickTime = new DateTime(0);
+
         #endregion
 
         #region Form stuff
 
-          public formMain()
+          public FormMain()
         {
             InitializeComponent();
         }
@@ -74,7 +76,9 @@ namespace CSTransporteKiosk
             }
         }
 
-        private void wmPlayer_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
+#pragma warning disable IDE0060 // Remove unused parameter
+        private void WindowsMediaPlayer_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             if (e.newState == 8)
             {
@@ -100,7 +104,9 @@ namespace CSTransporteKiosk
             AvanzarPaso();
         }
 
+#pragma warning disable IDE0060 // Remove unused parameter
         private void Click_ToStart(object sender, AxWMPLib._WMPOCXEvents_ClickEvent e)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             Click_ToStart();
             AvanzarPaso();
@@ -131,7 +137,7 @@ namespace CSTransporteKiosk
             {
                 if (logoSecondClickTime.Ticks == 0)
                 {
-
+                    logoSecondClickTime = DateTime.Now;
                 }
             }
         }
@@ -201,12 +207,14 @@ namespace CSTransporteKiosk
 
             if (DatabaseBusqueda.BuscarViajesPorDocumento(textboxPaso2_Valor.Text.Trim(), ref fechaHora, ref ruta, personaList))
             {
-                labelPaso3_ViajeFechaHora.Text = String.Format("{0} {1}", fechaHora.ToShortDateString(), fechaHora.ToShortTimeString());
-                labelPaso3_ViajeRuta.Text = ruta;
+                labelPaso3_Origen_Leyenda.Text = String.Format("{0} {1}", fechaHora.ToShortDateString(), fechaHora.ToShortTimeString());
+                labelPaso3_Destino_Leyenda.Text = ruta;
 
                 foreach (DatabaseBusqueda.Persona persona in personaList)
                 {
-                    C1.Win.C1Tile.Tile tileNuevo = new C1.Win.C1Tile.Tile();
+#pragma warning disable IDE0017 // Simplify object initialization
+                    Tile tileNuevo = new Tile();
+#pragma warning restore IDE0017 // Simplify object initialization
                     tileNuevo.Text = persona.Apellido;
                     if (persona.Nombre != null)
                     {
