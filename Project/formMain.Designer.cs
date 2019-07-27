@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            C1.Win.C1Tile.PanelElement panelElement1 = new C1.Win.C1Tile.PanelElement();
-            C1.Win.C1Tile.ImageElement imageElement1 = new C1.Win.C1Tile.ImageElement();
-            C1.Win.C1Tile.TextElement textElement1 = new C1.Win.C1Tile.TextElement();
+            C1.Win.C1Tile.PanelElement panelElement2 = new C1.Win.C1Tile.PanelElement();
+            C1.Win.C1Tile.ImageElement imageElement2 = new C1.Win.C1Tile.ImageElement();
+            C1.Win.C1Tile.TextElement textElement2 = new C1.Win.C1Tile.TextElement();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.panelPasos = new System.Windows.Forms.TableLayoutPanel();
             this.pictureboxLogoEmpresa = new System.Windows.Forms.PictureBox();
@@ -39,10 +39,14 @@
             this.panelPaso3 = new System.Windows.Forms.TableLayoutPanel();
             this.panelPaso3_Personas = new System.Windows.Forms.TableLayoutPanel();
             this.panelPaso3_Viaje = new System.Windows.Forms.TableLayoutPanel();
-            this.labelPaso3_ViajeRuta_Valor = new System.Windows.Forms.Label();
-            this.labelPaso3_Origen_Valor = new System.Windows.Forms.Label();
-            this.labelPaso3_Origen_Leyenda = new System.Windows.Forms.Label();
-            this.labelPaso3_Destino_Leyenda = new System.Windows.Forms.Label();
+            this.panelPaso3_Viaje_Origen = new System.Windows.Forms.TableLayoutPanel();
+            this.labelPaso3_Viaje_Origen_FechaHora = new System.Windows.Forms.Label();
+            this.labelPaso3_Viaje_Origen_Lugar = new System.Windows.Forms.Label();
+            this.labelPaso3_Viaje_Origen_Leyenda = new System.Windows.Forms.Label();
+            this.labelPaso3_Viaje_Destino_Leyenda = new System.Windows.Forms.Label();
+            this.panelPaso3_Viaje_Destino = new System.Windows.Forms.TableLayoutPanel();
+            this.labelPaso3_Viaje_Destino_FechaHora = new System.Windows.Forms.Label();
+            this.labelPaso3_Viaje_Destino_Lugar = new System.Windows.Forms.Label();
             this.tilecontrolPaso3_Pasajeros = new C1.Win.C1Tile.C1TileControl();
             this.groupMain = new C1.Win.C1Tile.Group();
             this.panelPaso4 = new System.Windows.Forms.TableLayoutPanel();
@@ -71,6 +75,8 @@
             this.panelPaso3.SuspendLayout();
             this.panelPaso3_Personas.SuspendLayout();
             this.panelPaso3_Viaje.SuspendLayout();
+            this.panelPaso3_Viaje_Origen.SuspendLayout();
+            this.panelPaso3_Viaje_Destino.SuspendLayout();
             this.panelPaso4.SuspendLayout();
             this.panelPaso1.SuspendLayout();
             this.panelPaso2.SuspendLayout();
@@ -150,7 +156,7 @@
             this.panelPaso3_Personas.Location = new System.Drawing.Point(33, 3);
             this.panelPaso3_Personas.Name = "panelPaso3_Personas";
             this.panelPaso3_Personas.RowCount = 2;
-            this.panelPaso3_Personas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.panelPaso3_Personas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.panelPaso3_Personas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.panelPaso3_Personas.Size = new System.Drawing.Size(728, 338);
             this.panelPaso3_Personas.TabIndex = 0;
@@ -160,66 +166,120 @@
             this.panelPaso3_Viaje.ColumnCount = 2;
             this.panelPaso3_Viaje.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.panelPaso3_Viaje.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
-            this.panelPaso3_Viaje.Controls.Add(this.labelPaso3_ViajeRuta_Valor, 0, 1);
-            this.panelPaso3_Viaje.Controls.Add(this.labelPaso3_Origen_Valor, 0, 0);
-            this.panelPaso3_Viaje.Controls.Add(this.labelPaso3_Origen_Leyenda, 0, 0);
-            this.panelPaso3_Viaje.Controls.Add(this.labelPaso3_Destino_Leyenda, 0, 1);
+            this.panelPaso3_Viaje.Controls.Add(this.panelPaso3_Viaje_Origen, 1, 0);
+            this.panelPaso3_Viaje.Controls.Add(this.labelPaso3_Viaje_Origen_Leyenda, 0, 0);
+            this.panelPaso3_Viaje.Controls.Add(this.labelPaso3_Viaje_Destino_Leyenda, 0, 1);
+            this.panelPaso3_Viaje.Controls.Add(this.panelPaso3_Viaje_Destino, 1, 1);
             this.panelPaso3_Viaje.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPaso3_Viaje.Location = new System.Drawing.Point(3, 3);
             this.panelPaso3_Viaje.Name = "panelPaso3_Viaje";
             this.panelPaso3_Viaje.RowCount = 2;
             this.panelPaso3_Viaje.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.panelPaso3_Viaje.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.panelPaso3_Viaje.Size = new System.Drawing.Size(722, 74);
+            this.panelPaso3_Viaje.Size = new System.Drawing.Size(722, 144);
             this.panelPaso3_Viaje.TabIndex = 2;
             // 
-            // labelPaso3_ViajeRuta_Valor
+            // panelPaso3_Viaje_Origen
             // 
-            this.labelPaso3_ViajeRuta_Valor.AutoSize = true;
-            this.labelPaso3_ViajeRuta_Valor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelPaso3_ViajeRuta_Valor.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.labelPaso3_ViajeRuta_Valor.Location = new System.Drawing.Point(147, 37);
-            this.labelPaso3_ViajeRuta_Valor.Name = "labelPaso3_ViajeRuta_Valor";
-            this.labelPaso3_ViajeRuta_Valor.Size = new System.Drawing.Size(572, 37);
-            this.labelPaso3_ViajeRuta_Valor.TabIndex = 3;
-            this.labelPaso3_ViajeRuta_Valor.Text = "Destino";
-            this.labelPaso3_ViajeRuta_Valor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.panelPaso3_Viaje_Origen.ColumnCount = 1;
+            this.panelPaso3_Viaje_Origen.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.panelPaso3_Viaje_Origen.Controls.Add(this.labelPaso3_Viaje_Origen_FechaHora, 0, 1);
+            this.panelPaso3_Viaje_Origen.Controls.Add(this.labelPaso3_Viaje_Origen_Lugar, 0, 0);
+            this.panelPaso3_Viaje_Origen.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelPaso3_Viaje_Origen.Location = new System.Drawing.Point(147, 3);
+            this.panelPaso3_Viaje_Origen.Name = "panelPaso3_Viaje_Origen";
+            this.panelPaso3_Viaje_Origen.RowCount = 2;
+            this.panelPaso3_Viaje_Origen.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.panelPaso3_Viaje_Origen.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.panelPaso3_Viaje_Origen.Size = new System.Drawing.Size(572, 66);
+            this.panelPaso3_Viaje_Origen.TabIndex = 4;
             // 
-            // labelPaso3_Origen_Valor
+            // labelPaso3_Viaje_Origen_FechaHora
             // 
-            this.labelPaso3_Origen_Valor.AutoSize = true;
-            this.labelPaso3_Origen_Valor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelPaso3_Origen_Valor.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.labelPaso3_Origen_Valor.Location = new System.Drawing.Point(147, 0);
-            this.labelPaso3_Origen_Valor.Name = "labelPaso3_Origen_Valor";
-            this.labelPaso3_Origen_Valor.Size = new System.Drawing.Size(572, 37);
-            this.labelPaso3_Origen_Valor.TabIndex = 2;
-            this.labelPaso3_Origen_Valor.Text = "Origen";
-            this.labelPaso3_Origen_Valor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelPaso3_Viaje_Origen_FechaHora.AutoSize = true;
+            this.labelPaso3_Viaje_Origen_FechaHora.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelPaso3_Viaje_Origen_FechaHora.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPaso3_Viaje_Origen_FechaHora.Location = new System.Drawing.Point(3, 40);
+            this.labelPaso3_Viaje_Origen_FechaHora.Name = "labelPaso3_Viaje_Origen_FechaHora";
+            this.labelPaso3_Viaje_Origen_FechaHora.Size = new System.Drawing.Size(566, 26);
+            this.labelPaso3_Viaje_Origen_FechaHora.TabIndex = 4;
+            this.labelPaso3_Viaje_Origen_FechaHora.Text = "Fecha y hora de salida";
+            this.labelPaso3_Viaje_Origen_FechaHora.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // labelPaso3_Origen_Leyenda
+            // labelPaso3_Viaje_Origen_Lugar
             // 
-            this.labelPaso3_Origen_Leyenda.AutoSize = true;
-            this.labelPaso3_Origen_Leyenda.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelPaso3_Origen_Leyenda.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPaso3_Origen_Leyenda.Location = new System.Drawing.Point(3, 0);
-            this.labelPaso3_Origen_Leyenda.Name = "labelPaso3_Origen_Leyenda";
-            this.labelPaso3_Origen_Leyenda.Size = new System.Drawing.Size(138, 37);
-            this.labelPaso3_Origen_Leyenda.TabIndex = 0;
-            this.labelPaso3_Origen_Leyenda.Text = "Origen:";
-            this.labelPaso3_Origen_Leyenda.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelPaso3_Viaje_Origen_Lugar.AutoSize = true;
+            this.labelPaso3_Viaje_Origen_Lugar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelPaso3_Viaje_Origen_Lugar.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
+            this.labelPaso3_Viaje_Origen_Lugar.Location = new System.Drawing.Point(3, 0);
+            this.labelPaso3_Viaje_Origen_Lugar.Name = "labelPaso3_Viaje_Origen_Lugar";
+            this.labelPaso3_Viaje_Origen_Lugar.Size = new System.Drawing.Size(566, 40);
+            this.labelPaso3_Viaje_Origen_Lugar.TabIndex = 3;
+            this.labelPaso3_Viaje_Origen_Lugar.Text = "Parada de origen y lugar";
+            this.labelPaso3_Viaje_Origen_Lugar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // labelPaso3_Destino_Leyenda
+            // labelPaso3_Viaje_Origen_Leyenda
             // 
-            this.labelPaso3_Destino_Leyenda.AutoSize = true;
-            this.labelPaso3_Destino_Leyenda.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelPaso3_Destino_Leyenda.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPaso3_Destino_Leyenda.Location = new System.Drawing.Point(3, 37);
-            this.labelPaso3_Destino_Leyenda.Name = "labelPaso3_Destino_Leyenda";
-            this.labelPaso3_Destino_Leyenda.Size = new System.Drawing.Size(138, 37);
-            this.labelPaso3_Destino_Leyenda.TabIndex = 1;
-            this.labelPaso3_Destino_Leyenda.Text = "Destino:";
-            this.labelPaso3_Destino_Leyenda.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelPaso3_Viaje_Origen_Leyenda.AutoSize = true;
+            this.labelPaso3_Viaje_Origen_Leyenda.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelPaso3_Viaje_Origen_Leyenda.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPaso3_Viaje_Origen_Leyenda.Location = new System.Drawing.Point(3, 0);
+            this.labelPaso3_Viaje_Origen_Leyenda.Name = "labelPaso3_Viaje_Origen_Leyenda";
+            this.labelPaso3_Viaje_Origen_Leyenda.Size = new System.Drawing.Size(138, 72);
+            this.labelPaso3_Viaje_Origen_Leyenda.TabIndex = 0;
+            this.labelPaso3_Viaje_Origen_Leyenda.Text = "Salida de:";
+            this.labelPaso3_Viaje_Origen_Leyenda.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // labelPaso3_Viaje_Destino_Leyenda
+            // 
+            this.labelPaso3_Viaje_Destino_Leyenda.AutoSize = true;
+            this.labelPaso3_Viaje_Destino_Leyenda.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelPaso3_Viaje_Destino_Leyenda.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPaso3_Viaje_Destino_Leyenda.Location = new System.Drawing.Point(3, 72);
+            this.labelPaso3_Viaje_Destino_Leyenda.Name = "labelPaso3_Viaje_Destino_Leyenda";
+            this.labelPaso3_Viaje_Destino_Leyenda.Size = new System.Drawing.Size(138, 72);
+            this.labelPaso3_Viaje_Destino_Leyenda.TabIndex = 1;
+            this.labelPaso3_Viaje_Destino_Leyenda.Text = "Llegada a:";
+            this.labelPaso3_Viaje_Destino_Leyenda.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // panelPaso3_Viaje_Destino
+            // 
+            this.panelPaso3_Viaje_Destino.ColumnCount = 1;
+            this.panelPaso3_Viaje_Destino.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.panelPaso3_Viaje_Destino.Controls.Add(this.labelPaso3_Viaje_Destino_FechaHora, 0, 1);
+            this.panelPaso3_Viaje_Destino.Controls.Add(this.labelPaso3_Viaje_Destino_Lugar, 0, 0);
+            this.panelPaso3_Viaje_Destino.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelPaso3_Viaje_Destino.Location = new System.Drawing.Point(147, 75);
+            this.panelPaso3_Viaje_Destino.Name = "panelPaso3_Viaje_Destino";
+            this.panelPaso3_Viaje_Destino.RowCount = 2;
+            this.panelPaso3_Viaje_Destino.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.panelPaso3_Viaje_Destino.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.panelPaso3_Viaje_Destino.Size = new System.Drawing.Size(572, 66);
+            this.panelPaso3_Viaje_Destino.TabIndex = 3;
+            // 
+            // labelPaso3_Viaje_Destino_FechaHora
+            // 
+            this.labelPaso3_Viaje_Destino_FechaHora.AutoSize = true;
+            this.labelPaso3_Viaje_Destino_FechaHora.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelPaso3_Viaje_Destino_FechaHora.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPaso3_Viaje_Destino_FechaHora.Location = new System.Drawing.Point(3, 40);
+            this.labelPaso3_Viaje_Destino_FechaHora.Name = "labelPaso3_Viaje_Destino_FechaHora";
+            this.labelPaso3_Viaje_Destino_FechaHora.Size = new System.Drawing.Size(566, 26);
+            this.labelPaso3_Viaje_Destino_FechaHora.TabIndex = 4;
+            this.labelPaso3_Viaje_Destino_FechaHora.Text = "Fecha y hora de llegada";
+            this.labelPaso3_Viaje_Destino_FechaHora.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelPaso3_Viaje_Destino_Lugar
+            // 
+            this.labelPaso3_Viaje_Destino_Lugar.AutoSize = true;
+            this.labelPaso3_Viaje_Destino_Lugar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelPaso3_Viaje_Destino_Lugar.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
+            this.labelPaso3_Viaje_Destino_Lugar.Location = new System.Drawing.Point(3, 0);
+            this.labelPaso3_Viaje_Destino_Lugar.Name = "labelPaso3_Viaje_Destino_Lugar";
+            this.labelPaso3_Viaje_Destino_Lugar.Size = new System.Drawing.Size(566, 40);
+            this.labelPaso3_Viaje_Destino_Lugar.TabIndex = 3;
+            this.labelPaso3_Viaje_Destino_Lugar.Text = "Parada de destino y lugar";
+            this.labelPaso3_Viaje_Destino_Lugar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tilecontrolPaso3_Pasajeros
             // 
@@ -229,19 +289,19 @@
             // 
             // 
             // 
-            panelElement1.Alignment = System.Drawing.ContentAlignment.BottomLeft;
-            panelElement1.Children.Add(imageElement1);
-            panelElement1.Children.Add(textElement1);
-            panelElement1.Margin = new System.Windows.Forms.Padding(10, 6, 10, 6);
-            this.tilecontrolPaso3_Pasajeros.DefaultTemplate.Elements.Add(panelElement1);
+            panelElement2.Alignment = System.Drawing.ContentAlignment.BottomLeft;
+            panelElement2.Children.Add(imageElement2);
+            panelElement2.Children.Add(textElement2);
+            panelElement2.Margin = new System.Windows.Forms.Padding(10, 6, 10, 6);
+            this.tilecontrolPaso3_Pasajeros.DefaultTemplate.Elements.Add(panelElement2);
             this.tilecontrolPaso3_Pasajeros.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tilecontrolPaso3_Pasajeros.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tilecontrolPaso3_Pasajeros.GroupPadding = new System.Windows.Forms.Padding(20, 60, 20, 20);
             this.tilecontrolPaso3_Pasajeros.Groups.Add(this.groupMain);
-            this.tilecontrolPaso3_Pasajeros.Location = new System.Drawing.Point(3, 83);
+            this.tilecontrolPaso3_Pasajeros.Location = new System.Drawing.Point(3, 153);
             this.tilecontrolPaso3_Pasajeros.Name = "tilecontrolPaso3_Pasajeros";
             this.tilecontrolPaso3_Pasajeros.Orientation = C1.Win.C1Tile.LayoutOrientation.Vertical;
-            this.tilecontrolPaso3_Pasajeros.Size = new System.Drawing.Size(722, 252);
+            this.tilecontrolPaso3_Pasajeros.Size = new System.Drawing.Size(722, 182);
             this.tilecontrolPaso3_Pasajeros.SurfaceContentAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             this.tilecontrolPaso3_Pasajeros.TabIndex = 3;
             this.tilecontrolPaso3_Pasajeros.UncheckTilesOnClick = false;
@@ -576,6 +636,10 @@
             this.panelPaso3_Personas.ResumeLayout(false);
             this.panelPaso3_Viaje.ResumeLayout(false);
             this.panelPaso3_Viaje.PerformLayout();
+            this.panelPaso3_Viaje_Origen.ResumeLayout(false);
+            this.panelPaso3_Viaje_Origen.PerformLayout();
+            this.panelPaso3_Viaje_Destino.ResumeLayout(false);
+            this.panelPaso3_Viaje_Destino.PerformLayout();
             this.panelPaso4.ResumeLayout(false);
             this.panelPaso4.PerformLayout();
             this.panelPaso1.ResumeLayout(false);
@@ -618,15 +682,19 @@
         private System.Windows.Forms.TableLayoutPanel panelPaso3;
         private System.Windows.Forms.TableLayoutPanel panelPaso3_Personas;
         private System.Windows.Forms.TableLayoutPanel panelPaso3_Viaje;
-        private System.Windows.Forms.Label labelPaso3_Origen_Leyenda;
-        private System.Windows.Forms.Label labelPaso3_Destino_Leyenda;
+        private System.Windows.Forms.Label labelPaso3_Viaje_Origen_Leyenda;
+        private System.Windows.Forms.Label labelPaso3_Viaje_Destino_Leyenda;
         private C1.Win.C1Tile.C1TileControl tilecontrolPaso3_Pasajeros;
         private C1.Win.C1Tile.Group groupMain;
-        private System.Windows.Forms.Label labelPaso3_ViajeRuta_Valor;
-        private System.Windows.Forms.Label labelPaso3_Origen_Valor;
         private System.Windows.Forms.TableLayoutPanel panelPaso4;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.TableLayoutPanel panelPaso3_Viaje_Destino;
+        private System.Windows.Forms.Label labelPaso3_Viaje_Destino_Lugar;
+        private System.Windows.Forms.Label labelPaso3_Viaje_Destino_FechaHora;
+        private System.Windows.Forms.TableLayoutPanel panelPaso3_Viaje_Origen;
+        private System.Windows.Forms.Label labelPaso3_Viaje_Origen_FechaHora;
+        private System.Windows.Forms.Label labelPaso3_Viaje_Origen_Lugar;
     }
 }
 

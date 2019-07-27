@@ -91,11 +91,11 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="formMessageBox.cs">
+    <Compile Include="FormMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="formMessageBox.Designer.cs">
-      <DependentUpon>formMessageBox.cs</DependentUpon>
+    <Compile Include="FormMessageBox.Designer.cs">
+      <DependentUpon>FormMessageBox.cs</DependentUpon>
     </Compile>
     <Compile Include="MessageBox.cs" />
     <Compile Include="Program.cs" />
@@ -116,8 +116,8 @@
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="formMessageBox.resx">
-      <DependentUpon>formMessageBox.cs</DependentUpon>
+    <EmbeddedResource Include="FormMessageBox.resx">
+      <DependentUpon>FormMessageBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">

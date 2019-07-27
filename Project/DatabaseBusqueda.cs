@@ -14,6 +14,11 @@ namespace CSTransporteKiosk
             public string Nombre { get; set; } = string.Empty;
             public string DocumentoTipo { get; set; } = string.Empty;
             public string DocumentoNumero { get; set; } = string.Empty;
+            public string LugarOrigen { get; set; } = string.Empty;
+            public string LugarGrupoOrigen { get; set; } = string.Empty;
+            public string LugarDestino { get; set; } = string.Empty;
+            public string LugarGrupoDestino { get; set; } = string.Empty;
+            public string Vehiculo { get; set; } = string.Empty;
         }
 
         static public CardonerSistemas.Database_ADO_SQLServer Database;
@@ -55,7 +60,7 @@ namespace CSTransporteKiosk
             }
         }
 
-        static public bool BuscarViajesPorDocumento(string Documento, ref DateTime fechaHora, ref string Ruta, List<DatabaseBusqueda.Persona> personaList)
+        static public bool BuscarViajesPorDocumento(string Documento, List<DatabaseBusqueda.Persona> personaList)
         {
             int IDViaje = 0;
             int IDViajeDetalle = 0;
@@ -64,7 +69,7 @@ namespace CSTransporteKiosk
 
             if (ConnectToDatabase())
             {
-                if (BuscarReservasPorDocumento(Documento, ref fechaHora, ref Ruta, ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero))
+                if (BuscarReservasPorDocumento(Documento, ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero))
                 {
                     if (BuscarPersonasPorReserva(IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero, personaList))
                     {
@@ -86,7 +91,7 @@ namespace CSTransporteKiosk
             }
         }
 
-        static private bool BuscarReservasPorDocumento(string documento, ref DateTime fechaHora, ref string Ruta, ref int idViaje, ref int idViajeDetalle, ref string reservaCodigo, ref byte grupoNumero)
+        static private bool BuscarReservasPorDocumento(string documento, ref int idViaje, ref int idViajeDetalle, ref string reservaCodigo, ref byte grupoNumero)
         {
             SqlCommand sqlCommand = new SqlCommand();
             SqlDataReader sqlDataReader;
@@ -108,8 +113,6 @@ namespace CSTransporteKiosk
                 if (sqlDataReader.HasRows)
                 {
                     sqlDataReader.Read();
-                    fechaHora = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("FechaHora"));
-                    Ruta = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Ruta"));
                     idViaje = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("IDViaje"));
                     idViajeDetalle = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("IDViajeDetalle"));
                     reservaCodigo = sqlDataReader.GetString(sqlDataReader.GetOrdinal("ReservaCodigo"));
@@ -182,6 +185,12 @@ namespace CSTransporteKiosk
                         {
                             nuevaPersona.DocumentoNumero = sqlDataReader.GetString(sqlDataReader.GetOrdinal("DocumentoNumero"));
                         }
+                        nuevaPersona.LugarOrigen = sqlDataReader.GetString(sqlDataReader.GetOrdinal("LugarOrigen"));
+                        nuevaPersona.LugarGrupoOrigen = sqlDataReader.GetString(sqlDataReader.GetOrdinal("LugarGrupoOrigen"));
+                        nuevaPersona.LugarDestino = sqlDataReader.GetString(sqlDataReader.GetOrdinal("LugarDestino"));
+                        nuevaPersona.LugarGrupoDestino = sqlDataReader.GetString(sqlDataReader.GetOrdinal("LugarGrupoDestino"));
+                        nuevaPersona.Vehiculo = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Vehiculo"));
+
                         personaList.Add(nuevaPersona);
                         nuevaPersona = null;
                     }

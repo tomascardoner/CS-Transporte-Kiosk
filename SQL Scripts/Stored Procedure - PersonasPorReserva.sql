@@ -26,9 +26,17 @@ CREATE PROCEDURE usp_PersonasPorReserva
 		-- SET NOCOUNT ON added to prevent extra result sets from interfering with SELECT statements.
 		SET NOCOUNT ON;
 
-		SELECT p.IDPersona, p.Apellido, p.Nombre, dt.Nombre AS DocumentoTipo, p.DocumentoNumero
-            FROM (Persona AS p LEFT JOIN DocumentoTipo AS dt ON p.IDDocumentoTipo = dt.IDDocumentoTipo)
-				INNER JOIN ViajeDetalle AS vd ON p.IDPersona = vd.IDPersona
+		SELECT p.IDPersona, p.Apellido, p.Nombre, dt.Nombre AS DocumentoTipo, p.DocumentoNumero, lo.Nombre AS LugarOrigen, lgo.Nombre AS LugarGrupoOrigen, ld.Nombre AS LugarDestino, lgd.Nombre AS LugarGrupoDestino, vh.Nombre AS Vehiculo
+            FROM (((((((((Persona AS p LEFT JOIN DocumentoTipo AS dt ON p.IDDocumentoTipo = dt.IDDocumentoTipo)
+				INNER JOIN ViajeDetalle AS vd ON p.IDPersona = vd.IDPersona)
+				INNER JOIN Viaje AS v ON vd.IDViaje = v.IDViaje)
+				INNER JOIN RutaDetalle AS rdo ON vd.IDRuta = rdo.IDRuta AND vd.IDOrigen = rdo.IDLugar)
+				INNER JOIN Lugar AS lo ON vd.IDOrigen = lo.IDLugar)
+				INNER JOIN LugarGrupo AS lgo ON rdo.IDLugarGrupo = lgo.IDLugarGrupo)
+				INNER JOIN RutaDetalle AS rdd ON vd.IDRuta = rdd.IDRuta AND vd.IDDestino = rdd.IDLugar)
+				INNER JOIN Lugar AS ld ON vd.IDDestino = ld.IDLugar)
+				INNER JOIN LugarGrupo AS lgd ON rdd.IDLugarGrupo = lgd.IDLugarGrupo)
+				LEFT JOIN Vehiculo AS vh ON v.IDVehiculo = vh.IDVehiculo
 			WHERE vd.IDViaje = @IDViaje
 				AND ((@ReservaCodigo IS NOT NULL AND vd.ReservaCodigo = @ReservaCodigo)
 						OR (@ReservaCodigo IS NULL AND ISNULL(@GrupoNumero, 0) > 0 AND vd.GrupoNumero = @GrupoNumero)

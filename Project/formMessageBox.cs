@@ -2,16 +2,16 @@
 
 namespace CSTransporteKiosk
 {
-    public partial class formMessageBox : Form
+    public partial class FormMessageBox : Form
     {
-        public formMessageBox()
+        public FormMessageBox()
         {
             InitializeComponent();
 
             setAppearance();
         }
 
-        public formMessageBox(string messageText)
+        public FormMessageBox(string messageText)
         {
             InitializeComponent();
 

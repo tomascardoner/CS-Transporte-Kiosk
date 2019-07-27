@@ -1,6 +1,6 @@
 ﻿namespace CSTransporteKiosk
 {
-    partial class formMessageBox
+    partial class FormMessageBox
     {
         /// <summary>
         /// Required designer variable.

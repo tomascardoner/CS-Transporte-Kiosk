@@ -5,7 +5,7 @@ namespace CSTransporteKiosk
     {
         public static void Show(string messageText)
         {
-            formMessageBox messageBox = new formMessageBox(messageText);
+            FormMessageBox messageBox = new FormMessageBox(messageText);
             messageBox.ShowDialog();
             messageBox = null;
         }

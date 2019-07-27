@@ -201,14 +201,13 @@ namespace CSTransporteKiosk
         private bool VerificarPaso2BuscarViajesYPersonas()
         {
             // Buscar datos en la base de datos
-            DateTime fechaHora = new DateTime();
-            string ruta = null;
             var personaList = new List<DatabaseBusqueda.Persona>();
 
-            if (DatabaseBusqueda.BuscarViajesPorDocumento(textboxPaso2_Valor.Text.Trim(), ref fechaHora, ref ruta, personaList))
+            if (DatabaseBusqueda.BuscarViajesPorDocumento(textboxPaso2_Valor.Text.Trim(), personaList))
             {
-                labelPaso3_Origen_Leyenda.Text = String.Format("{0} {1}", fechaHora.ToShortDateString(), fechaHora.ToShortTimeString());
-                labelPaso3_Destino_Leyenda.Text = ruta;
+                labelPaso3_Viaje_Origen_Lugar.Text = String.Format("{0} en {1}", personaList[0].LugarOrigen, personaList[0].LugarGrupoOrigen);
+                //labelPaso3_Viaje_Origen_Lugar.Text = String.Format("El día {0} a las {1} hs.", DateTime.Now(), fechaHora.ToShortTimeString());
+                labelPaso3_Viaje_Destino_Lugar.Text = String.Format("{0} en {1}", personaList[0].LugarDestino, personaList[0].LugarGrupoDestino);
 
                 foreach (DatabaseBusqueda.Persona persona in personaList)
                 {
