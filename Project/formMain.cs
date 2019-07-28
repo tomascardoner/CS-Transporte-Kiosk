@@ -206,9 +206,26 @@ namespace CSTransporteKiosk
             if (DatabaseBusqueda.BuscarViajesPorDocumento(textboxPaso2_Valor.Text.Trim(), personaList))
             {
                 labelPaso3_Viaje_Origen_Lugar.Text = String.Format("{0} en {1}", personaList[0].LugarOrigen, personaList[0].LugarGrupoOrigen);
-                //labelPaso3_Viaje_Origen_Lugar.Text = String.Format("El día {0} a las {1} hs.", DateTime.Now(), fechaHora.ToShortTimeString());
+                if (personaList[0].FechaHoraOrigen.Date == DateTime.Now.Date)
+                {
+                    labelPaso3_Viaje_Origen_FechaHora.Text = String.Format("Hoy a las {0} hs.", personaList[0].FechaHoraOrigen.ToShortTimeString());
+                }
+                else
+                {
+                    labelPaso3_Viaje_Origen_FechaHora.Text = String.Format("El día {0} a las {1} hs.", personaList[0].FechaHoraOrigen.ToShortDateString(), personaList[0].FechaHoraOrigen.ToShortTimeString());
+                }
                 labelPaso3_Viaje_Destino_Lugar.Text = String.Format("{0} en {1}", personaList[0].LugarDestino, personaList[0].LugarGrupoDestino);
+                if (personaList[0].FechaHoraDestino.Date == DateTime.Now.Date)
+                {
+                    labelPaso3_Viaje_Destino_FechaHora.Text = String.Format("Hoy a las {0} hs.", personaList[0].FechaHoraDestino.ToShortTimeString());
+                }
+                else
+                {
+                    labelPaso3_Viaje_Destino_FechaHora.Text = String.Format("El día {0} a las {1} hs.", personaList[0].FechaHoraDestino.ToShortDateString(), personaList[0].FechaHoraDestino.ToShortTimeString());
+                }
+                labelPaso3_Viaje_Vehiculo.Text = personaList[0].Vehiculo;
 
+                tilecontrolPaso3_Pasajeros.Groups[0].Tiles.Clear();
                 foreach (DatabaseBusqueda.Persona persona in personaList)
                 {
 #pragma warning disable IDE0017 // Simplify object initialization
@@ -321,6 +338,6 @@ namespace CSTransporteKiosk
         textboxPaso2_Valor.Text = "";
     }
 
-    #endregion
+        #endregion
     }
 }

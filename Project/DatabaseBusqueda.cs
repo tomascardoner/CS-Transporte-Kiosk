@@ -16,8 +16,10 @@ namespace CSTransporteKiosk
             public string DocumentoNumero { get; set; } = string.Empty;
             public string LugarOrigen { get; set; } = string.Empty;
             public string LugarGrupoOrigen { get; set; } = string.Empty;
+            public DateTime FechaHoraOrigen { get; set; } = DateTime.MinValue;
             public string LugarDestino { get; set; } = string.Empty;
             public string LugarGrupoDestino { get; set; } = string.Empty;
+            public DateTime FechaHoraDestino { get; set; } = DateTime.MinValue;
             public string Vehiculo { get; set; } = string.Empty;
         }
 
@@ -187,8 +189,10 @@ namespace CSTransporteKiosk
                         }
                         nuevaPersona.LugarOrigen = sqlDataReader.GetString(sqlDataReader.GetOrdinal("LugarOrigen"));
                         nuevaPersona.LugarGrupoOrigen = sqlDataReader.GetString(sqlDataReader.GetOrdinal("LugarGrupoOrigen"));
+                        nuevaPersona.FechaHoraOrigen = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("FechaHoraOrigen"));
                         nuevaPersona.LugarDestino = sqlDataReader.GetString(sqlDataReader.GetOrdinal("LugarDestino"));
                         nuevaPersona.LugarGrupoDestino = sqlDataReader.GetString(sqlDataReader.GetOrdinal("LugarGrupoDestino"));
+                        nuevaPersona.FechaHoraDestino = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("FechaHoraDestino"));
                         nuevaPersona.Vehiculo = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Vehiculo"));
 
                         personaList.Add(nuevaPersona);
