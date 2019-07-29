@@ -118,45 +118,72 @@ namespace CSTransporteKiosk.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2")]
-        public byte ExitApplicationIntervalBetweenFirstAndSecondClickInSeconds {
+        public byte ExitApplicationIntervalBetweenFirstAndSecondClickSeconds {
             get {
-                return ((byte)(this["ExitApplicationIntervalBetweenFirstAndSecondClickInSeconds"]));
+                return ((byte)(this["ExitApplicationIntervalBetweenFirstAndSecondClickSeconds"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2")]
-        public byte ExitApplicationIntervalBetweenSecondAndThirdClickInSeconds {
+        public byte ExitApplicationIntervalBetweenSecondAndThirdClickSeconds {
             get {
-                return ((byte)(this["ExitApplicationIntervalBetweenSecondAndThirdClickInSeconds"]));
+                return ((byte)(this["ExitApplicationIntervalBetweenSecondAndThirdClickSeconds"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2")]
-        public byte ExitApplicationThirdClickDurationInSeconds {
+        public byte ExitApplicationThirdClickDurationSeconds {
             get {
-                return ((byte)(this["ExitApplicationThirdClickDurationInSeconds"]));
+                return ((byte)(this["ExitApplicationThirdClickDurationSeconds"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("30")]
-        public short LugarDuracionPreviaMaxima {
+        public short LugarDuracionPreviaMaximaMinutos {
             get {
-                return ((short)(this["LugarDuracionPreviaMaxima"]));
+                return ((short)(this["LugarDuracionPreviaMaximaMinutos"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2")]
-        public short LugarDuracionPreviaMinima {
+        public short LugarDuracionPreviaMinimaMinutos {
             get {
-                return ((short)(this["LugarDuracionPreviaMinima"]));
+                return ((short)(this["LugarDuracionPreviaMinimaMinutos"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public int POSPrinterClaimTimeoutMilliseconds {
+            get {
+                return ((int)(this["POSPrinterClaimTimeoutMilliseconds"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("90")]
+        public int POSPrinterPaperCutPercentage {
+            get {
+                return ((int)(this["POSPrinterPaperCutPercentage"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public short InactivityTimeoutSeconds {
+            get {
+                return ((short)(this["InactivityTimeoutSeconds"]));
             }
         }
     }

@@ -76,5 +76,14 @@ namespace CSTransporteKiosk {
                 return ((string)(this["DatabasePassword"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MainPOSPrinter")]
+        public string POSPrinterName {
+            get {
+                return ((string)(this["POSPrinterName"]));
+            }
+        }
     }
 }

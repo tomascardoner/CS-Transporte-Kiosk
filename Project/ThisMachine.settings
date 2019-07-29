@@ -20,5 +20,8 @@
     <Setting Name="DatabasePassword" Type="System.String" Scope="Application">
       <Value Profile="(Default)">IdcBT5Ecsf4FjrfMtH0YJ4a0L+vIV1iSGkzY30U9akZI28ZlNBx/Z+kPDNsDs+C6</Value>
     </Setting>
+    <Setting Name="POSPrinterName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">MainPOSPrinter</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

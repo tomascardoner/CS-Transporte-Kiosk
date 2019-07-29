@@ -50,9 +50,9 @@ namespace CSTransporteKiosk
             Database.CreateConnectionString();
         }
 
-        static private bool ConnectToDatabase()
+        static private bool ConectarABaseDeDatos()
         {
-            if (Database.connection == null || Database.connection.State != System.Data.ConnectionState.Open)
+            if (!Database.IsConnected())
             {
                 return Database.Connect();
             }
@@ -62,6 +62,11 @@ namespace CSTransporteKiosk
             }
         }
 
+        static public bool CerrarConeccionABaseDeDatos()
+        {
+            return Database.Disconnect();
+        }
+
         static public bool BuscarViajesPorDocumento(string Documento, List<DatabaseBusqueda.Persona> personaList)
         {
             int IDViaje = 0;
@@ -69,18 +74,11 @@ namespace CSTransporteKiosk
             string ReservaCodigo = null;
             byte GrupoNumero = 0;
 
-            if (ConnectToDatabase())
+            if (ConectarABaseDeDatos())
             {
                 if (BuscarReservasPorDocumento(Documento, ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero))
                 {
-                    if (BuscarPersonasPorReserva(IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero, personaList))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return BuscarPersonasPorReserva(IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero, personaList);
                 }
                 else
                 {
@@ -104,8 +102,8 @@ namespace CSTransporteKiosk
                 sqlCommand.CommandText = "usp_ReservasPorDocumento";
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@IDLugar", ThisMachine.Default.LugarID);
-                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMaxima", Properties.Settings.Default.LugarDuracionPreviaMaxima);
-                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMinima", Properties.Settings.Default.LugarDuracionPreviaMinima);
+                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMaxima", Properties.Settings.Default.LugarDuracionPreviaMaximaMinutos);
+                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMinima", Properties.Settings.Default.LugarDuracionPreviaMinimaMinutos);
                 sqlCommand.Parameters.AddWithValue("@DocumentoNumero", documento);
 
                 sqlDataReader = sqlCommand.ExecuteReader(CommandBehavior.SingleRow);
@@ -206,22 +204,16 @@ namespace CSTransporteKiosk
                 else
                 {
                     MessageBox.Show("No se han encontrado reservas.");
-
                     sqlDataReader.Close();
                     sqlDataReader = null;
-
                     return false;
                 }
-
             }
             catch (Exception)
             {
                 MessageBox.Show("No se pudo obtener la información.");
-
                 sqlCommand = null;
-
                 sqlDataReader = null;
-
                 return false;
             }
         }

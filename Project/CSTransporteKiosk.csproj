@@ -37,6 +37,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="C1.Win.C1TileControl.4, Version=4.0.20152.67, Culture=neutral, PublicKeyToken=79882d576c6336da, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.PointOfService, Version=1.14.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft Point Of Service\SDK\Microsoft.PointOfService.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -83,6 +87,9 @@
     </Compile>
     <Compile Include="..\..\..\framework-csharp\My.cs">
       <Link>My.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\framework-csharp\Printer_POS.cs">
+      <Link>Printer_POS.cs</Link>
     </Compile>
     <Compile Include="DatabaseBusqueda.cs" />
     <Compile Include="FormMain.cs">

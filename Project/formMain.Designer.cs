@@ -61,7 +61,7 @@
             this.panelPaso2 = new System.Windows.Forms.TableLayoutPanel();
             this.textboxPaso2_Valor = new System.Windows.Forms.TextBox();
             this.labelPaso2_Valor = new System.Windows.Forms.Label();
-            this.onscreenkeyboardDNI = new CSTransporteKiosk.CS_Control_OnScreenKeyboard_Numeric();
+            this.onscreenkeyboardNumeric = new CSTransporteKiosk.CS_Control_OnScreenKeyboard_Numeric();
             this.panelPasosNavegacion = new System.Windows.Forms.TableLayoutPanel();
             this.buttonPasoAnterior = new System.Windows.Forms.Button();
             this.buttonPasoSiguiente = new System.Windows.Forms.Button();
@@ -105,7 +105,7 @@
             this.panelPasos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.panelPasos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.panelPasos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.panelPasos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.panelPasos.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.panelPasos.Size = new System.Drawing.Size(800, 600);
             this.panelPasos.TabIndex = 4;
             // 
@@ -114,7 +114,7 @@
             this.pictureboxLogoEmpresa.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureboxLogoEmpresa.Location = new System.Drawing.Point(3, 3);
             this.pictureboxLogoEmpresa.Name = "pictureboxLogoEmpresa";
-            this.pictureboxLogoEmpresa.Size = new System.Drawing.Size(794, 94);
+            this.pictureboxLogoEmpresa.Size = new System.Drawing.Size(794, 96);
             this.pictureboxLogoEmpresa.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureboxLogoEmpresa.TabIndex = 1;
             this.pictureboxLogoEmpresa.TabStop = false;
@@ -127,9 +127,9 @@
             this.panelUser.Controls.Add(this.panelPaso1);
             this.panelUser.Controls.Add(this.panelPaso2);
             this.panelUser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelUser.Location = new System.Drawing.Point(3, 103);
+            this.panelUser.Location = new System.Drawing.Point(3, 105);
             this.panelUser.Name = "panelUser";
-            this.panelUser.Size = new System.Drawing.Size(794, 344);
+            this.panelUser.Size = new System.Drawing.Size(794, 351);
             this.panelUser.TabIndex = 4;
             // 
             // panelPaso3
@@ -145,7 +145,7 @@
             this.panelPaso3.Name = "panelPaso3";
             this.panelPaso3.RowCount = 1;
             this.panelPaso3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.panelPaso3.Size = new System.Drawing.Size(794, 344);
+            this.panelPaso3.Size = new System.Drawing.Size(794, 351);
             this.panelPaso3.TabIndex = 7;
             this.panelPaso3.Visible = false;
             // 
@@ -161,7 +161,7 @@
             this.panelPaso3_Viaje_Personas.RowCount = 2;
             this.panelPaso3_Viaje_Personas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.panelPaso3_Viaje_Personas.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.panelPaso3_Viaje_Personas.Size = new System.Drawing.Size(728, 338);
+            this.panelPaso3_Viaje_Personas.Size = new System.Drawing.Size(728, 345);
             this.panelPaso3_Viaje_Personas.TabIndex = 0;
             // 
             // panelPaso3_Viaje
@@ -334,7 +334,7 @@
             this.tilecontrolPaso3_Pasajeros.Name = "tilecontrolPaso3_Pasajeros";
             this.tilecontrolPaso3_Pasajeros.Orientation = C1.Win.C1Tile.LayoutOrientation.Vertical;
             this.tilecontrolPaso3_Pasajeros.Padding = new System.Windows.Forms.Padding(0);
-            this.tilecontrolPaso3_Pasajeros.Size = new System.Drawing.Size(722, 152);
+            this.tilecontrolPaso3_Pasajeros.Size = new System.Drawing.Size(722, 159);
             this.tilecontrolPaso3_Pasajeros.SurfaceContentAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             this.tilecontrolPaso3_Pasajeros.TabIndex = 3;
             this.tilecontrolPaso3_Pasajeros.TextX = 0;
@@ -370,7 +370,7 @@
             this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelPaso4.Size = new System.Drawing.Size(794, 344);
+            this.panelPaso4.Size = new System.Drawing.Size(794, 351);
             this.panelPaso4.TabIndex = 8;
             this.panelPaso4.Visible = false;
             // 
@@ -383,9 +383,9 @@
             this.radioButton1.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.radioButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.radioButton1.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.radioButton1.Location = new System.Drawing.Point(231, 71);
+            this.radioButton1.Location = new System.Drawing.Point(231, 73);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(331, 62);
+            this.radioButton1.Size = new System.Drawing.Size(331, 64);
             this.radioButton1.TabIndex = 7;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Ingresar con Nº de Documento";
@@ -401,9 +401,9 @@
             this.radioButton2.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.radioButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.radioButton2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.radioButton2.Location = new System.Drawing.Point(231, 207);
+            this.radioButton2.Location = new System.Drawing.Point(231, 213);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(331, 62);
+            this.radioButton2.Size = new System.Drawing.Size(331, 64);
             this.radioButton2.TabIndex = 6;
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Ingresar con Nº de Reserva";
@@ -427,7 +427,7 @@
             this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelPaso1.Size = new System.Drawing.Size(794, 344);
+            this.panelPaso1.Size = new System.Drawing.Size(794, 351);
             this.panelPaso1.TabIndex = 3;
             this.panelPaso1.Visible = false;
             // 
@@ -440,9 +440,9 @@
             this.radioPaso1_Documento.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.radioPaso1_Documento.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.radioPaso1_Documento.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.radioPaso1_Documento.Location = new System.Drawing.Point(231, 71);
+            this.radioPaso1_Documento.Location = new System.Drawing.Point(231, 73);
             this.radioPaso1_Documento.Name = "radioPaso1_Documento";
-            this.radioPaso1_Documento.Size = new System.Drawing.Size(331, 62);
+            this.radioPaso1_Documento.Size = new System.Drawing.Size(331, 64);
             this.radioPaso1_Documento.TabIndex = 7;
             this.radioPaso1_Documento.TabStop = true;
             this.radioPaso1_Documento.Text = "Ingresar con Nº de Documento";
@@ -458,9 +458,9 @@
             this.radioPaso1_Reserva.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.radioPaso1_Reserva.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.radioPaso1_Reserva.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.radioPaso1_Reserva.Location = new System.Drawing.Point(231, 207);
+            this.radioPaso1_Reserva.Location = new System.Drawing.Point(231, 213);
             this.radioPaso1_Reserva.Name = "radioPaso1_Reserva";
-            this.radioPaso1_Reserva.Size = new System.Drawing.Size(331, 62);
+            this.radioPaso1_Reserva.Size = new System.Drawing.Size(331, 64);
             this.radioPaso1_Reserva.TabIndex = 6;
             this.radioPaso1_Reserva.TabStop = true;
             this.radioPaso1_Reserva.Text = "Ingresar con Nº de Reserva";
@@ -476,7 +476,7 @@
             this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.panelPaso2.Controls.Add(this.textboxPaso2_Valor, 2, 1);
             this.panelPaso2.Controls.Add(this.labelPaso2_Valor, 1, 1);
-            this.panelPaso2.Controls.Add(this.onscreenkeyboardDNI, 2, 2);
+            this.panelPaso2.Controls.Add(this.onscreenkeyboardNumeric, 2, 2);
             this.panelPaso2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPaso2.Location = new System.Drawing.Point(0, 0);
             this.panelPaso2.Name = "panelPaso2";
@@ -484,7 +484,7 @@
             this.panelPaso2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.panelPaso2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.panelPaso2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.panelPaso2.Size = new System.Drawing.Size(794, 344);
+            this.panelPaso2.Size = new System.Drawing.Size(794, 351);
             this.panelPaso2.TabIndex = 6;
             this.panelPaso2.Visible = false;
             // 
@@ -494,7 +494,7 @@
             this.textboxPaso2_Valor.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textboxPaso2_Valor.Enabled = false;
             this.textboxPaso2_Valor.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.textboxPaso2_Valor.Location = new System.Drawing.Point(418, 124);
+            this.textboxPaso2_Valor.Location = new System.Drawing.Point(418, 127);
             this.textboxPaso2_Valor.MaxLength = 8;
             this.textboxPaso2_Valor.Name = "textboxPaso2_Valor";
             this.textboxPaso2_Valor.Size = new System.Drawing.Size(150, 35);
@@ -506,21 +506,22 @@
             this.labelPaso2_Valor.AutoSize = true;
             this.labelPaso2_Valor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelPaso2_Valor.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.labelPaso2_Valor.Location = new System.Drawing.Point(81, 121);
+            this.labelPaso2_Valor.Location = new System.Drawing.Point(81, 124);
             this.labelPaso2_Valor.Name = "labelPaso2_Valor";
             this.labelPaso2_Valor.Size = new System.Drawing.Size(331, 41);
             this.labelPaso2_Valor.TabIndex = 1;
             this.labelPaso2_Valor.Text = "Ingrese el Documento / Reserva:";
             this.labelPaso2_Valor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // onscreenkeyboardDNI
+            // onscreenkeyboardNumeric
             // 
-            this.onscreenkeyboardDNI.DestinationTextBox = this.textboxPaso2_Valor;
-            this.onscreenkeyboardDNI.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.onscreenkeyboardDNI.Location = new System.Drawing.Point(418, 165);
-            this.onscreenkeyboardDNI.Name = "onscreenkeyboardDNI";
-            this.onscreenkeyboardDNI.Size = new System.Drawing.Size(294, 176);
-            this.onscreenkeyboardDNI.TabIndex = 3;
+            this.onscreenkeyboardNumeric.DestinationTextBox = this.textboxPaso2_Valor;
+            this.onscreenkeyboardNumeric.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.onscreenkeyboardNumeric.Location = new System.Drawing.Point(418, 168);
+            this.onscreenkeyboardNumeric.Name = "onscreenkeyboardNumeric";
+            this.onscreenkeyboardNumeric.Size = new System.Drawing.Size(294, 180);
+            this.onscreenkeyboardNumeric.TabIndex = 3;
+            this.onscreenkeyboardNumeric.Click += new System.EventHandler(this.KeyboardClick);
             // 
             // panelPasosNavegacion
             // 
@@ -533,11 +534,11 @@
             this.panelPasosNavegacion.Controls.Add(this.buttonPasoAnterior, 1, 0);
             this.panelPasosNavegacion.Controls.Add(this.buttonPasoSiguiente, 3, 0);
             this.panelPasosNavegacion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelPasosNavegacion.Location = new System.Drawing.Point(3, 453);
+            this.panelPasosNavegacion.Location = new System.Drawing.Point(3, 462);
             this.panelPasosNavegacion.Name = "panelPasosNavegacion";
             this.panelPasosNavegacion.RowCount = 1;
             this.panelPasosNavegacion.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.panelPasosNavegacion.Size = new System.Drawing.Size(794, 44);
+            this.panelPasosNavegacion.Size = new System.Drawing.Size(794, 45);
             this.panelPasosNavegacion.TabIndex = 6;
             // 
             // buttonPasoAnterior
@@ -547,7 +548,7 @@
             this.buttonPasoAnterior.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
             this.buttonPasoAnterior.Location = new System.Drawing.Point(23, 3);
             this.buttonPasoAnterior.Name = "buttonPasoAnterior";
-            this.buttonPasoAnterior.Size = new System.Drawing.Size(144, 38);
+            this.buttonPasoAnterior.Size = new System.Drawing.Size(144, 39);
             this.buttonPasoAnterior.TabIndex = 3;
             this.buttonPasoAnterior.Text = "Anterior";
             this.buttonPasoAnterior.UseVisualStyleBackColor = false;
@@ -560,7 +561,7 @@
             this.buttonPasoSiguiente.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
             this.buttonPasoSiguiente.Location = new System.Drawing.Point(623, 3);
             this.buttonPasoSiguiente.Name = "buttonPasoSiguiente";
-            this.buttonPasoSiguiente.Size = new System.Drawing.Size(144, 38);
+            this.buttonPasoSiguiente.Size = new System.Drawing.Size(144, 39);
             this.buttonPasoSiguiente.TabIndex = 2;
             this.buttonPasoSiguiente.Text = "Siguiente";
             this.buttonPasoSiguiente.UseVisualStyleBackColor = false;
@@ -575,19 +576,19 @@
             this.panelPasosPie.Controls.Add(this.labelPasosVersion, 0, 1);
             this.panelPasosPie.Controls.Add(this.pictureboxPasosLogoCompaniaSoftware, 2, 1);
             this.panelPasosPie.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelPasosPie.Location = new System.Drawing.Point(3, 503);
+            this.panelPasosPie.Location = new System.Drawing.Point(3, 513);
             this.panelPasosPie.Name = "panelPasosPie";
             this.panelPasosPie.RowCount = 2;
-            this.panelPasosPie.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.panelPasosPie.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.panelPasosPie.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.panelPasosPie.Size = new System.Drawing.Size(794, 94);
+            this.panelPasosPie.Size = new System.Drawing.Size(794, 84);
             this.panelPasosPie.TabIndex = 7;
             // 
             // labelPasosVersion
             // 
             this.labelPasosVersion.AutoSize = true;
             this.labelPasosVersion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelPasosVersion.Location = new System.Drawing.Point(3, 30);
+            this.labelPasosVersion.Location = new System.Drawing.Point(3, 20);
             this.labelPasosVersion.Name = "labelPasosVersion";
             this.labelPasosVersion.Size = new System.Drawing.Size(41, 64);
             this.labelPasosVersion.TabIndex = 1;
@@ -597,7 +598,7 @@
             // pictureboxPasosLogoCompaniaSoftware
             // 
             this.pictureboxPasosLogoCompaniaSoftware.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureboxPasosLogoCompaniaSoftware.Location = new System.Drawing.Point(641, 33);
+            this.pictureboxPasosLogoCompaniaSoftware.Location = new System.Drawing.Point(641, 23);
             this.pictureboxPasosLogoCompaniaSoftware.Name = "pictureboxPasosLogoCompaniaSoftware";
             this.pictureboxPasosLogoCompaniaSoftware.Size = new System.Drawing.Size(150, 58);
             this.pictureboxPasosLogoCompaniaSoftware.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -609,6 +610,7 @@
             // 
             this.timerMain.Enabled = true;
             this.timerMain.Interval = 1000;
+            this.timerMain.Tick += new System.EventHandler(this.TimerMain_Tick);
             // 
             // panelInicio
             // 
@@ -718,7 +720,7 @@
         private System.Windows.Forms.RadioButton radioPaso1_Documento;
         private System.Windows.Forms.RadioButton radioPaso1_Reserva;
         private System.Windows.Forms.PictureBox pictureboxPasosLogoCompaniaSoftware;
-        private CS_Control_OnScreenKeyboard_Numeric onscreenkeyboardDNI;
+        private CS_Control_OnScreenKeyboard_Numeric onscreenkeyboardNumeric;
         private System.Windows.Forms.TextBox textboxPaso2_Valor;
         private System.Windows.Forms.TableLayoutPanel panelPaso3;
         private System.Windows.Forms.TableLayoutPanel panelPaso3_Viaje_Personas;

@@ -13,6 +13,7 @@ namespace CSTransporteKiosk
         byte pasoActual = 0;
         Boolean buscarPorDocumento;
 
+        private DateTime inactivityTimeout = new DateTime(0);
         private DateTime logoFirstClickTime = new DateTime(0);
         private DateTime logoSecondClickTime = new DateTime(0);
 
@@ -20,7 +21,7 @@ namespace CSTransporteKiosk
 
         #region Form stuff
 
-          public FormMain()
+        public FormMain()
         {
             InitializeComponent();
         }
@@ -45,7 +46,7 @@ namespace CSTransporteKiosk
             pictureboxPasosLogoCompaniaSoftware.ImageLocation = Properties.Settings.Default.CompaniaSoftwareLogotipo;
 
             // Propiedades del teclado numérico en pantalla
-            onscreenkeyboardDNI.Font = Properties.Settings.Default.KeyboardNumericNumberFont;
+            onscreenkeyboardNumeric.Font = Properties.Settings.Default.KeyboardNumericNumberFont;
         }
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
@@ -60,7 +61,7 @@ namespace CSTransporteKiosk
                     }
                 }
             }
-            catch (Exception) {}
+            catch (Exception) { }
             DatabaseBusqueda.Database = null;
         }
 
@@ -89,6 +90,7 @@ namespace CSTransporteKiosk
 
         private void Click_ToStart()
         {
+            inactivityTimeout = DateTime.Now;
             if (pasoActual == 0)
             {
                 if (wmInicio_Player.playState == WMPLib.WMPPlayState.wmppsPlaying)
@@ -114,16 +116,19 @@ namespace CSTransporteKiosk
 
         private void ButtonPasoSiguiente_Click(object sender, EventArgs e)
         {
+            inactivityTimeout = DateTime.Now;
             AvanzarPaso();
         }
 
         private void ButtonPasoAnterior_Click(object sender, EventArgs e)
         {
+            inactivityTimeout = DateTime.Now;
             RetrocederPaso();
         }
 
         private void ClickEnPasajero(object sender, C1.Win.C1Tile.TileEventArgs e)
         {
+            inactivityTimeout = DateTime.Now;
             e.Tile.Checked = !e.Tile.Checked;
         }
 
@@ -140,6 +145,21 @@ namespace CSTransporteKiosk
                     logoSecondClickTime = DateTime.Now;
                 }
             }
+        }
+
+        private void TimerMain_Tick(object sender, EventArgs e)
+        {
+            if (pasoActual > 0 && (DateTime.Now - inactivityTimeout).TotalSeconds >= Properties.Settings.Default.InactivityTimeoutSeconds)
+            {
+                DatabaseBusqueda.CerrarConeccionABaseDeDatos();
+                pasoActual = 0;
+                MostrarPasos();
+            }
+        }
+
+        private void KeyboardClick(object sender, EventArgs e)
+        {
+            inactivityTimeout = DateTime.Now;
         }
 
         #endregion
@@ -256,6 +276,7 @@ namespace CSTransporteKiosk
                     tilecontrolPaso3_Pasajeros.Groups[0].Tiles.Add(tileNuevo);
                     tileNuevo = null;
                 }
+
                 return true;
             }
             else
@@ -273,7 +294,18 @@ namespace CSTransporteKiosk
             }
             else
             {
-                return true;
+                string mensajeConfirmacion;
+
+                if (tilecontrolPaso3_Pasajeros.CheckedTiles.Length == 1)
+                {
+                    mensajeConfirmacion = "¿Confirma la asistencia de 1 Persona?";
+                }
+                else
+                {
+                    mensajeConfirmacion = String.Format("¿Confirma la asistencia de {0} Personas?", tilecontrolPaso3_Pasajeros.CheckedTiles.Length);
+                }
+
+                return MessageBox.ShowDialog(mensajeConfirmacion);
             }
         }
 
@@ -282,61 +314,82 @@ namespace CSTransporteKiosk
         #region Avance de Pasos
 
         private void AvanzarPaso()
-    {
-        if (VerificarAvancePaso())
         {
-            pasoActual++;
+            if (VerificarAvancePaso())
+            {
+                if (pasoActual == 0)
+                {
+                    // Este es para saltear el paso de elegir el tipo de búsqueda
+                    radioPaso1_Documento.Checked = true;
+                    pasoActual = 2;
+                }
+                else if (pasoActual == 3)
+                {
+                    pasoActual = 0;
+                }
+                else
+                {
+                    pasoActual++;
+                }
+                MostrarPasos();
+            }
+        }
+
+        private void RetrocederPaso()
+        {
+            pasoActual--;
             MostrarPasos();
         }
-    }
 
-    private void RetrocederPaso()
-    {
-        pasoActual--;
-        MostrarPasos();
-    }
-
-    private void MostrarPasos()
-    {
-        switch (pasoActual)
+        private void MostrarPasos()
         {
-            case 1:
-                MostrarPaso1();
-                break;
-            case 2:
-                MostrarPaso2();
-                break;
-            default:
-                break;
+            switch (pasoActual)
+            {
+                case 1:
+                    MostrarPaso1();
+                    break;
+                case 2:
+                    MostrarPaso2();
+                    break;
+                default:
+                    break;
+            }
+            panelInicio.Visible = (pasoActual == 0);
+            panelPasos.Visible = (pasoActual > 0);
+            panelPaso1.Visible = (pasoActual == 1);
+            panelPaso2.Visible = (pasoActual == 2);
+            panelPaso3.Visible = (pasoActual == 3);
+            buttonPasoAnterior.Visible = (pasoActual > 0);
+            buttonPasoSiguiente.Visible = (pasoActual > 0);
+            if (pasoActual <= 2)
+            {
+                buttonPasoSiguiente.Text = "Siguiente";
+            }
+            else
+            {
+                buttonPasoSiguiente.Text = "Finalizar";
+            }
         }
-        panelInicio.Visible = (pasoActual == 0);
-        panelPasos.Visible = (pasoActual > 0);
-        panelPaso1.Visible = (pasoActual == 1);
-        panelPaso2.Visible = (pasoActual == 2);
-        panelPaso3.Visible = (pasoActual == 3);
-        buttonPasoAnterior.Visible = (pasoActual > 0);
-        buttonPasoSiguiente.Visible = (pasoActual > 0);
-    }
 
-    private void MostrarPaso1()
-    {
-        radioPaso1_Documento.Checked = false;
-        radioPaso1_Reserva.Checked = false;
-    }
+        private void MostrarPaso1()
+        {
+            radioPaso1_Documento.Checked = false;
+            radioPaso1_Reserva.Checked = false;
+        }
 
-    private void MostrarPaso2()
-    {
-        buscarPorDocumento = (radioPaso1_Documento.Checked);
-        if (buscarPorDocumento)
+        private void MostrarPaso2()
         {
-            labelPaso2_Valor.Text = "Ingrese el Nº de Documento:";
+            buscarPorDocumento = (radioPaso1_Documento.Checked);
+            if (buscarPorDocumento)
+            {
+                labelPaso2_Valor.Text = "Ingrese el Nº de Documento:";
+            }
+            else
+            {
+                labelPaso2_Valor.Text = "Ingrese el Nº de Reserva:";
+            }
+            textboxPaso2_Valor.Text = "";
         }
-        else
-        {
-            labelPaso2_Valor.Text = "Ingrese el Nº de Reserva:";
-        }
-        textboxPaso2_Valor.Text = "";
-    }
 
         #endregion
     }
