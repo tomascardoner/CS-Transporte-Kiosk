@@ -11,11 +11,11 @@ GO
 -- Create date: 2019-08-11
 -- Description:	Obtiene los datos de un Kiosko
 -- =============================================
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Kiosko_Obtener') AND type in (N'P', N'PC'))
-	 DROP PROCEDURE usp_Kiosko_Obtener
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Kiosko_ObtenerPorID') AND type in (N'P', N'PC'))
+	 DROP PROCEDURE usp_Kiosko_ObtenerPorID
 GO
 
-CREATE PROCEDURE usp_Kiosko_Obtener
+CREATE PROCEDURE usp_Kiosko_ObtenerPorID
 	@IDKiosko tinyint
 	AS
 
@@ -29,5 +29,5 @@ CREATE PROCEDURE usp_Kiosko_Obtener
 	END
 GO
 
-GRANT EXECUTE ON dbo.usp_TicketPlantilla_Obtener TO cstransportekiosk
+GRANT EXECUTE ON dbo.usp_Kiosko_ObtenerPorID TO cstransportekiosk
 GO

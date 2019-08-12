@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using CardonerSistemas.Database.ADO;
 
 namespace CSTransporteKiosk
 {
-    static class EventLog
+    class EventLog
     {
         public const string TipoInformacion = "I";
         public const string TipoAviso = "A";
@@ -15,31 +16,45 @@ namespace CSTransporteKiosk
         public const string MensajeLoginExitoso = "La terminal ha iniciado sesión correctamente.";
         public const string MensajeLoginFallido = "La terminal falló al intentar iniciar sesión.";
 
-        static public bool Agregar(CardonerSistemas.Database_ADO_SQLServer database, string tipo, byte idKiosko, string mensaje, string notas)
+        private string _tipo;
+
+        public string tipo
         {
-            if (tipo == TipoInformacion | tipo == TipoAviso | tipo == TipoError | tipo == TipoLoginExitoso | tipo == TipoLoginFallido)
+            get => _tipo;
+            set
             {
-                try
+                if (value == TipoInformacion | value == TipoAviso | value == TipoError | value == TipoLoginExitoso | value == TipoLoginFallido)
                 {
-                    SqlCommand command = new SqlCommand("usp_EventLog_Agregar", database.connection);
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    command.Parameters.AddWithValue("@Tipo", tipo);
-                    command.Parameters.AddWithValue("@IDKiosko", idKiosko);
-                    command.Parameters.AddWithValue("@Mensaje", mensaje);
-                    command.Parameters.AddWithValue("@Notas", notas);
-
-                    command.ExecuteNonQuery();
-                    return true;
+                    _tipo = value;
                 }
-                catch (Exception ex)
+                else
                 {
-                    CardonerSistemas.Error.ProcessError(ex, "Error al registrar el log del evento.");
-                    return false;
+                    throw new ArgumentOutOfRangeException("El Tipo debe ser: I->Informacion, A->Aviso, E->Error, S->Login exitoso o F->Login fallido.");
                 }
             }
-            else
+        }
+        public byte idKiosko { get; set; }
+        public string mensaje { get; set; }
+        public string notas { get; set; }
+
+        public bool Agregar(SQLServer database)
+        {
+            try
             {
+                SqlCommand command = new SqlCommand("usp_EventLog_Agregar", database.connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.AddWithValue("@Tipo", tipo);
+                command.Parameters.AddWithValue("@IDKiosko", idKiosko);
+                command.Parameters.AddWithValue("@Mensaje", mensaje);
+                command.Parameters.AddWithValue("@Notas", notas);
+
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                CardonerSistemas.Error.ProcessError(ex, "Error al agregar el log del evento.");
                 return false;
             }
         }

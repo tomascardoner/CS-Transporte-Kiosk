@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using C1.Win.C1Tile;
+using CardonerSistemas.Database.ADO;
+using CardonerSistemas.PointOfSale;
 
 namespace CSTransporteKiosk
 {
@@ -13,13 +15,16 @@ namespace CSTransporteKiosk
         private byte pasoActual = 0;
         private Boolean buscarPorDocumento;
 
-        private CardonerSistemas.Database_ADO_SQLServer database = new CardonerSistemas.Database_ADO_SQLServer();
+        private EventLog eventLog = new EventLog();
+
+        private SQLServer database = new SQLServer();
+        private Kiosko kiosko = new Kiosko();
         private BusquedaReservas busquedaReservas = new BusquedaReservas();
 
         private List<BusquedaReservas.Persona> listPersonasEncontradas = new List<BusquedaReservas.Persona>();
         private List<BusquedaReservas.Persona> listPersonasSeleccionadas = new List<BusquedaReservas.Persona>();
 
-        private CardonerSistemas.POS_Printer printer;
+        private Printer printer = new Printer();
 
         private DateTime inactivityTimeout = new DateTime(0);
         private DateTime logoFirstClickTime = new DateTime(0);
@@ -36,16 +41,16 @@ namespace CSTransporteKiosk
 
         private void Form_Load(object sender, EventArgs e)
         {
-            busquedaReservas.PrepararConexionABaseDeDatos(database);
+            if (PrepararConexionABaseDeDatos())
+            {
+                string macAddress = kiosko.ObtenerMacAddressLocal();
+                if (kiosko.CargarPorMacAddress(database, macAddress))
+                {
+                }
+            }
             PreparaImpresora();
             SetAppearance();
             MostrarPasos();
-        }
-
-        private bool PreparaImpresora()
-        {
-            printer = new CardonerSistemas.POS_Printer();
-            return printer.Open(Properties.Settings.Default.POSPrinterName, Properties.Settings.Default.POSPrinterClaimTimeoutMilliseconds);
         }
 
         private void SetAppearance()
@@ -66,13 +71,48 @@ namespace CSTransporteKiosk
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            printer.Close();
-            printer = null;
+            eventLog = null;
 
             database.Close();
             database = null;
 
             busquedaReservas = null;
+
+            listPersonasEncontradas = null;
+            listPersonasSeleccionadas = null;
+
+            printer.Close();
+            printer = null;
+        }
+
+        #endregion
+
+        #region Database
+
+        private bool PrepararConexionABaseDeDatos()
+        {
+            database.applicationName = CardonerSistemas.My.Application.Info.Title;
+            database.datasource = Properties.Settings.Default.DatabaseDatasource;
+            database.initialCatalog = Properties.Settings.Default.DatabaseDatabase;
+            database.userID = Properties.Settings.Default.DatabaseUserID;
+            if (Properties.Settings.Default.DatabasePassword.Trim().Length == 0)
+            {
+                database.password = "";
+            }
+            else
+            {
+                CardonerSistemas.Encrypt.TripleDES decrypter = new CardonerSistemas.Encrypt.TripleDES(CardonerSistemas.Constants.PublicEncryptionPassword);
+                string decryptedPassword = "";
+                if (decrypter.Decrypt(Properties.Settings.Default.DatabasePassword, ref decryptedPassword))
+                {
+                    database.password = decryptedPassword;
+                }
+                decrypter = null;
+            }
+            database.workstationID = "";
+            database.CreateConnectionString();
+
+            return database.Connect();
         }
 
         #endregion
@@ -425,6 +465,11 @@ namespace CSTransporteKiosk
         #endregion
 
         #region Impresión de ticket
+
+        private bool PreparaImpresora()
+        {
+            return printer.Open(Properties.Settings.Default.POSPrinterName, Properties.Settings.Default.POSPrinterClaimTimeoutMilliseconds);
+        }
 
         private bool ImprimirTicket()
         {

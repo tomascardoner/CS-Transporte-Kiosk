@@ -207,7 +207,7 @@ namespace CSTransporteKiosk.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("CSTransporte_DelSurBus")]
+        [global::System.Configuration.DefaultSettingValueAttribute("CSTransporte_Kiosko")]
         public string DatabaseDatabase {
             get {
                 return ((string)(this["DatabaseDatabase"]));
@@ -229,15 +229,6 @@ namespace CSTransporteKiosk.Properties {
         public string DatabasePassword {
             get {
                 return ((string)(this["DatabasePassword"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public short IDKiosk {
-            get {
-                return ((short)(this["IDKiosk"]));
             }
         }
     }

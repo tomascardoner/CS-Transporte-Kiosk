@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using CardonerSistemas.Database.ADO;
 
 namespace CSTransporteKiosk
 {
@@ -37,31 +38,7 @@ namespace CSTransporteKiosk
             public string Vehiculo { get; set; } = string.Empty;
         }
 
-        public void PrepararConexionABaseDeDatos(CardonerSistemas.Database_ADO_SQLServer database)
-        {
-            database.applicationName = CardonerSistemas.My.Application.Info.Title;
-            database.datasource = Properties.Settings.Default.DatabaseDatasource;
-            database.initialCatalog = Properties.Settings.Default.DatabaseDatabase;
-            database.userID = Properties.Settings.Default.DatabaseUserID;
-            if (Properties.Settings.Default.DatabasePassword.Trim().Length == 0)
-            {
-                database.password = "";
-            }
-            else
-            {
-                CardonerSistemas.Encrypt_TripleDES decrypter = new CardonerSistemas.Encrypt_TripleDES(CardonerSistemas.Constants.PublicEncryptionPassword);
-                string decryptedPassword = "";
-                if (decrypter.Decrypt(Properties.Settings.Default.DatabasePassword, ref decryptedPassword))
-                {
-                    database.password = decryptedPassword;
-                }
-                decrypter = null;
-            }
-            database.workstationID = "";
-            database.CreateConnectionString();
-        }
-
-        private bool ConectarABaseDeDatos(CardonerSistemas.Database_ADO_SQLServer database)
+        private bool ConectarABaseDeDatos(SQLServer database)
         {
             if (!database.IsConnected())
             {
@@ -73,7 +50,7 @@ namespace CSTransporteKiosk
             }
         }
 
-        public bool CerrarConexionABaseDeDatos(CardonerSistemas.Database_ADO_SQLServer database)
+        public bool CerrarConexionABaseDeDatos(SQLServer database)
         {
             if (!database.IsConnected())
             {
@@ -85,7 +62,7 @@ namespace CSTransporteKiosk
             }
         }
 
-        public bool BuscarViajesPorDocumento(CardonerSistemas.Database_ADO_SQLServer database, string Documento, List<BusquedaReservas.Persona> personaList)
+        public bool BuscarViajesPorDocumento(SQLServer database, string Documento, List<BusquedaReservas.Persona> personaList)
         {
             int IDViaje = 0;
             int IDViajeDetalle = 0;
@@ -109,7 +86,7 @@ namespace CSTransporteKiosk
             }
         }
 
-        private bool BuscarReservasPorDocumento(CardonerSistemas.Database_ADO_SQLServer database, string documento, ref int idViaje, ref int idViajeDetalle, ref string reservaCodigo, ref byte grupoNumero)
+        private bool BuscarReservasPorDocumento(SQLServer database, string documento, ref int idViaje, ref int idViajeDetalle, ref string reservaCodigo, ref byte grupoNumero)
         {
             SqlCommand sqlCommand = new SqlCommand();
             SqlDataReader sqlDataReader;
@@ -164,7 +141,7 @@ namespace CSTransporteKiosk
             }
         }
 
-        private bool BuscarPersonasPorReserva(CardonerSistemas.Database_ADO_SQLServer database, int IDViaje, int IDViajeDetalle, string ReservaCodigo, byte GrupoNumero, List<BusquedaReservas.Persona> personaList)
+        private bool BuscarPersonasPorReserva(SQLServer database, int IDViaje, int IDViajeDetalle, string ReservaCodigo, byte GrupoNumero, List<BusquedaReservas.Persona> personaList)
         {
             SqlCommand sqlCommand = new SqlCommand();
             SqlDataReader sqlDataReader;
