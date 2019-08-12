@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using CardonerSistemas.Database.ADO;
+using System.Windows.Forms;
 
 namespace CSTransporteKiosko
 {
@@ -16,16 +16,16 @@ namespace CSTransporteKiosko
         public const string MensajeLoginExitoso = "La terminal ha iniciado sesión correctamente.";
         public const string MensajeLoginFallido = "La terminal falló al intentar iniciar sesión.";
 
-        private string _tipo;
+        private string _Tipo;
 
-        public string tipo
+        public string Tipo
         {
-            get => _tipo;
+            get => _Tipo;
             set
             {
                 if (value == TipoInformacion | value == TipoAviso | value == TipoError | value == TipoLoginExitoso | value == TipoLoginFallido)
                 {
-                    _tipo = value;
+                    _Tipo = value;
                 }
                 else
                 {
@@ -33,27 +33,42 @@ namespace CSTransporteKiosko
                 }
             }
         }
-        public byte idKiosko { get; set; }
-        public string mensaje { get; set; }
-        public string notas { get; set; }
+        public byte IdKiosko { get; set; }
+        public string Mensaje { get; set; }
+        public string Notas { get; set; }
 
-        public bool Agregar(SQLServer database)
+        public bool Agregar(SqlConnection connection)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             try
             {
-                SqlCommand command = new SqlCommand("usp_EventLog_Agregar", database.connection);
+                SqlCommand command = new SqlCommand("usp_EventLog_Agregar", connection);
                 command.CommandType = CommandType.StoredProcedure;
 
-                command.Parameters.AddWithValue("@Tipo", tipo);
-                command.Parameters.AddWithValue("@IDKiosko", idKiosko);
-                command.Parameters.AddWithValue("@Mensaje", mensaje);
-                command.Parameters.AddWithValue("@Notas", notas);
+                command.Parameters.AddWithValue("@Tipo", Tipo);
+                if (IdKiosko == 0)
+                {
+                    command.Parameters.AddWithValue("@IDKiosko", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@IDKiosko", IdKiosko);
+                }
+                command.Parameters.AddWithValue("@Mensaje", Mensaje);
+                command.Parameters.AddWithValue("@Notas", Notas);
 
                 command.ExecuteNonQuery();
+
+                command.Dispose();
+                command = null;
+
+                Cursor.Current = Cursors.Default;
                 return true;
             }
             catch (Exception ex)
             {
+                Cursor.Current = Cursors.Default;
                 CardonerSistemas.Error.ProcessError(ex, "Error al agregar el log del evento.");
                 return false;
             }

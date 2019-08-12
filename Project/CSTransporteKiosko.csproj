@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Kiosk.ico</ApplicationIcon>
+    <ApplicationIcon>Kiosko.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>CSTransporteKiosko.Program</StartupObject>
@@ -162,7 +162,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Kiosk.ico" />
+    <Content Include="Kiosko.ico" />
     <None Include="Resources\Kiosk.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

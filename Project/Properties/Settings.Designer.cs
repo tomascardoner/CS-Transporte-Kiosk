@@ -216,7 +216,7 @@ namespace CSTransporteKiosko.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("cstransportekiosk")]
+        [global::System.Configuration.DefaultSettingValueAttribute("cstransportekiosko")]
         public string DatabaseUserID {
             get {
                 return ((string)(this["DatabaseUserID"]));

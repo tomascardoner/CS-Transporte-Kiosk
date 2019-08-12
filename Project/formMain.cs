@@ -41,14 +41,9 @@ namespace CSTransporteKiosko
 
         private void Form_Load(object sender, EventArgs e)
         {
-            if (PrepararConexionABaseDeDatos())
+            if (!InicializarKiosko())
             {
-                string macAddress = kiosko.ObtenerMacAddressLocal();
-                if (kiosko.CargarPorMacAddress(database, macAddress))
-                {
-                }
             }
-            PreparaImpresora();
             SetAppearance();
             MostrarPasos();
         }
@@ -81,8 +76,48 @@ namespace CSTransporteKiosko
             listPersonasEncontradas = null;
             listPersonasSeleccionadas = null;
 
-            printer.Close();
-            printer = null;
+            if (printer != null)
+            {
+                printer.Close();
+                printer = null;
+            }
+        }
+
+        #endregion
+
+        #region Kiosko init
+
+        private bool InicializarKiosko()
+        {
+            if (PrepararConexionABaseDeDatos())
+            {
+                string macAddress = kiosko.ObtenerMacAddressLocal();
+                if (kiosko.CargarPorMacAddress(database.connection, macAddress))
+                {
+                    if (kiosko.IsFound)
+                    {
+                        return PreparaImpresora();
+                    }
+                    else
+                    {
+                        EventLog eventLog = new EventLog();
+                        eventLog.Tipo = EventLog.TipoLoginFallido;
+                        eventLog.Mensaje = EventLog.MensajeLoginFallido;
+                        eventLog.Notas = String.Format("MAC Address: {0}", macAddress);
+                        eventLog.Agregar(database.connection);
+                        eventLog = null;
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
         #endregion

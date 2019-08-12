@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CSTransporteKiosk.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CSTransporteKiosko.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="EmpresaLogotipo" Type="System.String" Scope="Application">
@@ -66,7 +66,7 @@
       <Value Profile="(Default)">CSTransporte_Kiosko</Value>
     </Setting>
     <Setting Name="DatabaseUserID" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">cstransportekiosk</Value>
+      <Value Profile="(Default)">cstransportekiosko</Value>
     </Setting>
     <Setting Name="DatabasePassword" Type="System.String" Scope="Application">
       <Value Profile="(Default)">IdcBT5Ecsf4FjrfMtH0YJ4a0L+vIV1iSGkzY30U9akZI28ZlNBx/Z+kPDNsDs+C6</Value>
