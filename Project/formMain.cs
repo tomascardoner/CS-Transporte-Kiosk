@@ -10,8 +10,16 @@ namespace CSTransporteKiosk
     {
         #region Declaraciones
 
-        byte pasoActual = 0;
-        Boolean buscarPorDocumento;
+        private byte pasoActual = 0;
+        private Boolean buscarPorDocumento;
+
+        private CardonerSistemas.Database_ADO_SQLServer database = new CardonerSistemas.Database_ADO_SQLServer();
+        private BusquedaReservas busquedaReservas = new BusquedaReservas();
+
+        private List<BusquedaReservas.Persona> listPersonasEncontradas = new List<BusquedaReservas.Persona>();
+        private List<BusquedaReservas.Persona> listPersonasSeleccionadas = new List<BusquedaReservas.Persona>();
+
+        private CardonerSistemas.POS_Printer printer;
 
         private DateTime inactivityTimeout = new DateTime(0);
         private DateTime logoFirstClickTime = new DateTime(0);
@@ -28,9 +36,16 @@ namespace CSTransporteKiosk
 
         private void Form_Load(object sender, EventArgs e)
         {
-            DatabaseBusqueda.PrepararConexionABaseDeDatos();
+            busquedaReservas.PrepararConexionABaseDeDatos(database);
+            PreparaImpresora();
             SetAppearance();
             MostrarPasos();
+        }
+
+        private bool PreparaImpresora()
+        {
+            printer = new CardonerSistemas.POS_Printer();
+            return printer.Open(Properties.Settings.Default.POSPrinterName, Properties.Settings.Default.POSPrinterClaimTimeoutMilliseconds);
         }
 
         private void SetAppearance()
@@ -51,18 +66,13 @@ namespace CSTransporteKiosk
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            try
-            {
-                if (DatabaseBusqueda.Database != null)
-                {
-                    if (DatabaseBusqueda.Database.connection.State != System.Data.ConnectionState.Open)
-                    {
-                        DatabaseBusqueda.Database.connection.Close();
-                    }
-                }
-            }
-            catch (Exception) { }
-            DatabaseBusqueda.Database = null;
+            printer.Close();
+            printer = null;
+
+            database.Close();
+            database = null;
+
+            busquedaReservas = null;
         }
 
         #endregion
@@ -151,7 +161,7 @@ namespace CSTransporteKiosk
         {
             if (pasoActual > 0 && (DateTime.Now - inactivityTimeout).TotalSeconds >= Properties.Settings.Default.InactivityTimeoutSeconds)
             {
-                DatabaseBusqueda.CerrarConeccionABaseDeDatos();
+                busquedaReservas.CerrarConexionABaseDeDatos(database);
                 pasoActual = 0;
                 MostrarPasos();
             }
@@ -176,8 +186,15 @@ namespace CSTransporteKiosk
                 case 2: // Introducción de los datos a buscar y búsqueda
                     return VerificarPaso2();
 
-                case 3: // Selección de Pasajeros
-                    return VerificarPaso3();
+                case 3: // Selección de Pasajeros e Impresión
+                    if (VerificarPaso3())
+                    {
+                        return ImprimirTicket();
+                    }
+                    else
+                    {
+                        return false;
+                    }
 
                 default:
                     break;
@@ -215,74 +232,7 @@ namespace CSTransporteKiosk
                 }
             }
 
-            return VerificarPaso2BuscarViajesYPersonas();
-        }
-
-        private bool VerificarPaso2BuscarViajesYPersonas()
-        {
-            // Buscar datos en la base de datos
-            var personaList = new List<DatabaseBusqueda.Persona>();
-
-            if (DatabaseBusqueda.BuscarViajesPorDocumento(textboxPaso2_Valor.Text.Trim(), personaList))
-            {
-                labelPaso3_Viaje_Origen_Lugar.Text = String.Format("{0} en {1}", personaList[0].LugarOrigen, personaList[0].LugarGrupoOrigen);
-                if (personaList[0].FechaHoraOrigen.Date == DateTime.Now.Date)
-                {
-                    labelPaso3_Viaje_Origen_FechaHora.Text = String.Format("Hoy a las {0} hs.", personaList[0].FechaHoraOrigen.ToShortTimeString());
-                }
-                else
-                {
-                    labelPaso3_Viaje_Origen_FechaHora.Text = String.Format("El día {0} a las {1} hs.", personaList[0].FechaHoraOrigen.ToShortDateString(), personaList[0].FechaHoraOrigen.ToShortTimeString());
-                }
-                labelPaso3_Viaje_Destino_Lugar.Text = String.Format("{0} en {1}", personaList[0].LugarDestino, personaList[0].LugarGrupoDestino);
-                if (personaList[0].FechaHoraDestino.Date == DateTime.Now.Date)
-                {
-                    labelPaso3_Viaje_Destino_FechaHora.Text = String.Format("Hoy a las {0} hs.", personaList[0].FechaHoraDestino.ToShortTimeString());
-                }
-                else
-                {
-                    labelPaso3_Viaje_Destino_FechaHora.Text = String.Format("El día {0} a las {1} hs.", personaList[0].FechaHoraDestino.ToShortDateString(), personaList[0].FechaHoraDestino.ToShortTimeString());
-                }
-                labelPaso3_Viaje_Vehiculo.Text = personaList[0].Vehiculo;
-
-                tilecontrolPaso3_Pasajeros.Groups[0].Tiles.Clear();
-                foreach (DatabaseBusqueda.Persona persona in personaList)
-                {
-#pragma warning disable IDE0017 // Simplify object initialization
-                    Tile tileNuevo = new Tile();
-#pragma warning restore IDE0017 // Simplify object initialization
-                    tileNuevo.Text = persona.Apellido;
-                    if (persona.Nombre != null)
-                    {
-                        tileNuevo.Text += ", " + persona.Nombre;
-                    }
-                    switch (tilecontrolPaso3_Pasajeros.Groups[0].Tiles.Count % 4)
-                    {
-                        case 0:
-                            tileNuevo.BackColor = Color.LightCoral;
-                            break;
-                        case 1:
-                            tileNuevo.BackColor = Color.Teal;
-                            break;
-                        case 2:
-                            tileNuevo.BackColor = Color.SteelBlue;
-                            break;
-                        case 3:
-                            tileNuevo.BackColor = Color.ForestGreen;
-                            break;
-                        default:
-                            break;
-                    }
-                    tilecontrolPaso3_Pasajeros.Groups[0].Tiles.Add(tileNuevo);
-                    tileNuevo = null;
-                }
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return BuscarViajesYPersonas();
         }
 
         private bool VerificarPaso3()
@@ -294,6 +244,10 @@ namespace CSTransporteKiosk
             }
             else
             {
+                foreach (Tile tileItem in tilecontrolPaso3_Pasajeros.CheckedTiles)
+                {
+                    listPersonasSeleccionadas.Add(listPersonasEncontradas.Find(persona => persona.IDPersona == Convert.ToInt32(tileItem.Tag)));
+                }
                 string mensajeConfirmacion;
 
                 if (tilecontrolPaso3_Pasajeros.CheckedTiles.Length == 1)
@@ -337,7 +291,16 @@ namespace CSTransporteKiosk
 
         private void RetrocederPaso()
         {
-            pasoActual--;
+            if (pasoActual == 2)
+            {
+                // Este es para saltear el paso de elegir el tipo de búsqueda
+                radioPaso1_Documento.Checked = true;
+                pasoActual = 0;
+            }
+            else
+            {
+                pasoActual--;
+            }
             MostrarPasos();
         }
 
@@ -389,6 +352,106 @@ namespace CSTransporteKiosk
                 labelPaso2_Valor.Text = "Ingrese el Nº de Reserva:";
             }
             textboxPaso2_Valor.Text = "";
+        }
+
+        #endregion
+
+        #region Búsqueda de pasajeros
+
+        private bool BuscarViajesYPersonas()
+        {
+            // Buscar datos en la base de datos
+            listPersonasEncontradas.Clear();
+
+            if (busquedaReservas.BuscarViajesPorDocumento(database, textboxPaso2_Valor.Text.Trim(), listPersonasEncontradas))
+            {
+                labelPaso3_Viaje_Origen_Lugar.Text = String.Format("{0} en {1}", listPersonasEncontradas[0].LugarOrigen, listPersonasEncontradas[0].LugarGrupoOrigen);
+                if (listPersonasEncontradas[0].FechaHoraOrigen.Date == DateTime.Now.Date)
+                {
+                    labelPaso3_Viaje_Origen_FechaHora.Text = String.Format("El día de hoy ({0}) a las {1} hs.", listPersonasEncontradas[0].FechaHoraOrigen.ToShortDateString(), listPersonasEncontradas[0].FechaHoraOrigen.ToShortTimeString());
+                }
+                else
+                {
+                    labelPaso3_Viaje_Origen_FechaHora.Text = String.Format("El día {0} a las {1} hs.", listPersonasEncontradas[0].FechaHoraOrigen.ToShortDateString(), listPersonasEncontradas[0].FechaHoraOrigen.ToShortTimeString());
+                }
+                labelPaso3_Viaje_Destino_Lugar.Text = String.Format("{0} en {1}", listPersonasEncontradas[0].LugarDestino, listPersonasEncontradas[0].LugarGrupoDestino);
+                if (listPersonasEncontradas[0].FechaHoraDestino.Date == DateTime.Now.Date)
+                {
+                    labelPaso3_Viaje_Destino_FechaHora.Text = String.Format("El día de hoy ({0}) a las {1} hs.", listPersonasEncontradas[0].FechaHoraDestino.ToShortDateString(), listPersonasEncontradas[0].FechaHoraDestino.ToShortTimeString());
+                }
+                else
+                {
+                    labelPaso3_Viaje_Destino_FechaHora.Text = String.Format("El día {0} a las {1} hs.", listPersonasEncontradas[0].FechaHoraDestino.ToShortDateString(), listPersonasEncontradas[0].FechaHoraDestino.ToShortTimeString());
+                }
+                labelPaso3_Viaje_Vehiculo.Text = listPersonasEncontradas[0].Vehiculo;
+
+                tilecontrolPaso3_Pasajeros.Groups[0].Tiles.Clear();
+                foreach (BusquedaReservas.Persona persona in listPersonasEncontradas)
+                {
+#pragma warning disable IDE0017 // Simplify object initialization
+                    Tile tileNuevo = new Tile();
+#pragma warning restore IDE0017 // Simplify object initialization
+                    tileNuevo.Tag = persona.IDPersona;
+                    tileNuevo.Text = persona.ApellidoNombre;
+                    switch (tilecontrolPaso3_Pasajeros.Groups[0].Tiles.Count % 4)
+                    {
+                        case 0:
+                            tileNuevo.BackColor = Color.LightCoral;
+                            break;
+                        case 1:
+                            tileNuevo.BackColor = Color.Teal;
+                            break;
+                        case 2:
+                            tileNuevo.BackColor = Color.SteelBlue;
+                            break;
+                        case 3:
+                            tileNuevo.BackColor = Color.ForestGreen;
+                            break;
+                        default:
+                            break;
+                    }
+                    tilecontrolPaso3_Pasajeros.Groups[0].Tiles.Add(tileNuevo);
+                    tileNuevo = null;
+                }
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Impresión de ticket
+
+        private bool ImprimirTicket()
+        {
+            foreach (BusquedaReservas.Persona persona in listPersonasSeleccionadas)
+            {
+                printer.PrintBitmap("C:\\Users\\Tomas\\Dropbox\\Cardoner Sistemas\\CS-Transporte\\Resource\\Interface\\lobosbus.gif", 500, -2);
+                printer.PrintLineCrLf("");
+                printer.PrintLineCrLf("Salida de:");
+                printer.PrintLineCrLf("<BOLD><DOUBLEHIGH>" + persona.LugarGrupoOrigen.ToUpper());
+                printer.PrintLineCrLf(persona.LugarOrigen);
+                printer.PrintLineCrLf("El día <BOLD><DOUBLEHIGH>{0}<SINGLE><NORMAL> a las <BOLD><DOUBLEHIGH>{1}<SINGLE><NORMAL> horas.", persona.FechaHoraOrigen.ToShortDateString(), persona.FechaHoraOrigen.ToShortTimeString());
+                printer.PrintLineCrLf("");
+                printer.PrintLineCrLf("Llegada a:");                
+                printer.PrintLineCrLf("<BOLD><DOUBLEHIGH>" + persona.LugarGrupoDestino.ToUpper());
+                printer.PrintLineCrLf(persona.LugarDestino);
+                printer.PrintLineCrLf("El día <BOLD><DOUBLEHIGH>{0}<SINGLE><NORMAL> a las <BOLD><DOUBLEHIGH>{1}<SINGLE><NORMAL> horas.", persona.FechaHoraDestino.ToShortDateString(), persona.FechaHoraDestino.ToShortTimeString());
+                printer.PrintLineCrLf("");
+                printer.PrintLineCrLf("Combi nº: <BOLD><DOUBLEHIGH>" + persona.Vehiculo);
+                printer.PrintLineCrLf("");
+                printer.PrintLineCrLf("<CENTER><DOUBLE>" + persona.ApellidoNombre);
+                printer.PrintLineCrLf("");
+                printer.PrintLineCrLf("");
+                printer.PrintLineCrLf("");
+                printer.PrintLineCrLf("");
+                printer.CutPaper(90);
+            }
+            return true;
         }
 
         #endregion

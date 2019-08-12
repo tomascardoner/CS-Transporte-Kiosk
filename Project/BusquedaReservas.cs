@@ -5,13 +5,27 @@ using System.Data.SqlClient;
 
 namespace CSTransporteKiosk
 {
-    static class DatabaseBusqueda
+    class BusquedaReservas
     {
         public class Persona
         {
             public int IDPersona { get; set; } = 0;
             public string Apellido { get; set; } = string.Empty;
             public string Nombre { get; set; } = string.Empty;
+            public string ApellidoNombre
+            {
+                get
+                {
+                    if (Nombre == null)
+                    {
+                        return Apellido;
+                    }
+                    else
+                    {
+                        return Apellido + ", " + Nombre;
+                    }
+                }
+            }
             public string DocumentoTipo { get; set; } = string.Empty;
             public string DocumentoNumero { get; set; } = string.Empty;
             public string LugarOrigen { get; set; } = string.Empty;
@@ -23,38 +37,35 @@ namespace CSTransporteKiosk
             public string Vehiculo { get; set; } = string.Empty;
         }
 
-        static public CardonerSistemas.Database_ADO_SQLServer Database;
-
-        static public void PrepararConexionABaseDeDatos()
+        public void PrepararConexionABaseDeDatos(CardonerSistemas.Database_ADO_SQLServer database)
         {
-            Database = new CardonerSistemas.Database_ADO_SQLServer();
-            Database.applicationName = CardonerSistemas.My.Application.Info.Title;
-            Database.datasource = ThisMachine.Default.DatabaseDatasource;
-            Database.initialCatalog = ThisMachine.Default.DatabaseDatabase;
-            Database.userID = ThisMachine.Default.DatabaseUserID;
-            if (ThisMachine.Default.DatabasePassword.Trim().Length == 0)
+            database.applicationName = CardonerSistemas.My.Application.Info.Title;
+            database.datasource = Properties.Settings.Default.DatabaseDatasource;
+            database.initialCatalog = Properties.Settings.Default.DatabaseDatabase;
+            database.userID = Properties.Settings.Default.DatabaseUserID;
+            if (Properties.Settings.Default.DatabasePassword.Trim().Length == 0)
             {
-                Database.password = "";
+                database.password = "";
             }
             else
             {
                 CardonerSistemas.Encrypt_TripleDES decrypter = new CardonerSistemas.Encrypt_TripleDES(CardonerSistemas.Constants.PublicEncryptionPassword);
                 string decryptedPassword = "";
-                if (decrypter.Decrypt(ThisMachine.Default.DatabasePassword, ref decryptedPassword))
+                if (decrypter.Decrypt(Properties.Settings.Default.DatabasePassword, ref decryptedPassword))
                 {
-                    Database.password = decryptedPassword;
+                    database.password = decryptedPassword;
                 }
                 decrypter = null;
             }
-            Database.workstationID = "";
-            Database.CreateConnectionString();
+            database.workstationID = "";
+            database.CreateConnectionString();
         }
 
-        static private bool ConectarABaseDeDatos()
+        private bool ConectarABaseDeDatos(CardonerSistemas.Database_ADO_SQLServer database)
         {
-            if (!Database.IsConnected())
+            if (!database.IsConnected())
             {
-                return Database.Connect();
+                return database.Connect();
             }
             else
             {
@@ -62,23 +73,30 @@ namespace CSTransporteKiosk
             }
         }
 
-        static public bool CerrarConeccionABaseDeDatos()
+        public bool CerrarConexionABaseDeDatos(CardonerSistemas.Database_ADO_SQLServer database)
         {
-            return Database.Disconnect();
+            if (!database.IsConnected())
+            {
+                return database.Close();
+            }
+            else
+            {
+                return true;
+            }
         }
 
-        static public bool BuscarViajesPorDocumento(string Documento, List<DatabaseBusqueda.Persona> personaList)
+        public bool BuscarViajesPorDocumento(CardonerSistemas.Database_ADO_SQLServer database, string Documento, List<BusquedaReservas.Persona> personaList)
         {
             int IDViaje = 0;
             int IDViajeDetalle = 0;
             string ReservaCodigo = null;
             byte GrupoNumero = 0;
 
-            if (ConectarABaseDeDatos())
+            if (ConectarABaseDeDatos(database))
             {
-                if (BuscarReservasPorDocumento(Documento, ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero))
+                if (BuscarReservasPorDocumento(database, Documento, ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero))
                 {
-                    return BuscarPersonasPorReserva(IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero, personaList);
+                    return BuscarPersonasPorReserva(database, IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero, personaList);
                 }
                 else
                 {
@@ -91,17 +109,17 @@ namespace CSTransporteKiosk
             }
         }
 
-        static private bool BuscarReservasPorDocumento(string documento, ref int idViaje, ref int idViajeDetalle, ref string reservaCodigo, ref byte grupoNumero)
+        private bool BuscarReservasPorDocumento(CardonerSistemas.Database_ADO_SQLServer database, string documento, ref int idViaje, ref int idViajeDetalle, ref string reservaCodigo, ref byte grupoNumero)
         {
             SqlCommand sqlCommand = new SqlCommand();
             SqlDataReader sqlDataReader;
 
             try
             {
-                sqlCommand.Connection = Database.connection;
+                sqlCommand.Connection = database.connection;
                 sqlCommand.CommandText = "usp_ReservasPorDocumento";
                 sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@IDLugar", ThisMachine.Default.LugarID);
+                sqlCommand.Parameters.AddWithValue("@IDLugar", 2);
                 sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMaxima", Properties.Settings.Default.LugarDuracionPreviaMaximaMinutos);
                 sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMinima", Properties.Settings.Default.LugarDuracionPreviaMinimaMinutos);
                 sqlCommand.Parameters.AddWithValue("@DocumentoNumero", documento);
@@ -146,14 +164,14 @@ namespace CSTransporteKiosk
             }
         }
 
-        static private bool BuscarPersonasPorReserva(int IDViaje, int IDViajeDetalle, string ReservaCodigo, byte GrupoNumero, List<DatabaseBusqueda.Persona> personaList)
+        private bool BuscarPersonasPorReserva(CardonerSistemas.Database_ADO_SQLServer database, int IDViaje, int IDViajeDetalle, string ReservaCodigo, byte GrupoNumero, List<BusquedaReservas.Persona> personaList)
         {
             SqlCommand sqlCommand = new SqlCommand();
             SqlDataReader sqlDataReader;
 
             try
             {
-                sqlCommand.Connection = Database.connection;
+                sqlCommand.Connection = database.connection;
                 sqlCommand.CommandText = "usp_PersonasPorReserva";
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@IDViaje", IDViaje);
