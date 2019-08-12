@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace CSTransporteKiosk
+namespace CSTransporteKiosko
 {
     public partial class FormMessageBox : Form
     {

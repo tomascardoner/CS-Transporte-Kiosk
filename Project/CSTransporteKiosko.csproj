@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D7AD711E-322F-418E-8C82-44D7CBB345DF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>CSTransporteKiosk</RootNamespace>
-    <AssemblyName>CSTransporteKiosk</AssemblyName>
+    <RootNamespace>CSTransporteKiosko</RootNamespace>
+    <AssemblyName>CSTransporteKiosko</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -37,7 +37,7 @@
     <ApplicationIcon>Kiosk.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>CSTransporteKiosk.Program</StartupObject>
+    <StartupObject>CSTransporteKiosko.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="C1.Win.C1TileControl.4, Version=4.0.20152.67, Culture=neutral, PublicKeyToken=79882d576c6336da, processorArchitecture=MSIL" />

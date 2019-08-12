@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Net.NetworkInformation;
 using CardonerSistemas.Database.ADO;
 
-namespace CSTransporteKiosk
+namespace CSTransporteKiosko
 {
     class Kiosko
     {

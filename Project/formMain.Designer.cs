@@ -1,4 +1,4 @@
-﻿namespace CSTransporteKiosk
+﻿namespace CSTransporteKiosko
 {
     partial class FormMain
     {
@@ -61,7 +61,7 @@
             this.panelPaso2 = new System.Windows.Forms.TableLayoutPanel();
             this.textboxPaso2_Valor = new System.Windows.Forms.TextBox();
             this.labelPaso2_Valor = new System.Windows.Forms.Label();
-            this.onscreenkeyboardNumeric = new CSTransporteKiosk.CS_Control_OnScreenKeyboard_Numeric();
+            this.onscreenkeyboardNumeric = new CSTransporteKiosko.CS_Control_OnScreenKeyboard_Numeric();
             this.panelPasosNavegacion = new System.Windows.Forms.TableLayoutPanel();
             this.buttonPasoAnterior = new System.Windows.Forms.Button();
             this.buttonPasoSiguiente = new System.Windows.Forms.Button();

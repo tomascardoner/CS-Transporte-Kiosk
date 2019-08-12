@@ -1,4 +1,4 @@
-﻿namespace CSTransporteKiosk
+﻿namespace CSTransporteKiosko
 {
     partial class FormMessageBox
     {

@@ -6,7 +6,7 @@ using C1.Win.C1Tile;
 using CardonerSistemas.Database.ADO;
 using CardonerSistemas.PointOfSale;
 
-namespace CSTransporteKiosk
+namespace CSTransporteKiosko
 {
     public partial class FormMain : Form
     {

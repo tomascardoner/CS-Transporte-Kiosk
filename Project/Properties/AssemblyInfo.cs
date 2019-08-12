@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CS-Transporte Kiosk 2019")]
-[assembly: AssemblyDescription("Software para Tótem (Kiosk).")]
+[assembly: AssemblyTitle("CS-Transporte Kiosko 2019")]
+[assembly: AssemblyDescription("Software para Tótem (Kiosko).")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Cardoner Sistemas")]
-[assembly: AssemblyProduct("CS-Transporte Kiosk")]
+[assembly: AssemblyProduct("CS-Transporte Kiosko")]
 [assembly: AssemblyCopyright("Copyright © 2019 Cardoner Sistemas")]
-[assembly: AssemblyTrademark("® CS-Transporte Kiosk")]
+[assembly: AssemblyTrademark("® CS-Transporte Kiosko")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible

@@ -1,5 +1,5 @@
 ﻿
-namespace CSTransporteKiosk
+namespace CSTransporteKiosko
 {
     static class MessageBox
     {

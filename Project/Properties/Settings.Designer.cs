@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CSTransporteKiosk.Properties {
+namespace CSTransporteKiosko.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
