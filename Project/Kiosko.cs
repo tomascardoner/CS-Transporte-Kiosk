@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Net.NetworkInformation;
 using System.Windows.Forms;
+using CardonerSistemas.Database.ADO;
 
 namespace CSTransporteKiosko
 {
@@ -11,8 +12,8 @@ namespace CSTransporteKiosko
         private string[] excludedInterfaceNames = { "Hyper-V Virtual", "VMware Virtual", "Microsoft Wi-Fi"};
 
         private byte _IdKiosko;
-        private DateTime _UltimaConexion;
-        private DateTime _UltimaOperacion;
+        private DateTime? _UltimaConexion;
+        private DateTime? _UltimaOperacion;
 
         private bool _IsFound = false;
 
@@ -24,8 +25,8 @@ namespace CSTransporteKiosko
         public byte IdKioskoConfiguracion { get; set; }
         public byte IdTicketPlantilla { get; set; }
         public bool Activo { get; set; }
-        public DateTime UltimaConexion { get => _UltimaConexion; }
-        public DateTime UltimaOperacion { get => _UltimaOperacion; }
+        public DateTime? UltimaConexion { get => _UltimaConexion; }
+        public DateTime? UltimaOperacion { get => _UltimaOperacion; }
 
         public bool IsFound { get => _IsFound; }
 
@@ -150,14 +151,14 @@ namespace CSTransporteKiosko
             {
                 _IdKiosko = dataReader.GetByte(dataReader.GetOrdinal("IDKiosko"));
                 Nombre = dataReader.GetString(dataReader.GetOrdinal("Nombre"));
-                MacAddress = dataReader.GetString(dataReader.GetOrdinal("MACAddress"));
+                MacAddress = SQLServer.DataReaderGetStringSafe(dataReader, "MACAddress");
                 IdEmpresa = dataReader.GetByte(dataReader.GetOrdinal("IDEmpresa"));
                 IdLugar = dataReader.GetInt32(dataReader.GetOrdinal("IDLugar"));
                 IdKioskoConfiguracion = dataReader.GetByte(dataReader.GetOrdinal("IDKioskoConfiguracion"));
                 IdTicketPlantilla = dataReader.GetByte(dataReader.GetOrdinal("IDTicketPlantilla"));
                 Activo = dataReader.GetBoolean(dataReader.GetOrdinal("Activo"));
-                _UltimaConexion = dataReader.GetDateTime(dataReader.GetOrdinal("UltimaConexion"));
-                _UltimaOperacion = dataReader.GetDateTime(dataReader.GetOrdinal("UltimaOperacion"));
+                _UltimaConexion = SQLServer.DataReaderGetDateTimeSafeAsNull(dataReader, ("UltimaConexion"));
+                _UltimaOperacion = SQLServer.DataReaderGetDateTimeSafeAsNull(dataReader, ("UltimaOperacion"));
                 return true;
             }
             catch (Exception ex)

@@ -47,14 +47,7 @@ namespace CSTransporteKiosko
                 command.CommandType = CommandType.StoredProcedure;
 
                 command.Parameters.AddWithValue("@Tipo", Tipo);
-                if (IdKiosko == 0)
-                {
-                    command.Parameters.AddWithValue("@IDKiosko", DBNull.Value);
-                }
-                else
-                {
-                    command.Parameters.AddWithValue("@IDKiosko", IdKiosko);
-                }
+                command.Parameters.AddWithValue("@IDKiosko", (IdKiosko == 0) ? DBNull.Value : (object)IdKiosko);
                 command.Parameters.AddWithValue("@Mensaje", Mensaje);
                 command.Parameters.AddWithValue("@Notas", Notas);
 

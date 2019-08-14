@@ -76,11 +76,8 @@ namespace CSTransporteKiosko
             listPersonasEncontradas = null;
             listPersonasSeleccionadas = null;
 
-            if (printer != null)
-            {
-                printer.Close();
-                printer = null;
-            }
+            printer.ReleaseAndClose();
+            printer = null;
         }
 
         #endregion
@@ -96,16 +93,14 @@ namespace CSTransporteKiosko
                 {
                     if (kiosko.IsFound)
                     {
+                        AgregarEventLog(EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
                         return PreparaImpresora();
                     }
                     else
                     {
-                        EventLog eventLog = new EventLog();
-                        eventLog.Tipo = EventLog.TipoLoginFallido;
-                        eventLog.Mensaje = EventLog.MensajeLoginFallido;
-                        eventLog.Notas = String.Format("MAC Address: {0}", macAddress);
-                        eventLog.Agregar(database.connection);
-                        eventLog = null;
+                        // La MAC Address del Kiosko no está en la base de datos, guardo en el log
+                        AgregarEventLog(EventLog.TipoLoginFallido, 0, EventLog.MensajeLoginFallido, String.Format("MAC Address: {0}", macAddress));
+                        MessageBox.Show("La MAC Address del Kiosko no está registrada en la base de datos.");
                         return false;
                     }
                 }
@@ -118,6 +113,17 @@ namespace CSTransporteKiosko
             {
                 return false;
             }
+        }
+
+        private void AgregarEventLog(string tipo, byte IdKiosko, string mensaje, string notas)
+        {
+            EventLog eventLog = new EventLog();
+            eventLog.Tipo = tipo;
+            eventLog.IdKiosko = IdKiosko;
+            eventLog.Mensaje = mensaje;
+            eventLog.Notas = notas;
+            eventLog.Agregar(database.connection);
+            eventLog = null;
         }
 
         #endregion
@@ -503,7 +509,7 @@ namespace CSTransporteKiosko
 
         private bool PreparaImpresora()
         {
-            return printer.Open(Properties.Settings.Default.POSPrinterName, Properties.Settings.Default.POSPrinterClaimTimeoutMilliseconds);
+            return printer.GetOpenClaimAndEnable(Properties.Settings.Default.POSPrinterName, Properties.Settings.Default.POSPrinterClaimTimeoutMilliseconds);
         }
 
         private bool ImprimirTicket()
