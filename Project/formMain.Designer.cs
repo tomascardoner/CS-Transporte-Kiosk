@@ -61,7 +61,7 @@
             this.panelPaso2 = new System.Windows.Forms.TableLayoutPanel();
             this.textboxPaso2_Valor = new System.Windows.Forms.TextBox();
             this.labelPaso2_Valor = new System.Windows.Forms.Label();
-            this.onscreenkeyboardNumeric = new CSTransporteKiosko.CS_Control_OnScreenKeyboard_Numeric();
+            this.onscreenkeyboardNumeric = new CardonerSistemas.ControlsOnScreenKeyboardNumeric();
             this.panelPasosNavegacion = new System.Windows.Forms.TableLayoutPanel();
             this.buttonPasoAnterior = new System.Windows.Forms.Button();
             this.buttonPasoSiguiente = new System.Windows.Forms.Button();
@@ -720,7 +720,7 @@
         private System.Windows.Forms.RadioButton radioPaso1_Documento;
         private System.Windows.Forms.RadioButton radioPaso1_Reserva;
         private System.Windows.Forms.PictureBox pictureboxPasosLogoCompaniaSoftware;
-        private CS_Control_OnScreenKeyboard_Numeric onscreenkeyboardNumeric;
+        private CardonerSistemas.ControlsOnScreenKeyboardNumeric onscreenkeyboardNumeric;
         private System.Windows.Forms.TextBox textboxPaso2_Valor;
         private System.Windows.Forms.TableLayoutPanel panelPaso3;
         private System.Windows.Forms.TableLayoutPanel panelPaso3_Viaje_Personas;

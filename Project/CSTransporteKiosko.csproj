@@ -64,13 +64,13 @@
     <Compile Include="..\..\..\framework-csharp\ConstantsKeys.cs">
       <Link>ConstantsKeys.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\framework-csharp\Control_OnScreenKeyboard_Numeric.cs">
-      <Link>Control_OnScreenKeyboard_Numeric.cs</Link>
+    <Compile Include="..\..\..\framework-csharp\Controls.OnScreenKeyboardNumeric.cs">
+      <Link>Controls.OnScreenKeyboardNumeric.cs</Link>
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="..\..\..\framework-csharp\Control_OnScreenKeyboard_Numeric.designer.cs">
-      <Link>Control_OnScreenKeyboard_Numeric.designer.cs</Link>
-      <DependentUpon>Control_OnScreenKeyboard_Numeric.cs</DependentUpon>
+    <Compile Include="..\..\..\framework-csharp\Controls.OnScreenKeyboardNumeric.designer.cs">
+      <Link>Controls.OnScreenKeyboardNumeric.designer.cs</Link>
+      <DependentUpon>Controls.OnScreenKeyboardNumeric.cs</DependentUpon>
     </Compile>
     <Compile Include="..\..\..\framework-csharp\Database.ADO.SQLServer.cs">
       <Link>Database.ADO.SQLServer.cs</Link>
@@ -109,13 +109,16 @@
     <Compile Include="FormMessageBox.Designer.cs">
       <DependentUpon>FormMessageBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Imagen.cs" />
     <Compile Include="Kiosko.cs" />
+    <Compile Include="KioskoConfiguracion.cs" />
+    <Compile Include="KioskoConfiguracionValor.cs" />
     <Compile Include="MessageBox.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="..\..\..\framework-csharp\Control_OnScreenKeyboard_Numeric.resx">
-      <Link>Control_OnScreenKeyboard_Numeric.resx</Link>
-      <DependentUpon>Control_OnScreenKeyboard_Numeric.cs</DependentUpon>
+    <EmbeddedResource Include="..\..\..\framework-csharp\Controls.OnScreenKeyboardNumeric.resx">
+      <Link>Controls.OnScreenKeyboardNumeric.resx</Link>
+      <DependentUpon>Controls.OnScreenKeyboardNumeric.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\framework-csharp\ErrorMessageBox.resx">
       <Link>ErrorMessageBox.resx</Link>

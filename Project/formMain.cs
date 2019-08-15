@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using C1.Win.C1Tile;
@@ -52,16 +53,24 @@ namespace CSTransporteKiosko
         {
             this.Icon = Properties.Resources.ICON_APP;
 
-            pictureboxLogoEmpresa.ImageLocation = Properties.Settings.Default.EmpresaLogotipo;
+            if (kiosko.KioskoConfiguracion.ValorCompaniaSoftwareLogotipoIDImagen.HasValue)
+            {
+                pictureboxLogoEmpresa.Image = kiosko.KioskoConfiguracion.ValorEmpresaLogotipo(database.Connection);
+            }
             wmInicio_Player.uiMode = "none";
-            wmInicio_Player.URL = Properties.Settings.Default.EmpresaVideo;
+            if (!String.IsNullOrEmpty(kiosko.KioskoConfiguracion.ValorVideo))
+            {
+                wmInicio_Player.URL = kiosko.KioskoConfiguracion.ValorVideo;
+            }
 
             // Version del assembly
-            labelPasosVersion.Text = Application.ProductVersion; //CardonerSistemas.My.Application.Info.Version.ToString();
-            pictureboxPasosLogoCompaniaSoftware.ImageLocation = Properties.Settings.Default.CompaniaSoftwareLogotipo;
+            labelPasosVersion.Text = Application.ProductVersion;
+            pictureboxPasosLogoCompaniaSoftware.Image = kiosko.KioskoConfiguracion.ValorCompaniaSoftwareLogotipo(database.Connection);
 
             // Propiedades del teclado numérico en pantalla
-            onscreenkeyboardNumeric.Font = Properties.Settings.Default.KeyboardNumericNumberFont;
+            TypeConverter converter = TypeDescriptor.GetConverter(typeof(Font));
+            Font font = (Font)converter.ConvertFromString(kiosko.KioskoConfiguracion.ValorKeyboardNumericNumberFont);
+            onscreenkeyboardNumeric.Font = font;
         }
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
@@ -89,12 +98,19 @@ namespace CSTransporteKiosko
             if (PrepararConexionABaseDeDatos())
             {
                 string macAddress = kiosko.ObtenerMacAddressLocal();
-                if (kiosko.CargarPorMacAddress(database.connection, macAddress))
+                if (kiosko.CargarPorMacAddress(database.Connection, macAddress))
                 {
                     if (kiosko.IsFound)
                     {
-                        AgregarEventLog(EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
-                        return PreparaImpresora();
+                        if (kiosko.CargarRelacionadoKioskoConfiguracion(database.Connection))
+                        {
+                            if (kiosko.KioskoConfiguracion.CargarRelacionadoKioscoConfiguracionValores(database.Connection))
+                            {
+                                AgregarEventLog(EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
+                                return PreparaImpresora();
+                            }
+                        }
+                        return false;
                     }
                     else
                     {
@@ -104,15 +120,8 @@ namespace CSTransporteKiosko
                         return false;
                     }
                 }
-                else
-                {
-                    return false;
-                }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         private void AgregarEventLog(string tipo, byte IdKiosko, string mensaje, string notas)
@@ -122,7 +131,7 @@ namespace CSTransporteKiosko
             eventLog.IdKiosko = IdKiosko;
             eventLog.Mensaje = mensaje;
             eventLog.Notas = notas;
-            eventLog.Agregar(database.connection);
+            eventLog.Agregar(database.Connection);
             eventLog = null;
         }
 
@@ -132,13 +141,13 @@ namespace CSTransporteKiosko
 
         private bool PrepararConexionABaseDeDatos()
         {
-            database.applicationName = CardonerSistemas.My.Application.Info.Title;
-            database.datasource = Properties.Settings.Default.DatabaseDatasource;
-            database.initialCatalog = Properties.Settings.Default.DatabaseDatabase;
-            database.userID = Properties.Settings.Default.DatabaseUserID;
+            database.ApplicationName = CardonerSistemas.My.Application.Info.Title;
+            database.Datasource = Properties.Settings.Default.DatabaseDatasource;
+            database.InitialCatalog = Properties.Settings.Default.DatabaseDatabase;
+            database.UserID = Properties.Settings.Default.DatabaseUserID;
             if (Properties.Settings.Default.DatabasePassword.Trim().Length == 0)
             {
-                database.password = "";
+                database.Password = "";
             }
             else
             {
@@ -146,11 +155,11 @@ namespace CSTransporteKiosko
                 string decryptedPassword = "";
                 if (decrypter.Decrypt(Properties.Settings.Default.DatabasePassword, ref decryptedPassword))
                 {
-                    database.password = decryptedPassword;
+                    database.Password = decryptedPassword;
                 }
                 decrypter = null;
             }
-            database.workstationID = "";
+            database.WorkstationID = "";
             database.CreateConnectionString();
 
             return database.Connect();

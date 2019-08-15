@@ -1,4 +1,4 @@
-USE CSTransporte_Kiosk
+USE CSTransporte_Kiosko
 GO
 
 SET ANSI_NULLS ON
@@ -23,11 +23,11 @@ CREATE PROCEDURE usp_Kiosko_ObtenerPorID
 		-- SET NOCOUNT ON added to prevent extra result sets from interfering with SELECT statements.
 		SET NOCOUNT ON;
 
-		SELECT k.Nombre, k.MACAddress, k.IDEmpresa, k.IDLugar, k.IDKioskoConfiguracion, k.IDTicketPlantilla, k.Activo, k.UltimaConexion, k.UltimaOperacion
+		SELECT k.IDKiosko, k.Nombre, k.MACAddress, k.IDEmpresa, k.IDLugar, k.IDKioskoConfiguracion, k.IDTicketPlantilla, k.Activo, k.UltimaConexion, k.UltimaOperacion
 			FROM Kiosko AS k
 			WHERE k.IDKiosko = @IDKiosko
 	END
 GO
 
-GRANT EXECUTE ON dbo.usp_Kiosko_ObtenerPorID TO cstransportekiosk
+GRANT EXECUTE ON dbo.usp_Kiosko_ObtenerPorID TO cstransportekiosko
 GO

@@ -9,13 +9,44 @@ namespace CSTransporteKiosko
 {
     class Kiosko
     {
+        #region Propiedades
+
         private string[] excludedInterfaceNames = { "Hyper-V Virtual", "VMware Virtual", "Microsoft Wi-Fi"};
+
+        // Entity definition properties
+
+        private const string EntityDBName = "Kiosko";
+
+        private const string EntityFieldNameIdKiosko = "IDKiosko";
+        private const string EntityFieldNameNombre = "Nombre";
+        private const string EntityFieldNameMacAddress = "MACAddress";
+        private const string EntityFieldNameIdEmpresa = "IDEmpresa";
+        private const string EntityFieldNameIdLugar = "IDLugar";
+        private const string EntityFieldNameIdKioskoConfiguracion = "IDKioskoConfiguracion";
+        private const string EntityFieldNameIdTicketPlantilla = "IDTicketPlantilla";
+        private const string EntityFieldNameActivo = "Activo";
+        private const string EntityFieldNameUltimaConexion = "UltimaConexion";
+        private const string EntityFieldNameUltimaOperacion = "UltimaOperacion";
+
+        private const bool EntityDisplayNameIsFemale = false;
+        private const string EntityDisplayName = "Kiosko";
+
+        private string EntityLoadByIdErrorMessage = String.Format("Error al cargar {0} {1} por Id.", EntityDisplayNameIsFemale? " la " : " el ", EntityDisplayName);
+        private string EntityLoadByMacAddressErrorMessage = String.Format("Error al cargar {0} {1} por MAC Address.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
+        private string EntityLoadPropertiesErrorMessage = String.Format("Error al cargar las propiedades de {0} {1}.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
+
+        // Object internal properties
 
         private byte _IdKiosko;
         private DateTime? _UltimaConexion;
         private DateTime? _UltimaOperacion;
 
         private bool _IsFound = false;
+
+        // Related entities
+        private KioskoConfiguracion _KioskoConfiguracion;
+
+        // Public properties
 
         public byte IdKiosko { get => _IdKiosko; }
         public string Nombre { get; set; }
@@ -28,7 +59,13 @@ namespace CSTransporteKiosko
         public DateTime? UltimaConexion { get => _UltimaConexion; }
         public DateTime? UltimaOperacion { get => _UltimaOperacion; }
 
+        public KioskoConfiguracion KioskoConfiguracion { get => _KioskoConfiguracion; }
+
         public bool IsFound { get => _IsFound; }
+
+        #endregion
+
+        #region Otros métodos
 
         public string ObtenerMacAddressLocal()
         {
@@ -61,6 +98,10 @@ namespace CSTransporteKiosko
             return String.Empty;
         }
 
+        #endregion
+
+        #region Carga de datos desde la base
+
         public bool CargarPorID(SqlConnection connection, byte idKiosko)
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -72,12 +113,12 @@ namespace CSTransporteKiosko
                 command.Parameters.AddWithValue("@IDKiosko", idKiosko);
 
                 Cursor.Current = Cursors.Default;
-                return CargarComun(command, "Error al cargar el Kiosko por Id.");
+                return CargarComun(command, EntityLoadByIdErrorMessage);
             }
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                CardonerSistemas.Error.ProcessError(ex, "Error al cargar el Kiosko por Id.");
+                CardonerSistemas.Error.ProcessError(ex, EntityLoadByIdErrorMessage);
                 return false;
             }
         }
@@ -93,12 +134,12 @@ namespace CSTransporteKiosko
                 command.Parameters.AddWithValue("@MACAddress", macAddress);
 
                 Cursor.Current = Cursors.Default;
-                return CargarComun(command, "Error al cargar el Kiosko por MAC Address.");
+                return CargarComun(command, EntityLoadByMacAddressErrorMessage);
             }
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                CardonerSistemas.Error.ProcessError(ex, "Error al cargar el Kiosko por MAC Address.");
+                CardonerSistemas.Error.ProcessError(ex, EntityLoadByMacAddressErrorMessage);
                 return false;
             }
         }
@@ -149,23 +190,35 @@ namespace CSTransporteKiosko
         {
             try
             {
-                _IdKiosko = dataReader.GetByte(dataReader.GetOrdinal("IDKiosko"));
-                Nombre = dataReader.GetString(dataReader.GetOrdinal("Nombre"));
-                MacAddress = SQLServer.DataReaderGetStringSafe(dataReader, "MACAddress");
-                IdEmpresa = dataReader.GetByte(dataReader.GetOrdinal("IDEmpresa"));
-                IdLugar = dataReader.GetInt32(dataReader.GetOrdinal("IDLugar"));
-                IdKioskoConfiguracion = dataReader.GetByte(dataReader.GetOrdinal("IDKioskoConfiguracion"));
-                IdTicketPlantilla = dataReader.GetByte(dataReader.GetOrdinal("IDTicketPlantilla"));
-                Activo = dataReader.GetBoolean(dataReader.GetOrdinal("Activo"));
-                _UltimaConexion = SQLServer.DataReaderGetDateTimeSafeAsNull(dataReader, ("UltimaConexion"));
-                _UltimaOperacion = SQLServer.DataReaderGetDateTimeSafeAsNull(dataReader, ("UltimaOperacion"));
+                _IdKiosko = dataReader.GetByte(dataReader.GetOrdinal(EntityFieldNameIdKiosko));
+                Nombre = dataReader.GetString(dataReader.GetOrdinal(EntityFieldNameNombre));
+                MacAddress = SQLServer.DataReaderGetStringSafeAsEmpty(dataReader, EntityFieldNameMacAddress);
+                IdEmpresa = dataReader.GetByte(dataReader.GetOrdinal(EntityFieldNameIdEmpresa));
+                IdLugar = dataReader.GetInt32(dataReader.GetOrdinal(EntityFieldNameIdLugar));
+                IdKioskoConfiguracion = dataReader.GetByte(dataReader.GetOrdinal(EntityFieldNameIdKioskoConfiguracion));
+                IdTicketPlantilla = dataReader.GetByte(dataReader.GetOrdinal(EntityFieldNameIdTicketPlantilla));
+                Activo = dataReader.GetBoolean(dataReader.GetOrdinal(EntityFieldNameActivo));
+                _UltimaConexion = SQLServer.DataReaderGetDateTimeSafeAsNull(dataReader, EntityFieldNameUltimaConexion);
+                _UltimaOperacion = SQLServer.DataReaderGetDateTimeSafeAsNull(dataReader, EntityFieldNameUltimaOperacion);
                 return true;
             }
             catch (Exception ex)
             {
-                CardonerSistemas.Error.ProcessError(ex, "Error al cargar las propiedades del Kiosko.");
+                CardonerSistemas.Error.ProcessError(ex, EntityLoadPropertiesErrorMessage);
                 return false;
             }
         }
+
+        #endregion
+
+        #region Entidades relacionadas
+
+        public bool CargarRelacionadoKioskoConfiguracion(SqlConnection connection)
+        {
+            _KioskoConfiguracion = new KioskoConfiguracion();
+            return _KioskoConfiguracion.CargarPorID(connection, IdKioskoConfiguracion);
+        }
+
+        #endregion
     }
 }

@@ -93,7 +93,7 @@ namespace CSTransporteKiosko
 
             try
             {
-                sqlCommand.Connection = database.connection;
+                sqlCommand.Connection = database.Connection;
                 sqlCommand.CommandText = "usp_ReservasPorDocumento";
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@IDLugar", 2);
@@ -148,7 +148,7 @@ namespace CSTransporteKiosko
 
             try
             {
-                sqlCommand.Connection = database.connection;
+                sqlCommand.Connection = database.Connection;
                 sqlCommand.CommandText = "usp_PersonasPorReserva";
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@IDViaje", IDViaje);
