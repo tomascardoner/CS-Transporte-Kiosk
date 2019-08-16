@@ -2,60 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CSTransporteKiosko.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="EmpresaLogotipo" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Users\Tomas\Dropbox\Cardoner Sistemas\CS-Transporte\Resource\Interface\lobosbus.gif</Value>
-    </Setting>
-    <Setting Name="EmpresaVideo" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Users\Tomas\Dropbox\Cardoner Sistemas\CS-Transporte\Resource\Interface\lobosbus.mp4</Value>
-    </Setting>
-    <Setting Name="CompaniaSoftwareLogotipo" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Users\Tomas\Dropbox\Cardoner Sistemas\Design\Nuevo\borrador.png</Value>
-    </Setting>
-    <Setting Name="MessageBoxBackColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">192, 255, 192</Value>
-    </Setting>
-    <Setting Name="MessageBoxForeColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">Black</Value>
-    </Setting>
-    <Setting Name="MessageBoxButtonBackColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">224, 224, 224</Value>
-    </Setting>
-    <Setting Name="MessageBoxButtonForeColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">Black</Value>
-    </Setting>
-    <Setting Name="FontStyle" Type="System.Drawing.Font" Scope="Application">
-      <Value Profile="(Default)">Segoe UI, 15.75pt, style=Bold</Value>
-    </Setting>
-    <Setting Name="KeyboardNumericNumberFont" Type="System.Drawing.Font" Scope="Application">
-      <Value Profile="(Default)">Segoe UI, 15.75pt, style=Bold</Value>
-    </Setting>
-    <Setting Name="KeyboardNumericSpecialFont" Type="System.Drawing.Font" Scope="Application">
-      <Value Profile="(Default)">Segoe UI, 11pt, style=Bold</Value>
-    </Setting>
-    <Setting Name="ExitApplicationIntervalBetweenFirstAndSecondClickSeconds" Type="System.Byte" Scope="Application">
-      <Value Profile="(Default)">2</Value>
-    </Setting>
-    <Setting Name="ExitApplicationIntervalBetweenSecondAndThirdClickSeconds" Type="System.Byte" Scope="Application">
-      <Value Profile="(Default)">2</Value>
-    </Setting>
-    <Setting Name="ExitApplicationThirdClickDurationSeconds" Type="System.Byte" Scope="Application">
-      <Value Profile="(Default)">2</Value>
-    </Setting>
-    <Setting Name="LugarDuracionPreviaMaximaMinutos" Type="System.Int16" Scope="Application">
-      <Value Profile="(Default)">30</Value>
-    </Setting>
-    <Setting Name="LugarDuracionPreviaMinimaMinutos" Type="System.Int16" Scope="Application">
-      <Value Profile="(Default)">2</Value>
-    </Setting>
-    <Setting Name="POSPrinterClaimTimeoutMilliseconds" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">1000</Value>
-    </Setting>
-    <Setting Name="POSPrinterPaperCutPercentage" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">90</Value>
-    </Setting>
-    <Setting Name="InactivityTimeoutSeconds" Type="System.Int16" Scope="Application">
-      <Value Profile="(Default)">30</Value>
-    </Setting>
     <Setting Name="POSPrinterName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">MainPOSPrinter</Value>
     </Setting>

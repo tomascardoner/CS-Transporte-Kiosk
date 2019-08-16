@@ -8,7 +8,7 @@ using CardonerSistemas.Database.ADO;
 
 namespace CSTransporteKiosko
 {
-    class Imagen
+    public class Imagen
     {
         #region Entity definition properties
 

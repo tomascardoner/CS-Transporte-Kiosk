@@ -15,12 +15,16 @@ namespace CSTransporteKiosko
 
         private byte pasoActual = 0;
         private Boolean buscarPorDocumento;
+        private int InactivityTimeoutSeconds;
 
         private EventLog eventLog = new EventLog();
 
         private SQLServer database = new SQLServer();
         private Kiosko kiosko = new Kiosko();
         private BusquedaReservas busquedaReservas = new BusquedaReservas();
+
+        private short LugarDuracionPreviaMinimaMinutos;
+        private short LugarDuracionPreviaMaximaMinutos;
 
         private List<BusquedaReservas.Persona> listPersonasEncontradas = new List<BusquedaReservas.Persona>();
         private List<BusquedaReservas.Persona> listPersonasSeleccionadas = new List<BusquedaReservas.Persona>();
@@ -45,32 +49,72 @@ namespace CSTransporteKiosko
             if (!InicializarKiosko())
             {
             }
-            SetAppearance();
+            ConfigAndSetAppearance();
             MostrarPasos();
         }
 
-        private void SetAppearance()
+        private void ConfigAndSetAppearance()
         {
+            // Form appearance and version info
             this.Icon = Properties.Resources.ICON_APP;
-
-            if (kiosko.KioskoConfiguracion.ValorCompaniaSoftwareLogotipoIDImagen.HasValue)
-            {
-                pictureboxLogoEmpresa.Image = kiosko.KioskoConfiguracion.ValorEmpresaLogotipo(database.Connection);
-            }
-            wmInicio_Player.uiMode = "none";
-            if (!String.IsNullOrEmpty(kiosko.KioskoConfiguracion.ValorVideo))
-            {
-                wmInicio_Player.URL = kiosko.KioskoConfiguracion.ValorVideo;
-            }
-
-            // Version del assembly
             labelPasosVersion.Text = Application.ProductVersion;
+
+            // Media
             pictureboxPasosLogoCompaniaSoftware.Image = kiosko.KioskoConfiguracion.ValorCompaniaSoftwareLogotipo(database.Connection);
+            pictureboxLogoEmpresa.Image = kiosko.KioskoConfiguracion.ValorEmpresaLogotipo(database.Connection);
+            wmInicio_Player.uiMode = "none";
+            wmInicio_Player.URL = kiosko.KioskoConfiguracion.ValorVideo;
+
+            // Apariencia
+            this.BackColor = SetColor(kiosko.KioskoConfiguracion.ValorScreenBackColorAsColor, this.BackColor);
+
+            labelPaso3_Viaje_Origen_Leyenda.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFontStyle;
+            labelPaso3_Viaje_Origen_Leyenda.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColorAsColor, labelPaso3_Viaje_Origen_Leyenda.ForeColor);
+            labelPaso3_Viaje_Destino_Leyenda.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFontStyle;
+            labelPaso3_Viaje_Destino_Leyenda.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColorAsColor, labelPaso3_Viaje_Destino_Leyenda.ForeColor);
+            labelPaso3_Viaje_Vehiculo_Leyenda.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFontStyle;
+            labelPaso3_Viaje_Vehiculo_Leyenda.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColorAsColor, labelPaso3_Viaje_Vehiculo_Leyenda.ForeColor);
+
+            labelPaso3_Viaje_Origen_Lugar.Font = kiosko.KioskoConfiguracion.ValorInformacionPrincipalFontStyle;
+            labelPaso3_Viaje_Origen_Lugar.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionPrincipalForeColorAsColor, labelPaso3_Viaje_Origen_Lugar.ForeColor);
+            labelPaso3_Viaje_Destino_Lugar.Font = kiosko.KioskoConfiguracion.ValorInformacionPrincipalFontStyle;
+            labelPaso3_Viaje_Destino_Lugar.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionPrincipalForeColorAsColor, labelPaso3_Viaje_Destino_Lugar.ForeColor);
+            labelPaso3_Viaje_Vehiculo.Font = kiosko.KioskoConfiguracion.ValorInformacionPrincipalFontStyle;
+            labelPaso3_Viaje_Vehiculo.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionPrincipalForeColorAsColor, labelPaso3_Viaje_Vehiculo.ForeColor);
+
+            labelPaso3_Viaje_Origen_FechaHora.Font = kiosko.KioskoConfiguracion.ValorInformacionSecundariaFontStyle;
+            labelPaso3_Viaje_Origen_FechaHora.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionSecundariaForeColorAsColor, labelPaso3_Viaje_Origen_FechaHora.ForeColor);
+            labelPaso3_Viaje_Destino_FechaHora.Font = kiosko.KioskoConfiguracion.ValorInformacionSecundariaFontStyle;
+            labelPaso3_Viaje_Destino_FechaHora.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionSecundariaForeColorAsColor, labelPaso3_Viaje_Destino_FechaHora.ForeColor);
+
+            // Botón anterior
+            buttonPasoAnterior.Font = kiosko.KioskoConfiguracion.ValorButtonPreviousFontStyle;
+            buttonPasoAnterior.BackColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonPreviousBackColorAsColor, buttonPasoAnterior.BackColor);
+            buttonPasoAnterior.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonPreviousForeColorAsColor, buttonPasoAnterior.BackColor);
+
+            // Botón siguiente
+            buttonPasoSiguiente.Font = kiosko.KioskoConfiguracion.ValorButtonNextFontStyle;
+            buttonPasoSiguiente.BackColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonNextBackColorAsColor, buttonPasoSiguiente.BackColor);
+            buttonPasoSiguiente.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonNextForeColorAsColor, buttonPasoSiguiente.BackColor);
 
             // Propiedades del teclado numérico en pantalla
-            TypeConverter converter = TypeDescriptor.GetConverter(typeof(Font));
-            Font font = (Font)converter.ConvertFromString(kiosko.KioskoConfiguracion.ValorKeyboardNumericNumberFont);
-            onscreenkeyboardNumeric.Font = font;
+            // onscreenkeyboardNumeric.Font = kiosko.KioskoConfiguracion.ValorFontStyle;
+
+            InactivityTimeoutSeconds = kiosko.KioskoConfiguracion.ValorInactivityTimeoutSeconds;
+            LugarDuracionPreviaMinimaMinutos = kiosko.KioskoConfiguracion.ValorLugarDuracionPreviaMinimaMinutos;
+            LugarDuracionPreviaMaximaMinutos = kiosko.KioskoConfiguracion.ValorLugarDuracionPreviaMaximaMinutos;
+        }
+
+        private Color SetColor(Color? colorNuevo, Color colorPredeterminado)
+        {
+            if (colorNuevo.HasValue)
+            {
+                return colorNuevo.Value;
+            }
+            else
+            {
+                return colorPredeterminado;
+            }
         }
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
@@ -85,7 +129,7 @@ namespace CSTransporteKiosko
             listPersonasEncontradas = null;
             listPersonasSeleccionadas = null;
 
-            printer.ReleaseAndClose();
+            printer.ReleaseAndClose(kiosko.KioskoConfiguracion.ValorPOSPrinterReleaseTimeoutSeconds);
             printer = null;
         }
 
@@ -116,7 +160,7 @@ namespace CSTransporteKiosko
                     {
                         // La MAC Address del Kiosko no está en la base de datos, guardo en el log
                         AgregarEventLog(EventLog.TipoLoginFallido, 0, EventLog.MensajeLoginFallido, String.Format("MAC Address: {0}", macAddress));
-                        MessageBox.Show("La MAC Address del Kiosko no está registrada en la base de datos.");
+                        MessageBox.Show("La MAC Address del Kiosko no está registrada en la base de datos.", kiosko.KioskoConfiguracion);
                         return false;
                     }
                 }
@@ -249,7 +293,7 @@ namespace CSTransporteKiosko
 
         private void TimerMain_Tick(object sender, EventArgs e)
         {
-            if (pasoActual > 0 && (DateTime.Now - inactivityTimeout).TotalSeconds >= Properties.Settings.Default.InactivityTimeoutSeconds)
+            if (pasoActual > 0 && (DateTime.Now - inactivityTimeout).TotalSeconds >= InactivityTimeoutSeconds)
             {
                 busquedaReservas.CerrarConexionABaseDeDatos(database);
                 pasoActual = 0;
@@ -296,7 +340,7 @@ namespace CSTransporteKiosko
         {
             if (radioPaso1_Documento.Checked == false & radioPaso1_Reserva.Checked == false)
             {
-                MessageBox.Show("Debe seleccionar alguna de las opciones de búsqueda.");
+                MessageBox.Show("Debe seleccionar alguna de las opciones de búsqueda.", kiosko.KioskoConfiguracion);
                 return false;
             }
             return true;
@@ -309,7 +353,7 @@ namespace CSTransporteKiosko
             {
                 if (textboxPaso2_Valor.Text.Trim().Length < 6)
                 {
-                    MessageBox.Show("El Nº de Documento debe contener al menos 6 (seis) dígitos.");
+                    MessageBox.Show("El Nº de Documento debe contener al menos 6 (seis) dígitos.", kiosko.KioskoConfiguracion);
                     return false;
                 }
             }
@@ -317,7 +361,7 @@ namespace CSTransporteKiosko
             {
                 if (textboxPaso2_Valor.Text.Trim().Length < 8)
                 {
-                    MessageBox.Show("Debe ingresar los 8 (ocho) caracteres del Nº de Reserva.");
+                    MessageBox.Show("Debe ingresar los 8 (ocho) caracteres del Nº de Reserva.", kiosko.KioskoConfiguracion);
                     return false;
                 }
             }
@@ -329,7 +373,7 @@ namespace CSTransporteKiosko
         {
             if (tilecontrolPaso3_Pasajeros.CheckedTiles.Length == 0)
             {
-                MessageBox.Show("Debe seleccionar al menos una Persona.");
+                MessageBox.Show("Debe seleccionar al menos una Persona.", kiosko.KioskoConfiguracion);
                 return false;
             }
             else
@@ -349,7 +393,7 @@ namespace CSTransporteKiosko
                     mensajeConfirmacion = String.Format("¿Confirma la asistencia de {0} Personas?", tilecontrolPaso3_Pasajeros.CheckedTiles.Length);
                 }
 
-                return MessageBox.ShowDialog(mensajeConfirmacion);
+                return MessageBox.ShowDialog(mensajeConfirmacion, kiosko.KioskoConfiguracion);
             }
         }
 
@@ -453,7 +497,7 @@ namespace CSTransporteKiosko
             // Buscar datos en la base de datos
             listPersonasEncontradas.Clear();
 
-            if (busquedaReservas.BuscarViajesPorDocumento(database, textboxPaso2_Valor.Text.Trim(), listPersonasEncontradas))
+            if (busquedaReservas.BuscarViajesPorDocumento(database, textboxPaso2_Valor.Text.Trim(), listPersonasEncontradas, kiosko.KioskoConfiguracion))
             {
                 labelPaso3_Viaje_Origen_Lugar.Text = String.Format("{0} en {1}", listPersonasEncontradas[0].LugarOrigen, listPersonasEncontradas[0].LugarGrupoOrigen);
                 if (listPersonasEncontradas[0].FechaHoraOrigen.Date == DateTime.Now.Date)
@@ -518,7 +562,7 @@ namespace CSTransporteKiosko
 
         private bool PreparaImpresora()
         {
-            return printer.GetOpenClaimAndEnable(Properties.Settings.Default.POSPrinterName, Properties.Settings.Default.POSPrinterClaimTimeoutMilliseconds);
+            return printer.GetOpenClaimAndEnable(Properties.Settings.Default.POSPrinterName, kiosko.KioskoConfiguracion.ValorPOSPrinterClaimTimeoutSeconds);
         }
 
         private bool ImprimirTicket()

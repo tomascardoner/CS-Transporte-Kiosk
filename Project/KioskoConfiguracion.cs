@@ -5,11 +5,10 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using CardonerSistemas.Database.ADO;
 
 namespace CSTransporteKiosko
 {
-    class KioskoConfiguracion
+    public class KioskoConfiguracion
     {
         #region Entity definition properties
 
@@ -25,21 +24,50 @@ namespace CSTransporteKiosko
         private string EntityLoadPropertiesErrorMessage = String.Format("Error al cargar las propiedades de {0} {1} por Id.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
         private string EntityLoadRelatedKioskoConfiguracionValorErrorMessage = String.Format("Error al cargar los valores de {0} {1} por Id.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
 
+        // Media
         private string IdValorCompaniaSoftwareLogotipoIDImagen = "CompaniaSoftwareLogotipoIDImagen";
         private string IdValorEmpresaLogotipoIDImagen = "EmpresaLogotipoIDImagen";
-        private string IdValorFontStyle = "FontStyle";
-        private string IdValorInactivityTimeoutSeconds = "InactivityTimeoutSeconds";
-        private string IdValorKeyboardNumericNumberFont = "KeyboardNumericNumberFont";
-        private string IdValorKeyboardNumericSpecialFont = "KeyboardNumericSpecialFont";
-        private string IdValorLugarDuracionPreviaMaximaMinutos = "LugarDuracionPreviaMaximaMinutos";
-        private string IdValorLugarDuracionPreviaMinimaMinutos = "LugarDuracionPreviaMinimaMinutos";
+        private string IdValorVideo = "Video";
+
+        // Apariencia
+        private string IdValorScreenBackColor = "ScreenBackColor";
+        private string IdValorInformacionLeyendaFontStyle = "InformacionLeyendaFontStyle";
+        private string IdValorInformacionLeyendaForeColor = "InformacionLeyendaForeColor";
+        private string IdValorInformacionPrincipalFontStyle = "InformacionPrincipalFontStyle";
+        private string IdValorInformacionPrincipalForeColor = "InformacionPrincipalForeColor";
+        private string IdValorInformacionSecundariaFontStyle = "InformacionSecundariaFontStyle";
+        private string IdValorInformacionSecundariaForeColor = "InformacionSecundariaForeColor";
+
+        // Botón anterior
+        private string IdValorButtonPreviousFontStyle = "ButtonPreviousFontStyle";
+        private string IdValorButtonPreviousBackColor = "ButtonPreviousBackColor";
+        private string IdValorButtonPreviousForeColor = "ButtonPreviousForeColor";
+
+        // Botón siguiente
+        private string IdValorButtonNextFontStyle = "ButtonNextFontStyle";
+        private string IdValorButtonNextBackColor = "ButtonNextBackColor";
+        private string IdValorButtonNextForeColor = "ButtonNextForeColor";
+
+        // Mesage box
+        private string IdValorMessageBoxFontStyle = "MessageBoxFontStyle";
         private string IdValorMessageBoxBackColor = "MessageBoxBackColor";
+        private string IdValorMessageBoxForeColor = "MessageBoxForeColor";
+        private string IdValorMessageBoxButtonFontStyle = "MessageBoxButtonFontStyle";
         private string IdValorMessageBoxButtonBackColor = "MessageBoxButtonBackColor";
         private string IdValorMessageBoxButtonForeColor = "MessageBoxButtonForeColor";
-        private string IdValorMessageBoxForeColor = "MessageBoxForeColor";
-        private string IdValorPOSPrinterClaimTimeoutMilliseconds = "POSPrinterClaimTimeoutMilliseconds";
+
+        // Numeric Keyborad
+        private string IdValorKeyboardNumericNumberFontStyle = "KeyboardNumericNumberFontStyle";
+        private string IdValorKeyboardNumericSpecialFontStyle = "KeyboardNumericSpecialFontStyle";
+
+        // POS Printer
+        private string IdValorPOSPrinterClaimTimeoutSeconds = "POSPrinterClaimTimeoutSeconds";
         private string IdValorPOSPrinterReleaseTimeoutSeconds = "POSPrinterReleaseTimeoutSeconds";
-        private string IdValorVideo = "Video";
+
+        // Timeouts
+        private string IdValorInactivityTimeoutSeconds = "InactivityTimeoutSeconds";
+        private string IdValorLugarDuracionPreviaMaximaMinutos = "LugarDuracionPreviaMaximaMinutos";
+        private string IdValorLugarDuracionPreviaMinimaMinutos = "LugarDuracionPreviaMinimaMinutos";
 
         #endregion
 
@@ -66,29 +94,83 @@ namespace CSTransporteKiosko
 
         public List<KioskoConfiguracionValor> KioskoConfiguracionValores { get => _KioskoConfiguracionValores; }
 
-        public short? ValorCompaniaSoftwareLogotipoIDImagen { get => GetValorNumeroEnteroAsShort(IdValorCompaniaSoftwareLogotipoIDImagen); }
+        // Media
+        public short? ValorCompaniaSoftwareLogotipoIDImagen { get => GetValorIdImagen(IdValorCompaniaSoftwareLogotipoIDImagen); }
         public Image ValorCompaniaSoftwareLogotipo(SqlConnection connection)
         {
             return GetValorImagenDataAsBitmap(connection, IdValorCompaniaSoftwareLogotipoIDImagen);
         }
-        public short? ValorEmpresaLogotipoIDImagen { get => GetValorNumeroEnteroAsShort(IdValorEmpresaLogotipoIDImagen); }
+        public short? ValorEmpresaLogotipoIDImagen { get => GetValorIdImagen(IdValorEmpresaLogotipoIDImagen); }
         public Image ValorEmpresaLogotipo(SqlConnection connection)
         {
             return GetValorImagenDataAsBitmap(connection, IdValorEmpresaLogotipoIDImagen);
         }
-        public string ValorFontStyle { get => GetValorString(IdValorFontStyle); }
-        public int? ValorInactivityTimeoutSeconds { get => GetValorNumeroEnteroAsInteger(IdValorInactivityTimeoutSeconds); }
-        public string ValorKeyboardNumericNumberFont { get => GetValorString(IdValorKeyboardNumericNumberFont); }
-        public string ValorKeyboardNumericSpecialFont { get => GetValorString(IdValorKeyboardNumericSpecialFont); }
-        public int? ValorLugarDuracionPreviaMaximaMinutos { get => GetValorNumeroEnteroAsInteger(IdValorLugarDuracionPreviaMaximaMinutos); }
-        public int? ValorLugarDuracionPreviaMinimaMinutos { get => GetValorNumeroEnteroAsInteger(IdValorLugarDuracionPreviaMinimaMinutos); }
-        public int? ValorMessageBoxBackColor { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxBackColor); }
-        public int? ValorMessageBoxButtonBackColor { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxButtonBackColor); }
-        public int? ValorMessageBoxButtonForeColor { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxButtonForeColor); }
-        public int? ValorMessageBoxForeColor { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxForeColor); }
-        public int? ValorPOSPrinterClaimTimeoutMilliseconds { get => GetValorNumeroEnteroAsInteger(IdValorPOSPrinterClaimTimeoutMilliseconds); }
-        public int? ValorPOSPrinterReleaseTimeoutSeconds { get => GetValorNumeroEnteroAsInteger(IdValorPOSPrinterReleaseTimeoutSeconds); }
         public string ValorVideo { get => GetValorString(IdValorVideo); }
+
+        // Apariencia
+        public int? ValorScreenBackColor { get => GetValorNumeroEnteroAsInteger(IdValorScreenBackColor); }
+        public Color? ValorScreenBackColorAsColor { get => GetValorColor(IdValorScreenBackColor); }
+
+        public string ValorInformacionLeyendaFontStyleString { get => GetValorString(IdValorInformacionLeyendaFontStyle); }
+        public Font ValorInformacionLeyendaFontStyle { get => GetValorFont(IdValorInformacionLeyendaFontStyle); }
+        public int? ValorInformacionLeyendaForeColor { get => GetValorNumeroEnteroAsInteger(IdValorInformacionLeyendaForeColor); }
+        public Color? ValorInformacionLeyendaForeColorAsColor { get => GetValorColor(IdValorInformacionLeyendaForeColor); }
+
+        public string ValorInformacionPrincipalFontStyleString { get => GetValorString(IdValorInformacionPrincipalFontStyle); }
+        public Font ValorInformacionPrincipalFontStyle { get => GetValorFont(IdValorInformacionPrincipalFontStyle); }
+        public int? ValorInformacionPrincipalForeColor { get => GetValorNumeroEnteroAsInteger(IdValorInformacionPrincipalForeColor); }
+        public Color? ValorInformacionPrincipalForeColorAsColor { get => GetValorColor(IdValorInformacionPrincipalForeColor); }
+
+        public string ValorInformacionSecundariaFontStyleString { get => GetValorString(IdValorInformacionSecundariaFontStyle); }
+        public Font ValorInformacionSecundariaFontStyle { get => GetValorFont(IdValorInformacionSecundariaFontStyle); }
+        public int? ValorInformacionSecundariaForeColor { get => GetValorNumeroEnteroAsInteger(IdValorInformacionSecundariaForeColor); }
+        public Color? ValorInformacionSecundariaForeColorAsColor { get => GetValorColor(IdValorInformacionSecundariaForeColor); }
+
+        // Botón anterior
+        public string ValorButtonPreviousFontStyleString { get => GetValorString(IdValorButtonPreviousFontStyle); }
+        public Font ValorButtonPreviousFontStyle { get => GetValorFont(IdValorButtonPreviousFontStyle); }
+        public int? ValorButtonPreviousBackColor { get => GetValorNumeroEnteroAsInteger(IdValorButtonPreviousBackColor); }
+        public Color? ValorButtonPreviousBackColorAsColor { get => GetValorColor(IdValorButtonPreviousBackColor);  }
+        public int? ValorButtonPreviousForeColor { get => GetValorNumeroEnteroAsInteger(IdValorButtonPreviousForeColor); }
+        public Color? ValorButtonPreviousForeColorAsColor { get => GetValorColor(IdValorButtonPreviousBackColor); }
+
+        // Botón siguiente
+        public string ValorButtonNextFontStyleString { get => GetValorString(IdValorButtonNextFontStyle); }
+        public Font ValorButtonNextFontStyle { get => GetValorFont(IdValorButtonNextFontStyle); }
+        public int? ValorButtonNextBackColor { get => GetValorNumeroEnteroAsInteger(IdValorButtonNextBackColor); }
+        public Color? ValorButtonNextBackColorAsColor { get => GetValorColor(IdValorButtonNextBackColor); }
+        public int? ValorButtonNextForeColor { get => GetValorNumeroEnteroAsInteger(IdValorButtonNextForeColor); }
+        public Color? ValorButtonNextForeColorAsColor { get => GetValorColor(IdValorButtonNextBackColor); }
+
+        // Mesage box
+        public string ValorMessageBoxFontStyleString { get => GetValorString(IdValorMessageBoxFontStyle); }
+        public Font ValorMessageBoxFontStyle { get => GetValorFont(IdValorMessageBoxFontStyle); }
+        public int? ValorMessageBoxBackColor { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxBackColor); }
+        public Color? ValorMessageBoxBackColorAsColor { get => GetValorColor(IdValorMessageBoxBackColor); }
+        public int? ValorMessageBoxForeColor { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxForeColor); }
+        public Color? ValorMessageBoxForeColorAsColor { get => GetValorColor(IdValorMessageBoxForeColor); }
+
+        public string ValorMessageBoxButtonFontStyleString { get => GetValorString(IdValorMessageBoxButtonFontStyle); }
+        public Font ValorMessageBoxButtonFontStyle { get => GetValorFont(IdValorMessageBoxButtonFontStyle); }
+        public int? ValorMessageBoxButtonBackColor { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxButtonBackColor); }
+        public Color? ValorMessageBoxButtonBackColorAsColor { get => GetValorColor(IdValorMessageBoxButtonBackColor); }
+        public int? ValorMessageBoxButtonForeColor { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxButtonForeColor); }
+        public Color? ValorMessageBoxButtonForeColorAsColor { get => GetValorColor(IdValorMessageBoxButtonForeColor); }
+
+        // Numeric Keyborad
+        public string ValorKeyboardNumericNumberFontString { get => GetValorString(IdValorKeyboardNumericNumberFontStyle); }
+        public Font ValorKeyboardNumericNumberFont { get => GetValorFont(IdValorKeyboardNumericNumberFontStyle); }
+        public string ValorKeyboardNumericSpecialFontString { get => GetValorString(IdValorKeyboardNumericSpecialFontStyle); }
+        public Font ValorKeyboardNumericSpecialFont { get => GetValorFont(IdValorKeyboardNumericSpecialFontStyle); }
+
+        // POS Printer
+        public int ValorPOSPrinterClaimTimeoutSeconds { get => GetValorNumeroEnteroAsInteger(IdValorPOSPrinterClaimTimeoutSeconds, 2); }
+        public int ValorPOSPrinterReleaseTimeoutSeconds { get => GetValorNumeroEnteroAsInteger(IdValorPOSPrinterReleaseTimeoutSeconds, 5); }
+
+        // Timeouts
+        public int ValorInactivityTimeoutSeconds { get => GetValorNumeroEnteroAsInteger(IdValorInactivityTimeoutSeconds, 60); }
+        public short ValorLugarDuracionPreviaMaximaMinutos { get => GetValorNumeroEnteroAsShort(IdValorLugarDuracionPreviaMaximaMinutos, 0); }
+        public short ValorLugarDuracionPreviaMinimaMinutos { get => GetValorNumeroEnteroAsShort(IdValorLugarDuracionPreviaMinimaMinutos, 0); }
 
         #endregion
 
@@ -201,7 +283,7 @@ namespace CSTransporteKiosko
 
                         object[] values = new object[dataReader.FieldCount];
                         int fieldCount = dataReader.GetValues(values);
-                        valor.CargarDesdeArray(values);
+                        valor.CargarPropiedadesDesdeArray(values);
                         _KioskoConfiguracionValores.Add(valor);
 
                         valor = null;
@@ -221,9 +303,14 @@ namespace CSTransporteKiosko
             }
         }
 
+        private KioskoConfiguracionValor GetValor(string idValor)
+        {
+            return _KioskoConfiguracionValores.Find(kcv => kcv.IdValor == idValor);
+        }
+
         private string GetValorString(string idValor)
         {
-            KioskoConfiguracionValor valor = _KioskoConfiguracionValores.Find(kcv => kcv.IdValor == idValor);
+            KioskoConfiguracionValor valor = GetValor(idValor);
             if (valor == null)
             {
                 return null;
@@ -234,48 +321,113 @@ namespace CSTransporteKiosko
             }
         }
 
-        private int? GetValorNumeroEnteroAsInteger(string idValor)
+        private Font GetValorFont(string idValor)
         {
-            KioskoConfiguracionValor valor = _KioskoConfiguracionValores.Find(kcv => kcv.IdValor == idValor);
+            KioskoConfiguracionValor valor = GetValor(idValor);
             if (valor == null)
             {
                 return null;
             }
             else
             {
-                return valor.ValorNumeroEntero;
+                return valor.ValorFont;
+            }
+        }
+
+        private int? GetValorNumeroEnteroAsInteger(string idValor)
+        {
+            KioskoConfiguracionValor valor = GetValor(idValor);
+            if (valor == null)
+            {
+                return null;
+            }
+            else
+            {
+                return valor.ValorNumeroEnteroAsInteger;
+            }
+        }
+
+        private int GetValorNumeroEnteroAsInteger(string idValor, int valorPredeterminado)
+        {
+            int? valor = GetValorNumeroEnteroAsInteger(idValor);
+            if (valor.HasValue)
+            {
+                return valor.Value;
+            }
+            else
+            {
+                return valorPredeterminado;
             }
         }
 
         private short? GetValorNumeroEnteroAsShort(string idValor)
         {
-            KioskoConfiguracionValor valor = _KioskoConfiguracionValores.Find(kcv => kcv.IdValor == idValor);
-            if (valor == null || !valor.ValorNumeroEntero.HasValue)
+            KioskoConfiguracionValor valor = GetValor(idValor);
+            if (valor == null)
             {
                 return null;
             }
             else
             {
-                return (short)valor.ValorNumeroEntero;
+                return valor.ValorNumeroEnteroAsShort;
+            }
+        }
+
+        private short GetValorNumeroEnteroAsShort(string idValor, short valorPredeterminado)
+        {
+            short? valor = GetValorNumeroEnteroAsShort(idValor);
+            if (valor.HasValue)
+            {
+                return valor.Value;
+            }
+            else
+            {
+                return valorPredeterminado;
             }
         }
 
         private byte? GetValorNumeroEnteroAsByte(string idValor)
         {
-            KioskoConfiguracionValor valor = _KioskoConfiguracionValores.Find(kcv => kcv.IdValor == idValor);
-            if (valor == null || !valor.ValorNumeroEntero.HasValue)
+            KioskoConfiguracionValor valor = GetValor(idValor);
+            if (valor == null)
             {
                 return null;
             }
             else
             {
-                return (byte)valor.ValorNumeroEntero;
+                return valor.ValorNumeroEnteroAsByte;
+            }
+        }
+
+        private byte GetValorNumeroEnteroAsByte(string idValor, byte valorPredeterminado)
+        {
+            byte? valor = GetValorNumeroEnteroAsByte(idValor);
+            if (valor.HasValue)
+            {
+                return valor.Value;
+            }
+            else
+            {
+                return valorPredeterminado;
+            }
+        }
+
+        private Color? GetValorColor(string idValor)
+        {
+            KioskoConfiguracionValor valor = GetValor(idValor);
+            if (valor == null)
+            {
+                return null;
+            }
+            else
+            {
+                return valor.ValorColor;
             }
         }
 
         private decimal? GetValorNumeroDecimal(string idValor)
         {
-            KioskoConfiguracionValor valor = _KioskoConfiguracionValores.Find(kcv => kcv.IdValor == idValor);
+            KioskoConfiguracionValor valor = GetValor(idValor);
             if (valor == null)
             {
                 return null;
@@ -288,7 +440,7 @@ namespace CSTransporteKiosko
 
         private DateTime? GetValorFechaHora(string idValor)
         {
-            KioskoConfiguracionValor valor = _KioskoConfiguracionValores.Find(kcv => kcv.IdValor == idValor);
+            KioskoConfiguracionValor valor = GetValor(idValor);
             if (valor == null)
             {
                 return null;
@@ -301,7 +453,7 @@ namespace CSTransporteKiosko
 
         private bool? GetValorSiNo(string idValor)
         {
-            KioskoConfiguracionValor valor = _KioskoConfiguracionValores.Find(kcv => kcv.IdValor == idValor);
+            KioskoConfiguracionValor valor = GetValor(idValor);
             if (valor == null)
             {
                 return null;
@@ -312,25 +464,29 @@ namespace CSTransporteKiosko
             }
         }
 
-        private Imagen GetValorImagen(SqlConnection connection, string idValor)
+        private short? GetValorIdImagen(string idValor)
         {
-            short? IdImagen = GetValorNumeroEnteroAsShort(idValor);
-            if (IdImagen.HasValue)
+            KioskoConfiguracionValor valor = GetValor(idValor);
+            if (valor == null)
             {
-                Imagen imagen = new Imagen();
-                if (imagen.CargarPorID(connection, IdImagen.Value))
-                {
-                    return imagen;
-                }
-                else
-                {
-                    imagen = null;
-                    return null;
-                }
+                return null;
             }
             else
             {
+                return valor.ValorIdImagen;
+            }
+        }
+
+        private Imagen GetValorImagen(SqlConnection connection, string idValor)
+        {
+            KioskoConfiguracionValor valor = GetValor(idValor);
+            if (valor == null)
+            {
                 return null;
+            }
+            else
+            {
+                return valor.ValorImagen(connection);
             }
         }
 

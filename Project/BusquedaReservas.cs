@@ -62,7 +62,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        public bool BuscarViajesPorDocumento(SQLServer database, string Documento, List<BusquedaReservas.Persona> personaList)
+        public bool BuscarViajesPorDocumento(SQLServer database, string Documento, List<BusquedaReservas.Persona> personaList, KioskoConfiguracion configuracion)
         {
             int IDViaje = 0;
             int IDViajeDetalle = 0;
@@ -71,9 +71,9 @@ namespace CSTransporteKiosko
 
             if (ConectarABaseDeDatos(database))
             {
-                if (BuscarReservasPorDocumento(database, Documento, ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero))
+                if (BuscarReservasPorDocumento(database, Documento, ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero, configuracion))
                 {
-                    return BuscarPersonasPorReserva(database, IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero, personaList);
+                    return BuscarPersonasPorReserva(database, IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero, personaList, configuracion);
                 }
                 else
                 {
@@ -86,7 +86,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        private bool BuscarReservasPorDocumento(SQLServer database, string documento, ref int idViaje, ref int idViajeDetalle, ref string reservaCodigo, ref byte grupoNumero)
+        private bool BuscarReservasPorDocumento(SQLServer database, string documento, ref int idViaje, ref int idViajeDetalle, ref string reservaCodigo, ref byte grupoNumero, KioskoConfiguracion configuracion)
         {
             SqlCommand sqlCommand = new SqlCommand();
             SqlDataReader sqlDataReader;
@@ -97,8 +97,8 @@ namespace CSTransporteKiosko
                 sqlCommand.CommandText = "usp_ReservasPorDocumento";
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@IDLugar", 2);
-                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMaxima", Properties.Settings.Default.LugarDuracionPreviaMaximaMinutos);
-                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMinima", Properties.Settings.Default.LugarDuracionPreviaMinimaMinutos);
+                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMaxima", configuracion.ValorLugarDuracionPreviaMaximaMinutos);
+                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMinima", configuracion.ValorLugarDuracionPreviaMinimaMinutos);
                 sqlCommand.Parameters.AddWithValue("@DocumentoNumero", documento);
 
                 sqlDataReader = sqlCommand.ExecuteReader(CommandBehavior.SingleRow);
@@ -120,7 +120,7 @@ namespace CSTransporteKiosko
                 }
                 else
                 {
-                    MessageBox.Show("No se han encontrado reservas.");
+                    MessageBox.Show("No se han encontrado reservas.", configuracion);
 
                     sqlDataReader.Close();
                     sqlDataReader = null;
@@ -131,7 +131,7 @@ namespace CSTransporteKiosko
             }
             catch (Exception)
             {
-                MessageBox.Show("No se pudo obtener la información.");
+                MessageBox.Show("No se pudo obtener la información.", configuracion);
 
                 sqlCommand = null;
 
@@ -141,7 +141,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        private bool BuscarPersonasPorReserva(SQLServer database, int IDViaje, int IDViajeDetalle, string ReservaCodigo, byte GrupoNumero, List<BusquedaReservas.Persona> personaList)
+        private bool BuscarPersonasPorReserva(SQLServer database, int IDViaje, int IDViajeDetalle, string ReservaCodigo, byte GrupoNumero, List<BusquedaReservas.Persona> personaList, KioskoConfiguracion configuracion)
         {
             SqlCommand sqlCommand = new SqlCommand();
             SqlDataReader sqlDataReader;
@@ -198,7 +198,7 @@ namespace CSTransporteKiosko
                 }
                 else
                 {
-                    MessageBox.Show("No se han encontrado reservas.");
+                    MessageBox.Show("No se han encontrado reservas.", configuracion);
                     sqlDataReader.Close();
                     sqlDataReader = null;
                     return false;
@@ -206,7 +206,7 @@ namespace CSTransporteKiosko
             }
             catch (Exception)
             {
-                MessageBox.Show("No se pudo obtener la información.");
+                MessageBox.Show("No se pudo obtener la información.", configuracion);
                 sqlCommand = null;
                 sqlDataReader = null;
                 return false;

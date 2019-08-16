@@ -23,7 +23,7 @@ CREATE PROCEDURE usp_KioskoConfiguracion_ObtenerValores
 		-- SET NOCOUNT ON added to prevent extra result sets from interfering with SELECT statements.
 		SET NOCOUNT ON;
 
-		SELECT kcv.IDKioskoConfiguracion, kcv.IDValor, kcv.ValorTexto, kcv.ValorNumeroEntero, kcv.ValorNumeroDecimal, kcv.ValorFechaHora, kcv.ValorSiNo
+		SELECT kcv.IDKioskoConfiguracion, kcv.IDValor, kcv.ValorTexto, kcv.ValorNumeroEntero, kcv.ValorNumeroDecimal, kcv.ValorFechaHora, kcv.ValorSiNo, kcv.ValorIDImagen
 			FROM KioskoConfiguracionValor AS kcv
 			WHERE kcv.IDKioskoConfiguracion = @IDKioskoConfiguracion
 			ORDER BY kcv.IDValor
