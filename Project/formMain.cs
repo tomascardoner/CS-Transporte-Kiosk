@@ -66,39 +66,39 @@ namespace CSTransporteKiosko
             wmInicio_Player.URL = kiosko.KioskoConfiguracion.ValorVideo;
 
             // Apariencia
-            this.BackColor = SetColor(kiosko.KioskoConfiguracion.ValorScreenBackColorAsColor, this.BackColor);
+            this.BackColor = SetColor(kiosko.KioskoConfiguracion.ValorScreenBackColor, this.BackColor);
 
-            labelPaso3_Viaje_Origen_Leyenda.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFontStyle;
-            labelPaso3_Viaje_Origen_Leyenda.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColorAsColor, labelPaso3_Viaje_Origen_Leyenda.ForeColor);
-            labelPaso3_Viaje_Destino_Leyenda.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFontStyle;
-            labelPaso3_Viaje_Destino_Leyenda.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColorAsColor, labelPaso3_Viaje_Destino_Leyenda.ForeColor);
-            labelPaso3_Viaje_Vehiculo_Leyenda.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFontStyle;
-            labelPaso3_Viaje_Vehiculo_Leyenda.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColorAsColor, labelPaso3_Viaje_Vehiculo_Leyenda.ForeColor);
+            labelPaso3_Viaje_Origen_Leyenda.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFont;
+            labelPaso3_Viaje_Origen_Leyenda.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColor, labelPaso3_Viaje_Origen_Leyenda.ForeColor);
+            labelPaso3_Viaje_Destino_Leyenda.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFont;
+            labelPaso3_Viaje_Destino_Leyenda.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColor, labelPaso3_Viaje_Destino_Leyenda.ForeColor);
+            labelPaso3_Viaje_Vehiculo_Leyenda.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFont;
+            labelPaso3_Viaje_Vehiculo_Leyenda.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColor, labelPaso3_Viaje_Vehiculo_Leyenda.ForeColor);
 
-            labelPaso3_Viaje_Origen_Lugar.Font = kiosko.KioskoConfiguracion.ValorInformacionPrincipalFontStyle;
-            labelPaso3_Viaje_Origen_Lugar.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionPrincipalForeColorAsColor, labelPaso3_Viaje_Origen_Lugar.ForeColor);
-            labelPaso3_Viaje_Destino_Lugar.Font = kiosko.KioskoConfiguracion.ValorInformacionPrincipalFontStyle;
-            labelPaso3_Viaje_Destino_Lugar.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionPrincipalForeColorAsColor, labelPaso3_Viaje_Destino_Lugar.ForeColor);
-            labelPaso3_Viaje_Vehiculo.Font = kiosko.KioskoConfiguracion.ValorInformacionPrincipalFontStyle;
-            labelPaso3_Viaje_Vehiculo.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionPrincipalForeColorAsColor, labelPaso3_Viaje_Vehiculo.ForeColor);
+            labelPaso3_Viaje_Origen_Lugar.Font = kiosko.KioskoConfiguracion.ValorInformacionPrincipalFont;
+            labelPaso3_Viaje_Origen_Lugar.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionPrincipalForeColor, labelPaso3_Viaje_Origen_Lugar.ForeColor);
+            labelPaso3_Viaje_Destino_Lugar.Font = kiosko.KioskoConfiguracion.ValorInformacionPrincipalFont;
+            labelPaso3_Viaje_Destino_Lugar.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionPrincipalForeColor, labelPaso3_Viaje_Destino_Lugar.ForeColor);
+            labelPaso3_Viaje_Vehiculo.Font = kiosko.KioskoConfiguracion.ValorInformacionPrincipalFont;
+            labelPaso3_Viaje_Vehiculo.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionPrincipalForeColor, labelPaso3_Viaje_Vehiculo.ForeColor);
 
-            labelPaso3_Viaje_Origen_FechaHora.Font = kiosko.KioskoConfiguracion.ValorInformacionSecundariaFontStyle;
-            labelPaso3_Viaje_Origen_FechaHora.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionSecundariaForeColorAsColor, labelPaso3_Viaje_Origen_FechaHora.ForeColor);
-            labelPaso3_Viaje_Destino_FechaHora.Font = kiosko.KioskoConfiguracion.ValorInformacionSecundariaFontStyle;
-            labelPaso3_Viaje_Destino_FechaHora.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionSecundariaForeColorAsColor, labelPaso3_Viaje_Destino_FechaHora.ForeColor);
+            labelPaso3_Viaje_Origen_FechaHora.Font = kiosko.KioskoConfiguracion.ValorInformacionSecundariaFont;
+            labelPaso3_Viaje_Origen_FechaHora.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionSecundariaForeColor, labelPaso3_Viaje_Origen_FechaHora.ForeColor);
+            labelPaso3_Viaje_Destino_FechaHora.Font = kiosko.KioskoConfiguracion.ValorInformacionSecundariaFont;
+            labelPaso3_Viaje_Destino_FechaHora.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionSecundariaForeColor, labelPaso3_Viaje_Destino_FechaHora.ForeColor);
 
             // Botón anterior
-            buttonPasoAnterior.Font = kiosko.KioskoConfiguracion.ValorButtonPreviousFontStyle;
-            buttonPasoAnterior.BackColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonPreviousBackColorAsColor, buttonPasoAnterior.BackColor);
-            buttonPasoAnterior.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonPreviousForeColorAsColor, buttonPasoAnterior.BackColor);
+            buttonPasoAnterior.Font = kiosko.KioskoConfiguracion.ValorButtonPreviousFont;
+            buttonPasoAnterior.BackColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonPreviousBackColor, buttonPasoAnterior.BackColor);
+            buttonPasoAnterior.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonPreviousForeColor, buttonPasoAnterior.ForeColor);
 
             // Botón siguiente
-            buttonPasoSiguiente.Font = kiosko.KioskoConfiguracion.ValorButtonNextFontStyle;
-            buttonPasoSiguiente.BackColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonNextBackColorAsColor, buttonPasoSiguiente.BackColor);
-            buttonPasoSiguiente.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonNextForeColorAsColor, buttonPasoSiguiente.BackColor);
+            buttonPasoSiguiente.Font = kiosko.KioskoConfiguracion.ValorButtonNextFont;
+            buttonPasoSiguiente.BackColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonNextBackColor, buttonPasoSiguiente.BackColor);
+            buttonPasoSiguiente.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonNextForeColor, buttonPasoSiguiente.ForeColor);
 
             // Propiedades del teclado numérico en pantalla
-            // onscreenkeyboardNumeric.Font = kiosko.KioskoConfiguracion.ValorFontStyle;
+            // onscreenkeyboardNumeric.Font = kiosko.KioskoConfiguracion.ValorFont;
 
             InactivityTimeoutSeconds = kiosko.KioskoConfiguracion.ValorInactivityTimeoutSeconds;
             LugarDuracionPreviaMinimaMinutos = kiosko.KioskoConfiguracion.ValorLugarDuracionPreviaMinimaMinutos;

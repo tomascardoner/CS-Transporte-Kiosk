@@ -31,34 +31,34 @@ namespace CSTransporteKiosko
 
         // Apariencia
         private string IdValorScreenBackColor = "ScreenBackColor";
-        private string IdValorInformacionLeyendaFontStyle = "InformacionLeyendaFontStyle";
+        private string IdValorInformacionLeyendaFont = "InformacionLeyendaFont";
         private string IdValorInformacionLeyendaForeColor = "InformacionLeyendaForeColor";
-        private string IdValorInformacionPrincipalFontStyle = "InformacionPrincipalFontStyle";
+        private string IdValorInformacionPrincipalFont = "InformacionPrincipalFont";
         private string IdValorInformacionPrincipalForeColor = "InformacionPrincipalForeColor";
-        private string IdValorInformacionSecundariaFontStyle = "InformacionSecundariaFontStyle";
+        private string IdValorInformacionSecundariaFont = "InformacionSecundariaFont";
         private string IdValorInformacionSecundariaForeColor = "InformacionSecundariaForeColor";
 
         // Botón anterior
-        private string IdValorButtonPreviousFontStyle = "ButtonPreviousFontStyle";
+        private string IdValorButtonPreviousFont = "ButtonPreviousFont";
         private string IdValorButtonPreviousBackColor = "ButtonPreviousBackColor";
         private string IdValorButtonPreviousForeColor = "ButtonPreviousForeColor";
 
         // Botón siguiente
-        private string IdValorButtonNextFontStyle = "ButtonNextFontStyle";
+        private string IdValorButtonNextFont = "ButtonNextFont";
         private string IdValorButtonNextBackColor = "ButtonNextBackColor";
         private string IdValorButtonNextForeColor = "ButtonNextForeColor";
 
         // Mesage box
-        private string IdValorMessageBoxFontStyle = "MessageBoxFontStyle";
+        private string IdValorMessageBoxFont = "MessageBoxFont";
         private string IdValorMessageBoxBackColor = "MessageBoxBackColor";
         private string IdValorMessageBoxForeColor = "MessageBoxForeColor";
-        private string IdValorMessageBoxButtonFontStyle = "MessageBoxButtonFontStyle";
+        private string IdValorMessageBoxButtonFont = "MessageBoxButtonFont";
         private string IdValorMessageBoxButtonBackColor = "MessageBoxButtonBackColor";
         private string IdValorMessageBoxButtonForeColor = "MessageBoxButtonForeColor";
 
         // Numeric Keyborad
-        private string IdValorKeyboardNumericNumberFontStyle = "KeyboardNumericNumberFontStyle";
-        private string IdValorKeyboardNumericSpecialFontStyle = "KeyboardNumericSpecialFontStyle";
+        private string IdValorKeyboardNumericNumberFont = "KeyboardNumericNumberFont";
+        private string IdValorKeyboardNumericSpecialFont = "KeyboardNumericSpecialFont";
 
         // POS Printer
         private string IdValorPOSPrinterClaimTimeoutSeconds = "POSPrinterClaimTimeoutSeconds";
@@ -108,60 +108,60 @@ namespace CSTransporteKiosko
         public string ValorVideo { get => GetValorString(IdValorVideo); }
 
         // Apariencia
-        public int? ValorScreenBackColor { get => GetValorNumeroEnteroAsInteger(IdValorScreenBackColor); }
-        public Color? ValorScreenBackColorAsColor { get => GetValorColor(IdValorScreenBackColor); }
+        public int? ValorScreenBackColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorScreenBackColor); }
+        public Color? ValorScreenBackColor { get => GetValorColor(IdValorScreenBackColor); }
 
-        public string ValorInformacionLeyendaFontStyleString { get => GetValorString(IdValorInformacionLeyendaFontStyle); }
-        public Font ValorInformacionLeyendaFontStyle { get => GetValorFont(IdValorInformacionLeyendaFontStyle); }
-        public int? ValorInformacionLeyendaForeColor { get => GetValorNumeroEnteroAsInteger(IdValorInformacionLeyendaForeColor); }
-        public Color? ValorInformacionLeyendaForeColorAsColor { get => GetValorColor(IdValorInformacionLeyendaForeColor); }
+        public string ValorInformacionLeyendaFontString { get => GetValorString(IdValorInformacionLeyendaFont); }
+        public Font ValorInformacionLeyendaFont { get => GetValorFont(IdValorInformacionLeyendaFont); }
+        public int? ValorInformacionLeyendaForeColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorInformacionLeyendaForeColor); }
+        public Color? ValorInformacionLeyendaForeColor { get => GetValorColor(IdValorInformacionLeyendaForeColor); }
 
-        public string ValorInformacionPrincipalFontStyleString { get => GetValorString(IdValorInformacionPrincipalFontStyle); }
-        public Font ValorInformacionPrincipalFontStyle { get => GetValorFont(IdValorInformacionPrincipalFontStyle); }
-        public int? ValorInformacionPrincipalForeColor { get => GetValorNumeroEnteroAsInteger(IdValorInformacionPrincipalForeColor); }
-        public Color? ValorInformacionPrincipalForeColorAsColor { get => GetValorColor(IdValorInformacionPrincipalForeColor); }
+        public string ValorInformacionPrincipalFontString { get => GetValorString(IdValorInformacionPrincipalFont); }
+        public Font ValorInformacionPrincipalFont { get => GetValorFont(IdValorInformacionPrincipalFont); }
+        public int? ValorInformacionPrincipalForeColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorInformacionPrincipalForeColor); }
+        public Color? ValorInformacionPrincipalForeColor { get => GetValorColor(IdValorInformacionPrincipalForeColor); }
 
-        public string ValorInformacionSecundariaFontStyleString { get => GetValorString(IdValorInformacionSecundariaFontStyle); }
-        public Font ValorInformacionSecundariaFontStyle { get => GetValorFont(IdValorInformacionSecundariaFontStyle); }
-        public int? ValorInformacionSecundariaForeColor { get => GetValorNumeroEnteroAsInteger(IdValorInformacionSecundariaForeColor); }
-        public Color? ValorInformacionSecundariaForeColorAsColor { get => GetValorColor(IdValorInformacionSecundariaForeColor); }
+        public string ValorInformacionSecundariaFontString { get => GetValorString(IdValorInformacionSecundariaFont); }
+        public Font ValorInformacionSecundariaFont { get => GetValorFont(IdValorInformacionSecundariaFont); }
+        public int? ValorInformacionSecundariaForeColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorInformacionSecundariaForeColor); }
+        public Color? ValorInformacionSecundariaForeColor { get => GetValorColor(IdValorInformacionSecundariaForeColor); }
 
         // Botón anterior
-        public string ValorButtonPreviousFontStyleString { get => GetValorString(IdValorButtonPreviousFontStyle); }
-        public Font ValorButtonPreviousFontStyle { get => GetValorFont(IdValorButtonPreviousFontStyle); }
-        public int? ValorButtonPreviousBackColor { get => GetValorNumeroEnteroAsInteger(IdValorButtonPreviousBackColor); }
-        public Color? ValorButtonPreviousBackColorAsColor { get => GetValorColor(IdValorButtonPreviousBackColor);  }
-        public int? ValorButtonPreviousForeColor { get => GetValorNumeroEnteroAsInteger(IdValorButtonPreviousForeColor); }
-        public Color? ValorButtonPreviousForeColorAsColor { get => GetValorColor(IdValorButtonPreviousBackColor); }
+        public string ValorButtonPreviousFontString { get => GetValorString(IdValorButtonPreviousFont); }
+        public Font ValorButtonPreviousFont { get => GetValorFont(IdValorButtonPreviousFont); }
+        public int? ValorButtonPreviousBackColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorButtonPreviousBackColor); }
+        public Color? ValorButtonPreviousBackColor { get => GetValorColor(IdValorButtonPreviousBackColor);  }
+        public int? ValorButtonPreviousForeColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorButtonPreviousForeColor); }
+        public Color? ValorButtonPreviousForeColor { get => GetValorColor(IdValorButtonPreviousBackColor); }
 
         // Botón siguiente
-        public string ValorButtonNextFontStyleString { get => GetValorString(IdValorButtonNextFontStyle); }
-        public Font ValorButtonNextFontStyle { get => GetValorFont(IdValorButtonNextFontStyle); }
-        public int? ValorButtonNextBackColor { get => GetValorNumeroEnteroAsInteger(IdValorButtonNextBackColor); }
-        public Color? ValorButtonNextBackColorAsColor { get => GetValorColor(IdValorButtonNextBackColor); }
-        public int? ValorButtonNextForeColor { get => GetValorNumeroEnteroAsInteger(IdValorButtonNextForeColor); }
-        public Color? ValorButtonNextForeColorAsColor { get => GetValorColor(IdValorButtonNextBackColor); }
+        public string ValorButtonNextFontString { get => GetValorString(IdValorButtonNextFont); }
+        public Font ValorButtonNextFont { get => GetValorFont(IdValorButtonNextFont); }
+        public int? ValorButtonNextBackColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorButtonNextBackColor); }
+        public Color? ValorButtonNextBackColor { get => GetValorColor(IdValorButtonNextBackColor); }
+        public int? ValorButtonNextForeColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorButtonNextForeColor); }
+        public Color? ValorButtonNextForeColor { get => GetValorColor(IdValorButtonNextBackColor); }
 
         // Mesage box
-        public string ValorMessageBoxFontStyleString { get => GetValorString(IdValorMessageBoxFontStyle); }
-        public Font ValorMessageBoxFontStyle { get => GetValorFont(IdValorMessageBoxFontStyle); }
-        public int? ValorMessageBoxBackColor { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxBackColor); }
-        public Color? ValorMessageBoxBackColorAsColor { get => GetValorColor(IdValorMessageBoxBackColor); }
-        public int? ValorMessageBoxForeColor { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxForeColor); }
-        public Color? ValorMessageBoxForeColorAsColor { get => GetValorColor(IdValorMessageBoxForeColor); }
+        public string ValorMessageBoxFontString { get => GetValorString(IdValorMessageBoxFont); }
+        public Font ValorMessageBoxFont { get => GetValorFont(IdValorMessageBoxFont); }
+        public int? ValorMessageBoxBackColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxBackColor); }
+        public Color? ValorMessageBoxBackColor { get => GetValorColor(IdValorMessageBoxBackColor); }
+        public int? ValorMessageBoxForeColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxForeColor); }
+        public Color? ValorMessageBoxForeColor { get => GetValorColor(IdValorMessageBoxForeColor); }
 
-        public string ValorMessageBoxButtonFontStyleString { get => GetValorString(IdValorMessageBoxButtonFontStyle); }
-        public Font ValorMessageBoxButtonFontStyle { get => GetValorFont(IdValorMessageBoxButtonFontStyle); }
-        public int? ValorMessageBoxButtonBackColor { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxButtonBackColor); }
-        public Color? ValorMessageBoxButtonBackColorAsColor { get => GetValorColor(IdValorMessageBoxButtonBackColor); }
-        public int? ValorMessageBoxButtonForeColor { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxButtonForeColor); }
-        public Color? ValorMessageBoxButtonForeColorAsColor { get => GetValorColor(IdValorMessageBoxButtonForeColor); }
+        public string ValorMessageBoxButtonFontString { get => GetValorString(IdValorMessageBoxButtonFont); }
+        public Font ValorMessageBoxButtonFont { get => GetValorFont(IdValorMessageBoxButtonFont); }
+        public int? ValorMessageBoxButtonBackColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxButtonBackColor); }
+        public Color? ValorMessageBoxButtonBackColor { get => GetValorColor(IdValorMessageBoxButtonBackColor); }
+        public int? ValorMessageBoxButtonForeColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxButtonForeColor); }
+        public Color? ValorMessageBoxButtonForeColor { get => GetValorColor(IdValorMessageBoxButtonForeColor); }
 
         // Numeric Keyborad
-        public string ValorKeyboardNumericNumberFontString { get => GetValorString(IdValorKeyboardNumericNumberFontStyle); }
-        public Font ValorKeyboardNumericNumberFont { get => GetValorFont(IdValorKeyboardNumericNumberFontStyle); }
-        public string ValorKeyboardNumericSpecialFontString { get => GetValorString(IdValorKeyboardNumericSpecialFontStyle); }
-        public Font ValorKeyboardNumericSpecialFont { get => GetValorFont(IdValorKeyboardNumericSpecialFontStyle); }
+        public string ValorKeyboardNumericNumberFontString { get => GetValorString(IdValorKeyboardNumericNumberFont); }
+        public Font ValorKeyboardNumericNumberFont { get => GetValorFont(IdValorKeyboardNumericNumberFont); }
+        public string ValorKeyboardNumericSpecialFontString { get => GetValorString(IdValorKeyboardNumericSpecialFont); }
+        public Font ValorKeyboardNumericSpecialFont { get => GetValorFont(IdValorKeyboardNumericSpecialFont); }
 
         // POS Printer
         public int ValorPOSPrinterClaimTimeoutSeconds { get => GetValorNumeroEnteroAsInteger(IdValorPOSPrinterClaimTimeoutSeconds, 2); }
