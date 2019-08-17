@@ -60,8 +60,8 @@ namespace CSTransporteKiosko
             labelPasosVersion.Text = Application.ProductVersion;
 
             // Media
-            pictureboxPasosLogoCompaniaSoftware.Image = kiosko.KioskoConfiguracion.ValorCompaniaSoftwareLogotipo(database.Connection);
-            pictureboxLogoEmpresa.Image = kiosko.KioskoConfiguracion.ValorEmpresaLogotipo(database.Connection);
+            pictureboxPasosLogoCompaniaSoftware.Image = kiosko.KioskoConfiguracion.ValorCompaniaSoftwareLogotipo;
+            pictureboxLogoEmpresa.Image = kiosko.KioskoConfiguracion.ValorEmpresaLogotipo;
             wmInicio_Player.uiMode = "none";
             wmInicio_Player.URL = kiosko.KioskoConfiguracion.ValorVideo;
 
@@ -146,9 +146,9 @@ namespace CSTransporteKiosko
                 {
                     if (kiosko.IsFound)
                     {
-                        if (kiosko.CargarRelacionadoKioskoConfiguracion(database.Connection))
+                        if (kiosko.KioskoConfiguracionCargar(database.Connection))
                         {
-                            if (kiosko.KioskoConfiguracion.CargarRelacionadoKioscoConfiguracionValores(database.Connection))
+                            if (kiosko.KioskoConfiguracion.KioskoConfiguracionValoresCargar(database.Connection))
                             {
                                 AgregarEventLog(EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
                                 return PreparaImpresora();

@@ -75,6 +75,9 @@
     <Compile Include="..\..\..\framework-csharp\Database.ADO.SQLServer.cs">
       <Link>Database.ADO.SQLServer.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\framework-csharp\Database.Framework.Lite.cs">
+      <Link>Database.Framework.Lite.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\framework-csharp\Encrypt.TripleDES.cs">
       <Link>Encrypt.TripleDES.cs</Link>
     </Compile>
@@ -116,6 +119,8 @@
     <Compile Include="MessageBox.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TicketPlantilla.cs" />
+    <Compile Include="TicketPlantillaComando.cs" />
     <EmbeddedResource Include="..\..\..\framework-csharp\Controls.OnScreenKeyboardNumeric.resx">
       <Link>Controls.OnScreenKeyboardNumeric.resx</Link>
       <DependentUpon>Controls.OnScreenKeyboardNumeric.cs</DependentUpon>

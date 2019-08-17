@@ -1,30 +1,31 @@
-﻿using System;
+﻿using CardonerSistemas.Database.ADO;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
-using CardonerSistemas.Database.ADO;
 
 namespace CSTransporteKiosko
 {
-    public class Imagen
+    public class TicketPlantilla
     {
         #region Entity definition properties
 
-        private const string EntityDBName = "Imagen";
+        private const string EntityDBName = "TicketPlantilla";
 
-        private const string EntityFieldNameIdImagen = "IDImagen";
+        private const string EntityFieldNameIdTicketPlantilla = "IDTicketPlantilla";
         private const string EntityFieldNameNombre = "Nombre";
-        private const string EntityFieldNameImagenData = "ImagenData";
+        private const string EntityFieldNameActivo = "Activo";
 
         private const bool EntityDisplayNameIsFemale = true;
-        private const string EntityDisplayName = "Imagen";
+        private const string EntityDisplayName = "Plantilla del Ticket";
 
         private string EntityLoadErrorMessage;
         private string EntityLoadPropertiesErrorMessage;
 
-        public Imagen()
+        private string EntityLoadRelatedKioskoConfiguracionValorErrorMessage = String.Format("Error al cargar los valores de {0} {1} por Id.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
+
+        public TicketPlantilla()
         {
             EntityLoadErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
             EntityLoadPropertiesErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadPropertiesErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
@@ -34,9 +35,9 @@ namespace CSTransporteKiosko
 
         #region Object private properties
 
-        private short _IdImagen;
+        private byte _IdTicketPlantilla;
         private string _Nombre;
-        private Stream _ImagenData;
+        private bool _Activo;
 
         private bool _IsFound = false;
 
@@ -44,39 +45,76 @@ namespace CSTransporteKiosko
 
         #region Object public properties
 
-        public short IdImagen { get => _IdImagen; }
+        public byte IdTicketPlantilla { get => _IdTicketPlantilla; }
         public string Nombre { get => _Nombre; set => _Nombre = value; }
-        public Stream ImagenData { get => _ImagenData; }
-        public Image ImagenDataAsBitmap
-        {
-            get
-            {
-                try
-                {
-                    return Bitmap.FromStream(_ImagenData);
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-            }
-        }
+        public bool Activo { get => _Activo; set => _Activo = value; }
 
         public bool IsFound { get => _IsFound; }
 
         #endregion
 
-        #region Load data from database
+        #region Related entities
 
-        public bool CargarPorID(SqlConnection connection, short idImagen)
+        private List<TicketPlantillaComando> _TicketPlantillaComandos = new List<TicketPlantillaComando>();
+
+        public List<TicketPlantillaComando> TicketPlantillaComandos { get => _TicketPlantillaComandos; }
+
+        public bool TicketPlantillaComandosCargar(SqlConnection connection)
         {
             Cursor.Current = Cursors.WaitCursor;
 
             try
             {
-                SqlCommand command = new SqlCommand("usp_Imagen_ObtenerPorID", connection);
+                SqlCommand command = new SqlCommand("usp_TicketPlantilla_ObtenerComandos", connection);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@IDImagen", idImagen);
+                command.Parameters.AddWithValue("@IDTicketPlantilla", _IdTicketPlantilla);
+
+                SqlDataReader dataReader;
+                dataReader = command.ExecuteReader(CommandBehavior.SingleResult);
+                command.Dispose();
+                command = null;
+
+                _TicketPlantillaComandos.Clear();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        TicketPlantillaComando comando = new TicketPlantillaComando();
+
+                        comando.CargarPropiedades(dataReader);
+                        _TicketPlantillaComandos.Add(comando);
+
+                        comando = null;
+                    }
+                }
+
+                dataReader.Close();
+                dataReader = null;
+                Cursor.Current = Cursors.Default;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Cursor.Current = Cursors.Default;
+                CardonerSistemas.Error.ProcessError(ex, EntityLoadRelatedKioskoConfiguracionValorErrorMessage);
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Load data from database
+
+        public bool CargarPorID(SqlConnection connection, byte idTicketPlantilla)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            try
+            {
+                SqlCommand command = new SqlCommand("usp_TicketPlantilla_ObtenerPorID", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@IDTicketPlantilla", idTicketPlantilla);
 
                 Cursor.Current = Cursors.Default;
                 return CargarEjecutar(command, EntityLoadErrorMessage);
@@ -131,13 +169,13 @@ namespace CSTransporteKiosko
             }
         }
 
-        private bool CargarPropiedades(SqlDataReader dataReader)
+        public bool CargarPropiedades(SqlDataReader dataReader)
         {
             try
             {
-                _IdImagen = SQLServer.DataReaderGetShort(dataReader, EntityFieldNameIdImagen);
+                _IdTicketPlantilla = SQLServer.DataReaderGetByte(dataReader, EntityFieldNameIdTicketPlantilla);
                 _Nombre = SQLServer.DataReaderGetString(dataReader, EntityFieldNameNombre);
-                _ImagenData = SQLServer.DataReaderGetStream(dataReader, EntityFieldNameImagenData);
+                _Activo = SQLServer.DataReaderGetBoolean(dataReader, EntityFieldNameActivo);
                 return true;
             }
             catch (Exception ex)

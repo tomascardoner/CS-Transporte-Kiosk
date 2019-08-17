@@ -15,7 +15,7 @@ namespace CSTransporteKiosko
 
         private const string EntityDBName = "KioskoConfiguracionValor";
 
-        private const string EntityFieldNameIdKioskoConfiguracion = "IDKioskoConfiguracionValor";
+        private const string EntityFieldNameIdKioskoConfiguracion = "IDKioskoConfiguracion";
         private const string EntityFieldNameIdValor = "IDValor";
         private const string EntityFieldNameValorTexto = "ValorTexto";
         private const string EntityFieldNameValorNumeroEntero = "ValorNumeroEntero";
@@ -23,12 +23,19 @@ namespace CSTransporteKiosko
         private const string EntityFieldNameValorFechaHora = "ValorFechaHora";
         private const string EntityFieldNameValorSiNo = "ValorSiNo";
         private const string EntityFieldNameValorIdImagen = "ValorIDImagen";
+        private const string EntityFieldNameValorImagenData = "ValorImagenData";
 
         private const bool EntityDisplayNameIsFemale = false;
         private const string EntityDisplayName = "Valor de Configuración del Kiosko";
 
-        private string EntityLoadErrorMessage = String.Format("Error al cargar {0} {1} por Id.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
-        private string EntityLoadPropertiesErrorMessage = String.Format("Error al cargar las propiedades de {0} {1} por Id.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
+        private string EntityLoadErrorMessage;
+        private string EntityLoadPropertiesErrorMessage;
+
+        public KioskoConfiguracionValor()
+        {
+            EntityLoadErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
+            EntityLoadPropertiesErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadPropertiesErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
+        }
 
         #endregion
 
@@ -36,7 +43,13 @@ namespace CSTransporteKiosko
 
         private byte _IdKioskoConfiguracion;
         private string _IdValor;
+        private string _ValorTexto;
         private int? _ValorNumeroEntero;
+        private decimal? _ValorNumeroDecimal;
+        private DateTime? _ValorFechaHora;
+        private bool? _ValorSiNo;
+        private short? _ValorIdImagen;
+        private Stream _ValorImagenData;
 
         private bool _IsFound = false;
 
@@ -46,7 +59,28 @@ namespace CSTransporteKiosko
 
         public byte IdKioskoConfiguracion { get => _IdKioskoConfiguracion; }
         public string IdValor { get => _IdValor; }
-        public string ValorTexto { get; set; }
+        public string ValorTexto { get => _ValorTexto; set => _ValorTexto = value; }
+        public Font ValorFont
+        {
+            get
+            {
+                try
+                {
+                    TypeConverter converter = TypeDescriptor.GetConverter(typeof(Font));
+                    Font font = (Font)converter.ConvertFromString(_ValorTexto);
+                    return font;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                TypeConverter converter = TypeDescriptor.GetConverter(typeof(Font));
+                _ValorTexto = converter.ConvertToString(value);
+            }
+        }
         public int? ValorNumeroEnteroAsInteger{ get => _ValorNumeroEntero; set => _ValorNumeroEntero = value; }
         public short? ValorNumeroEnteroAsShort
         {
@@ -103,20 +137,18 @@ namespace CSTransporteKiosko
                 }
             }
         }
-        public decimal? ValorNumeroDecimal { get; set; }
-        public DateTime? ValorFechaHora { get; set; }
-        public bool? ValorSiNo { get; set; }
-        public short? ValorIdImagen { get; set; }
-
-        public Font ValorFont
+        public decimal? ValorNumeroDecimal { get => _ValorNumeroDecimal; set => _ValorNumeroDecimal = value; }
+        public DateTime? ValorFechaHora { get => _ValorFechaHora; set => _ValorFechaHora = value; }
+        public bool? ValorSiNo { get => _ValorSiNo; set => _ValorSiNo = value; }
+        public short? ValorIdImagen { get => _ValorIdImagen; set => _ValorIdImagen = value; }
+        public Stream ValorImagenData { get => _ValorImagenData; }
+        public Image ValorImagenDataAsBitmap
         {
             get
             {
                 try
                 {
-                    TypeConverter converter = TypeDescriptor.GetConverter(typeof(Font));
-                    Font font = (Font)converter.ConvertFromString(ValorTexto);
-                    return font;
+                    return Bitmap.FromStream(_ValorImagenData);
                 }
                 catch (Exception)
                 {
@@ -131,60 +163,28 @@ namespace CSTransporteKiosko
 
         #region Related entities
 
-        public Imagen ValorImagen(SqlConnection connection)
+        private Imagen _Imagen;
+
+        public bool ImagenCargar(SqlConnection connection)
         {
-            if (ValorIdImagen.HasValue)
+            if (_ValorIdImagen.HasValue)
             {
-                Imagen imagen = new Imagen();
-                if (imagen.CargarPorID(connection, ValorIdImagen.Value))
-                {
-                    return imagen;
-                }
-                else
-                {
-                    imagen = null;
-                    return null;
-                }
+                _Imagen = new Imagen();
+                return _Imagen.CargarPorID(connection, _ValorIdImagen.Value);
             }
             else
             {
-                return null;
+                return false;
             }
         }
 
-        public Stream ValorImagenDataAsStream(SqlConnection connection)
-        {
-            Imagen imagen = ValorImagen(connection);
-            if (imagen != null && imagen.IsFound)
-            {
-                return imagen.ImagenData;
-            }
-            else
-            {
-                imagen = null;
-                return null;
-            }
-        }
-
-        public Image ValorImagenDataAsBitmap(SqlConnection connection)
-        {
-            Imagen imagen = ValorImagen(connection);
-            if (imagen != null && imagen.IsFound)
-            {
-                return imagen.ImagenDataAsBitmap;
-            }
-            else
-            {
-                imagen = null;
-                return null;
-            }
-        }
+        public Imagen Imagen { get => _Imagen; }
 
         #endregion
 
-        #region Carga de datos desde la base
+        #region Load data from database
 
-        public bool CargarPorID(SqlConnection connection, byte idKioskoConfiguracion, string IdValor)
+        public bool CargarPorID(SqlConnection connection, byte idKioskoConfiguracion, string idValor)
         {
             Cursor.Current = Cursors.WaitCursor;
 
@@ -193,10 +193,10 @@ namespace CSTransporteKiosko
                 SqlCommand command = new SqlCommand("usp_KioskoConfiguracionValor_ObtenerPorID", connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@IDKioskoConfiguracion", idKioskoConfiguracion);
-                command.Parameters.AddWithValue("@IDValor", IdValor);
+                command.Parameters.AddWithValue("@IDValor", idValor);
 
                 Cursor.Current = Cursors.Default;
-                return CargarComun(command, EntityLoadErrorMessage);
+                return CargarEjecutar(command, EntityLoadErrorMessage);
             }
             catch (Exception ex)
             {
@@ -206,7 +206,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        private bool CargarComun(SqlCommand command, string errorMessage)
+        private bool CargarEjecutar(SqlCommand command, string errorMessage)
         {
             try
             {
@@ -248,39 +248,19 @@ namespace CSTransporteKiosko
             }
         }
 
-        private bool CargarPropiedades(SqlDataReader dataReader)
+        public bool CargarPropiedades(SqlDataReader dataReader)
         {
             try
             {
-                _IdKioskoConfiguracion = dataReader.GetByte(dataReader.GetOrdinal(EntityFieldNameIdKioskoConfiguracion));
-                _IdValor = dataReader.GetString(dataReader.GetOrdinal(EntityFieldNameIdValor));
-                ValorTexto = SQLServer.DataReaderGetStringSafeAsNull(dataReader, EntityFieldNameValorTexto);
+                _IdKioskoConfiguracion = SQLServer.DataReaderGetByte(dataReader, EntityFieldNameIdKioskoConfiguracion);
+                _IdValor = SQLServer.DataReaderGetString(dataReader, EntityFieldNameIdValor).TrimEnd();
+                _ValorTexto = SQLServer.DataReaderGetStringSafeAsNull(dataReader, EntityFieldNameValorTexto);
                 _ValorNumeroEntero = SQLServer.DataReaderGetIntegerSafeAsNull(dataReader, EntityFieldNameValorNumeroEntero);
-                ValorNumeroDecimal = SQLServer.DataReaderGetDecimalSafeAsNull(dataReader, EntityFieldNameValorNumeroDecimal);
-                ValorFechaHora = SQLServer.DataReaderGetDateTimeSafeAsNull(dataReader, EntityFieldNameValorFechaHora);
-                ValorSiNo = SQLServer.DataReaderGetBooleanSafeAsNull(dataReader, EntityFieldNameValorSiNo);
-                ValorIdImagen = SQLServer.DataReaderGetShortSafeAsNull(dataReader, EntityFieldNameValorIdImagen);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                CardonerSistemas.Error.ProcessError(ex, EntityLoadPropertiesErrorMessage);
-                return false;
-            }
-        }
-
-        public bool CargarPropiedadesDesdeArray(object[] values)
-        {
-            try
-            {
-                _IdKioskoConfiguracion = SQLServer.ObjectGetByte(values[0]).Value;
-                _IdValor = SQLServer.ObjectGetString(values[1]).TrimEnd();
-                ValorTexto = SQLServer.ObjectGetString(values[2]);
-                _ValorNumeroEntero = SQLServer.ObjectGetInteger(values[3]);
-                ValorNumeroDecimal = SQLServer.ObjectGetDecimal(values[4]);
-                ValorFechaHora = SQLServer.ObjectGetDateTime(values[5]);
-                ValorSiNo = SQLServer.ObjectGetBoolean(values[6]);
-                ValorIdImagen = SQLServer.ObjectGetShort(values[7]);
+                _ValorNumeroDecimal = SQLServer.DataReaderGetDecimalSafeAsNull(dataReader, EntityFieldNameValorNumeroDecimal);
+                _ValorFechaHora = SQLServer.DataReaderGetDateTimeSafeAsNull(dataReader, EntityFieldNameValorFechaHora);
+                _ValorSiNo = SQLServer.DataReaderGetBooleanSafeAsNull(dataReader, EntityFieldNameValorSiNo);
+                _ValorIdImagen = SQLServer.DataReaderGetShortSafeAsNull(dataReader, EntityFieldNameValorIdImagen);
+                _ValorImagenData = SQLServer.DataReaderGetStream(dataReader, EntityFieldNameValorImagenData);
                 return true;
             }
             catch (Exception ex)

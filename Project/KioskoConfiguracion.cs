@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using CardonerSistemas.Database.ADO;
 
 namespace CSTransporteKiosko
 {
@@ -20,13 +21,14 @@ namespace CSTransporteKiosko
         private const bool EntityDisplayNameIsFemale = true;
         private const string EntityDisplayName = "Configuración del Kiosko";
 
-        private string EntityLoadErrorMessage = String.Format("Error al cargar {0} {1} por Id.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
-        private string EntityLoadPropertiesErrorMessage = String.Format("Error al cargar las propiedades de {0} {1} por Id.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
+        private string EntityLoadErrorMessage;
+        private string EntityLoadPropertiesErrorMessage;
+
         private string EntityLoadRelatedKioskoConfiguracionValorErrorMessage = String.Format("Error al cargar los valores de {0} {1} por Id.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
 
         // Media
-        private string IdValorCompaniaSoftwareLogotipoIDImagen = "CompaniaSoftwareLogotipoIDImagen";
-        private string IdValorEmpresaLogotipoIDImagen = "EmpresaLogotipoIDImagen";
+        private string IdValorCompaniaSoftwareLogotipo = "CompaniaSoftwareLogotipo";
+        private string IdValorEmpresaLogotipo = "EmpresaLogotipo";
         private string IdValorVideo = "Video";
 
         // Apariencia
@@ -69,11 +71,18 @@ namespace CSTransporteKiosko
         private string IdValorLugarDuracionPreviaMaximaMinutos = "LugarDuracionPreviaMaximaMinutos";
         private string IdValorLugarDuracionPreviaMinimaMinutos = "LugarDuracionPreviaMinimaMinutos";
 
+        public KioskoConfiguracion()
+        {
+            EntityLoadErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
+            EntityLoadPropertiesErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadPropertiesErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
+        }
+
         #endregion
 
         #region Object private properties
 
         private byte _IdKioskoConfiguracion;
+        private string _Nombre;
 
         private bool _IsFound = false;
 
@@ -82,7 +91,7 @@ namespace CSTransporteKiosko
         #region Object public properties
 
         public byte IdKioskoConfiguracion { get => _IdKioskoConfiguracion; }
-        public string Nombre { get; set; }
+        public string Nombre { get => _Nombre; set => _Nombre = value; }
 
         public bool IsFound { get => _IsFound; }
 
@@ -95,16 +104,10 @@ namespace CSTransporteKiosko
         public List<KioskoConfiguracionValor> KioskoConfiguracionValores { get => _KioskoConfiguracionValores; }
 
         // Media
-        public short? ValorCompaniaSoftwareLogotipoIDImagen { get => GetValorIdImagen(IdValorCompaniaSoftwareLogotipoIDImagen); }
-        public Image ValorCompaniaSoftwareLogotipo(SqlConnection connection)
-        {
-            return GetValorImagenDataAsBitmap(connection, IdValorCompaniaSoftwareLogotipoIDImagen);
-        }
-        public short? ValorEmpresaLogotipoIDImagen { get => GetValorIdImagen(IdValorEmpresaLogotipoIDImagen); }
-        public Image ValorEmpresaLogotipo(SqlConnection connection)
-        {
-            return GetValorImagenDataAsBitmap(connection, IdValorEmpresaLogotipoIDImagen);
-        }
+        public short? ValorCompaniaSoftwareLogotipoIdImagen { get => GetValorIdImagen(IdValorCompaniaSoftwareLogotipo); }
+        public Image ValorCompaniaSoftwareLogotipo { get => GetValorImagenDataAsBitmap(IdValorCompaniaSoftwareLogotipo); }
+        public short? ValorEmpresaLogotipoIdImagen { get => GetValorIdImagen(IdValorEmpresaLogotipo); }
+        public Image ValorEmpresaLogotipo { get => GetValorImagenDataAsBitmap(IdValorEmpresaLogotipo); }
         public string ValorVideo { get => GetValorString(IdValorVideo); }
 
         // Apariencia
@@ -172,9 +175,52 @@ namespace CSTransporteKiosko
         public short ValorLugarDuracionPreviaMaximaMinutos { get => GetValorNumeroEnteroAsShort(IdValorLugarDuracionPreviaMaximaMinutos, 0); }
         public short ValorLugarDuracionPreviaMinimaMinutos { get => GetValorNumeroEnteroAsShort(IdValorLugarDuracionPreviaMinimaMinutos, 0); }
 
+        public bool KioskoConfiguracionValoresCargar(SqlConnection connection)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            try
+            {
+                SqlCommand command = new SqlCommand("usp_KioskoConfiguracion_ObtenerValores", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@IDKioskoConfiguracion", _IdKioskoConfiguracion);
+
+                SqlDataReader dataReader;
+                dataReader = command.ExecuteReader(CommandBehavior.SingleResult);
+                command.Dispose();
+                command = null;
+
+                _KioskoConfiguracionValores.Clear();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        KioskoConfiguracionValor valor = new KioskoConfiguracionValor();
+
+                        valor.CargarPropiedades(dataReader);
+                        _KioskoConfiguracionValores.Add(valor);
+
+                        valor = null;
+                    }
+                }
+
+                dataReader.Close();
+                dataReader = null;
+                Cursor.Current = Cursors.Default;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Cursor.Current = Cursors.Default;
+                CardonerSistemas.Error.ProcessError(ex, EntityLoadRelatedKioskoConfiguracionValorErrorMessage);
+                return false;
+            }
+        }
+
         #endregion
 
-        #region Carga de datos desde la base
+        #region Load data from database
 
         public bool CargarPorID(SqlConnection connection, byte idKioskoConfiguracion)
         {
@@ -187,7 +233,7 @@ namespace CSTransporteKiosko
                 command.Parameters.AddWithValue("@IDKioskoConfiguracion", idKioskoConfiguracion);
 
                 Cursor.Current = Cursors.Default;
-                return CargarComun(command, EntityLoadErrorMessage);
+                return CargarEjecutar(command, EntityLoadErrorMessage);
             }
             catch (Exception ex)
             {
@@ -197,7 +243,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        private bool CargarComun(SqlCommand command, string errorMessage)
+        private bool CargarEjecutar(SqlCommand command, string errorMessage)
         {
             try
             {
@@ -243,8 +289,8 @@ namespace CSTransporteKiosko
         {
             try
             {
-                _IdKioskoConfiguracion = dataReader.GetByte(dataReader.GetOrdinal(EntityFieldNameIdKioskoConfiguracion));
-                Nombre = dataReader.GetString(dataReader.GetOrdinal(EntityFieldNameNombre));
+                _IdKioskoConfiguracion = SQLServer.DataReaderGetByte(dataReader, EntityFieldNameIdKioskoConfiguracion);
+                _Nombre = SQLServer.DataReaderGetString(dataReader, EntityFieldNameNombre);
                 return true;
             }
             catch (Exception ex)
@@ -256,52 +302,7 @@ namespace CSTransporteKiosko
 
         #endregion
 
-        #region Cargar entidades relacionadas
-
-        public bool CargarRelacionadoKioscoConfiguracionValores(SqlConnection connection)
-        {
-            Cursor.Current = Cursors.WaitCursor;
-
-            try
-            {
-                SqlCommand command = new SqlCommand("usp_KioskoConfiguracion_ObtenerValores", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@IDKioskoConfiguracion", IdKioskoConfiguracion);
-
-                SqlDataReader dataReader;
-                dataReader = command.ExecuteReader(CommandBehavior.SingleResult);
-                command.Dispose();
-                command = null;
-
-                _KioskoConfiguracionValores.Clear();
-
-                if (dataReader.HasRows)
-                {
-                    while(dataReader.Read())
-                    {
-                        KioskoConfiguracionValor valor = new KioskoConfiguracionValor();
-
-                        object[] values = new object[dataReader.FieldCount];
-                        int fieldCount = dataReader.GetValues(values);
-                        valor.CargarPropiedadesDesdeArray(values);
-                        _KioskoConfiguracionValores.Add(valor);
-
-                        valor = null;
-                    }
-                }
-
-                dataReader.Close();
-                dataReader = null;
-                Cursor.Current = Cursors.Default;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Cursor.Current = Cursors.Default;
-                CardonerSistemas.Error.ProcessError(ex, EntityLoadRelatedKioskoConfiguracionValorErrorMessage);
-                return false;
-            }
-        }
+        #region Buscar valores
 
         private KioskoConfiguracionValor GetValor(string idValor)
         {
@@ -477,7 +478,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        private Imagen GetValorImagen(SqlConnection connection, string idValor)
+        private Image GetValorImagenDataAsBitmap(string idValor)
         {
             KioskoConfiguracionValor valor = GetValor(idValor);
             if (valor == null)
@@ -486,35 +487,7 @@ namespace CSTransporteKiosko
             }
             else
             {
-                return valor.ValorImagen(connection);
-            }
-        }
-
-        private Stream GetValorImagenDataAsStream(SqlConnection connection, string idValor)
-        {
-            Imagen imagen = GetValorImagen(connection, idValor);
-            if (imagen != null && imagen.IsFound)
-            {
-                return imagen.ImagenData;
-            }
-            else
-            {
-                imagen = null;
-                return null;
-            }
-        }
-
-        private Image GetValorImagenDataAsBitmap(SqlConnection connection, string idValor)
-        {
-            Imagen imagen = GetValorImagen(connection, idValor);
-            if (imagen != null && imagen.IsFound)
-            {
-                return imagen.ImagenDataAsBitmap;
-            }
-            else
-            {
-                imagen = null;
-                return null;
+                return valor.ValorImagenDataAsBitmap;
             }
         }
 

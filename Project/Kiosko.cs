@@ -9,13 +9,7 @@ namespace CSTransporteKiosko
 {
     class Kiosko
     {
-        #region Propiedades
-
-        private string[] excludedInterfaceNames = { "Hyper-V Virtual", "VMware Virtual", "Microsoft Wi-Fi"};
-
-        // Entity definition properties
-
-        private const string EntityDBName = "Kiosko";
+        #region Entity definition properties
 
         private const string EntityFieldNameIdKiosko = "IDKiosko";
         private const string EntityFieldNameNombre = "Nombre";
@@ -31,44 +25,74 @@ namespace CSTransporteKiosko
         private const bool EntityDisplayNameIsFemale = false;
         private const string EntityDisplayName = "Kiosko";
 
-        private string EntityLoadByIdErrorMessage = String.Format("Error al cargar {0} {1} por Id.", EntityDisplayNameIsFemale? " la " : " el ", EntityDisplayName);
+        private string EntityLoadByIdErrorMessage = String.Format("Error al cargar {0} {1} por Id.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
         private string EntityLoadByMacAddressErrorMessage = String.Format("Error al cargar {0} {1} por MAC Address.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
-        private string EntityLoadPropertiesErrorMessage = String.Format("Error al cargar las propiedades de {0} {1}.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
 
-        // Object internal properties
+        private string EntityLoadErrorMessage;
+        private string EntityLoadPropertiesErrorMessage;
+
+        public Kiosko()
+        {
+            EntityLoadErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
+            EntityLoadPropertiesErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadPropertiesErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
+        }
+
+        #endregion
+
+        #region Object private properties
 
         private byte _IdKiosko;
+        private string _Nombre;
+        private string _MacAddress;
+        private byte _IdEmpresa;
+        private int _IdLugar;
+        private byte _IdKioskoConfiguracion;
+        private byte? _IdTicketPlantilla;
+        private bool _Activo;
         private DateTime? _UltimaConexion;
         private DateTime? _UltimaOperacion;
 
         private bool _IsFound = false;
 
-        // Related entities
-        private KioskoConfiguracion _KioskoConfiguracion;
+        #endregion
 
-        // Public properties
+        #region Object public properties
 
         public byte IdKiosko { get => _IdKiosko; }
-        public string Nombre { get; set; }
-        public string MacAddress { get; set; }
-        public byte IdEmpresa { get; set; }
-        public int IdLugar { get; set; }
-        public byte IdKioskoConfiguracion { get; set; }
-        public byte IdTicketPlantilla { get; set; }
-        public bool Activo { get; set; }
+        public string Nombre { get => _Nombre; set => _Nombre = value; }
+        public string MacAddress { get => _MacAddress; set => _MacAddress = value; }
+        public byte IdEmpresa { get => _IdEmpresa; set => _IdEmpresa = value; }
+        public int IdLugar { get => _IdLugar; set => _IdLugar = value; }
+        public byte IdKioskoConfiguracion { get => _IdKioskoConfiguracion; set => _IdKioskoConfiguracion = value; }
+        public byte? IdTicketPlantilla { get => _IdTicketPlantilla; set => _IdTicketPlantilla = value; }
+        public bool Activo { get => _Activo; set => _Activo = value; }
         public DateTime? UltimaConexion { get => _UltimaConexion; }
         public DateTime? UltimaOperacion { get => _UltimaOperacion; }
-
-        public KioskoConfiguracion KioskoConfiguracion { get => _KioskoConfiguracion; }
 
         public bool IsFound { get => _IsFound; }
 
         #endregion
 
-        #region Otros métodos
+        #region Related entities
+
+        private KioskoConfiguracion _KioskoConfiguracion;
+
+        public bool KioskoConfiguracionCargar(SqlConnection connection)
+        {
+            _KioskoConfiguracion = new KioskoConfiguracion();
+            return _KioskoConfiguracion.CargarPorID(connection, IdKioskoConfiguracion);
+        }
+
+        public KioskoConfiguracion KioskoConfiguracion { get => _KioskoConfiguracion; }
+
+        #endregion
+
+        #region Other methods
 
         public string ObtenerMacAddressLocal()
         {
+            string[] excludedInterfaceNames = { "Hyper-V Virtual", "VMware Virtual", "Microsoft Wi-Fi" };
+
             Cursor.Current = Cursors.WaitCursor;
 
             foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
@@ -100,7 +124,7 @@ namespace CSTransporteKiosko
 
         #endregion
 
-        #region Carga de datos desde la base
+        #region Load data from database
 
         public bool CargarPorID(SqlConnection connection, byte idKiosko)
         {
@@ -113,7 +137,7 @@ namespace CSTransporteKiosko
                 command.Parameters.AddWithValue("@IDKiosko", idKiosko);
 
                 Cursor.Current = Cursors.Default;
-                return CargarComun(command, EntityLoadByIdErrorMessage);
+                return CargarEjecutar(command, EntityLoadByIdErrorMessage);
             }
             catch (Exception ex)
             {
@@ -134,7 +158,7 @@ namespace CSTransporteKiosko
                 command.Parameters.AddWithValue("@MACAddress", macAddress);
 
                 Cursor.Current = Cursors.Default;
-                return CargarComun(command, EntityLoadByMacAddressErrorMessage);
+                return CargarEjecutar(command, EntityLoadByMacAddressErrorMessage);
             }
             catch (Exception ex)
             {
@@ -144,7 +168,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        private bool CargarComun(SqlCommand command, string errorMessage)
+        private bool CargarEjecutar(SqlCommand command, string errorMessage)
         {
             try
             {
@@ -190,14 +214,14 @@ namespace CSTransporteKiosko
         {
             try
             {
-                _IdKiosko = dataReader.GetByte(dataReader.GetOrdinal(EntityFieldNameIdKiosko));
-                Nombre = dataReader.GetString(dataReader.GetOrdinal(EntityFieldNameNombre));
-                MacAddress = SQLServer.DataReaderGetStringSafeAsEmpty(dataReader, EntityFieldNameMacAddress);
-                IdEmpresa = dataReader.GetByte(dataReader.GetOrdinal(EntityFieldNameIdEmpresa));
-                IdLugar = dataReader.GetInt32(dataReader.GetOrdinal(EntityFieldNameIdLugar));
-                IdKioskoConfiguracion = dataReader.GetByte(dataReader.GetOrdinal(EntityFieldNameIdKioskoConfiguracion));
-                IdTicketPlantilla = dataReader.GetByte(dataReader.GetOrdinal(EntityFieldNameIdTicketPlantilla));
-                Activo = dataReader.GetBoolean(dataReader.GetOrdinal(EntityFieldNameActivo));
+                _IdKiosko = SQLServer.DataReaderGetByte(dataReader, EntityFieldNameIdKiosko);
+                _Nombre = SQLServer.DataReaderGetString(dataReader, EntityFieldNameNombre);
+                _MacAddress = SQLServer.DataReaderGetStringSafeAsEmpty(dataReader, EntityFieldNameMacAddress);
+                _IdEmpresa = SQLServer.DataReaderGetByte(dataReader, EntityFieldNameIdEmpresa);
+                _IdLugar = SQLServer.DataReaderGetInteger(dataReader, EntityFieldNameIdLugar);
+                _IdKioskoConfiguracion = SQLServer.DataReaderGetByte(dataReader, EntityFieldNameIdKioskoConfiguracion);
+                _IdTicketPlantilla = SQLServer.DataReaderGetByteSafeAsNull(dataReader, EntityFieldNameIdTicketPlantilla);
+                _Activo = SQLServer.DataReaderGetBoolean(dataReader, EntityFieldNameActivo);
                 _UltimaConexion = SQLServer.DataReaderGetDateTimeSafeAsNull(dataReader, EntityFieldNameUltimaConexion);
                 _UltimaOperacion = SQLServer.DataReaderGetDateTimeSafeAsNull(dataReader, EntityFieldNameUltimaOperacion);
                 return true;
@@ -207,16 +231,6 @@ namespace CSTransporteKiosko
                 CardonerSistemas.Error.ProcessError(ex, EntityLoadPropertiesErrorMessage);
                 return false;
             }
-        }
-
-        #endregion
-
-        #region Entidades relacionadas
-
-        public bool CargarRelacionadoKioskoConfiguracion(SqlConnection connection)
-        {
-            _KioskoConfiguracion = new KioskoConfiguracion();
-            return _KioskoConfiguracion.CargarPorID(connection, IdKioskoConfiguracion);
         }
 
         #endregion
