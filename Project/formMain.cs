@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using C1.Win.C1Tile;
@@ -67,6 +66,10 @@ namespace CSTransporteKiosko
 
             // Apariencia
             this.BackColor = SetColor(kiosko.KioskoConfiguracion.ValorScreenBackColor, this.BackColor);
+
+            // Textos
+            labelPaso2_Valor.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFont;
+            labelPaso2_Valor.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColor, labelPaso2_Valor.ForeColor);
 
             labelPaso3_Viaje_Origen_Leyenda.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFont;
             labelPaso3_Viaje_Origen_Leyenda.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColor, labelPaso3_Viaje_Origen_Leyenda.ForeColor);
@@ -497,7 +500,7 @@ namespace CSTransporteKiosko
             // Buscar datos en la base de datos
             listPersonasEncontradas.Clear();
 
-            if (busquedaReservas.BuscarViajesPorDocumento(database, textboxPaso2_Valor.Text.Trim(), listPersonasEncontradas, kiosko.KioskoConfiguracion))
+            if (busquedaReservas.BuscarViajesPorDocumento(database, kiosko.IdEmpresa, kiosko.IdLugar, textboxPaso2_Valor.Text.Trim(), listPersonasEncontradas, kiosko.KioskoConfiguracion))
             {
                 labelPaso3_Viaje_Origen_Lugar.Text = String.Format("{0} en {1}", listPersonasEncontradas[0].LugarOrigen, listPersonasEncontradas[0].LugarGrupoOrigen);
                 if (listPersonasEncontradas[0].FechaHoraOrigen.Date == DateTime.Now.Date)

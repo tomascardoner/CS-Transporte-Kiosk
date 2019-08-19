@@ -135,7 +135,7 @@ namespace CSTransporteKiosko
         public int? ValorButtonPreviousBackColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorButtonPreviousBackColor); }
         public Color? ValorButtonPreviousBackColor { get => GetValorColor(IdValorButtonPreviousBackColor);  }
         public int? ValorButtonPreviousForeColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorButtonPreviousForeColor); }
-        public Color? ValorButtonPreviousForeColor { get => GetValorColor(IdValorButtonPreviousBackColor); }
+        public Color? ValorButtonPreviousForeColor { get => GetValorColor(IdValorButtonPreviousForeColor); }
 
         // Botón siguiente
         public string ValorButtonNextFontString { get => GetValorString(IdValorButtonNextFont); }
@@ -143,7 +143,7 @@ namespace CSTransporteKiosko
         public int? ValorButtonNextBackColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorButtonNextBackColor); }
         public Color? ValorButtonNextBackColor { get => GetValorColor(IdValorButtonNextBackColor); }
         public int? ValorButtonNextForeColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorButtonNextForeColor); }
-        public Color? ValorButtonNextForeColor { get => GetValorColor(IdValorButtonNextBackColor); }
+        public Color? ValorButtonNextForeColor { get => GetValorColor(IdValorButtonNextForeColor); }
 
         // Mesage box
         public string ValorMessageBoxFontString { get => GetValorString(IdValorMessageBoxFont); }

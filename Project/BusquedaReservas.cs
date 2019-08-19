@@ -62,7 +62,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        public bool BuscarViajesPorDocumento(SQLServer database, string Documento, List<BusquedaReservas.Persona> personaList, KioskoConfiguracion configuracion)
+        public bool BuscarViajesPorDocumento(SQLServer database, byte idEmpresa, int idLugar, string Documento, List<BusquedaReservas.Persona> personaList, KioskoConfiguracion configuracion)
         {
             int IDViaje = 0;
             int IDViajeDetalle = 0;
@@ -71,9 +71,9 @@ namespace CSTransporteKiosko
 
             if (ConectarABaseDeDatos(database))
             {
-                if (BuscarReservasPorDocumento(database, Documento, ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero, configuracion))
+                if (BuscarReservasPorDocumento(database, idEmpresa, idLugar, Documento, ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero, configuracion))
                 {
-                    return BuscarPersonasPorReserva(database, IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero, personaList, configuracion);
+                    return BuscarPersonasPorReserva(database, idEmpresa, IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero, personaList, configuracion);
                 }
                 else
                 {
@@ -86,7 +86,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        private bool BuscarReservasPorDocumento(SQLServer database, string documento, ref int idViaje, ref int idViajeDetalle, ref string reservaCodigo, ref byte grupoNumero, KioskoConfiguracion configuracion)
+        private bool BuscarReservasPorDocumento(SQLServer database, byte idEmpresa, int idLugar, string documento, ref int idViaje, ref int idViajeDetalle, ref string reservaCodigo, ref byte grupoNumero, KioskoConfiguracion configuracion)
         {
             SqlCommand sqlCommand = new SqlCommand();
             SqlDataReader sqlDataReader;
@@ -96,7 +96,8 @@ namespace CSTransporteKiosko
                 sqlCommand.Connection = database.Connection;
                 sqlCommand.CommandText = "usp_ReservasPorDocumento";
                 sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@IDLugar", 2);
+                sqlCommand.Parameters.AddWithValue("@IDEmpresa", idEmpresa);
+                sqlCommand.Parameters.AddWithValue("@IDLugar", idLugar);
                 sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMaxima", configuracion.ValorLugarDuracionPreviaMaximaMinutos);
                 sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMinima", configuracion.ValorLugarDuracionPreviaMinimaMinutos);
                 sqlCommand.Parameters.AddWithValue("@DocumentoNumero", documento);
@@ -141,7 +142,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        private bool BuscarPersonasPorReserva(SQLServer database, int IDViaje, int IDViajeDetalle, string ReservaCodigo, byte GrupoNumero, List<BusquedaReservas.Persona> personaList, KioskoConfiguracion configuracion)
+        private bool BuscarPersonasPorReserva(SQLServer database, byte idEmpresa, int IDViaje, int IDViajeDetalle, string ReservaCodigo, byte GrupoNumero, List<BusquedaReservas.Persona> personaList, KioskoConfiguracion configuracion)
         {
             SqlCommand sqlCommand = new SqlCommand();
             SqlDataReader sqlDataReader;
@@ -151,6 +152,7 @@ namespace CSTransporteKiosko
                 sqlCommand.Connection = database.Connection;
                 sqlCommand.CommandText = "usp_PersonasPorReserva";
                 sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@IDEmpresa", idEmpresa);
                 sqlCommand.Parameters.AddWithValue("@IDViaje", IDViaje);
                 sqlCommand.Parameters.AddWithValue("@IDViajeDetalle", IDViajeDetalle);
                 sqlCommand.Parameters.AddWithValue("@ReservaCodigo", ReservaCodigo);

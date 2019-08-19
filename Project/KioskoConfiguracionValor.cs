@@ -116,24 +116,31 @@ namespace CSTransporteKiosko
         {
             get
             {
-                if (_ValorNumeroEntero.HasValue && _ValorNumeroEntero >= Color.Black.ToArgb() && _ValorNumeroEntero <= Color.White.ToArgb())
+                if (String.IsNullOrEmpty(_ValorTexto))
                 {
-                    return Color.FromArgb(_ValorNumeroEntero.Value);
+                    return null;
                 }
                 else
                 {
-                    return null;
+                    try
+                    {
+                        return ColorTranslator.FromHtml(_ValorTexto);
+                    }
+                    catch (Exception)
+                    {
+                        return null;
+                    }
                 }
             }
             set
             {
                 if (value.HasValue)
                 {
-                    _ValorNumeroEntero = value.Value.ToArgb();
+                    _ValorTexto = ColorTranslator.ToHtml(value.Value);
                 }
                 else
                 {
-                    _ValorNumeroEntero = null;
+                    _ValorTexto = null;
                 }
             }
         }
