@@ -16,7 +16,8 @@ namespace CSTransporteKiosko
         private Boolean buscarPorDocumento;
         private int InactivityTimeoutSeconds;
 
-        private SQLServer database = new SQLServer();
+        private SQLServer dbLocal = new SQLServer();
+        private SQLServer dbEmpresa = new SQLServer();
         private Kiosko kiosko = new Kiosko();
         private BusquedaReservas busquedaReservas = new BusquedaReservas();
         private TicketPlantilla ticket = new TicketPlantilla();
@@ -123,8 +124,11 @@ namespace CSTransporteKiosko
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            database.Close();
-            database = null;
+            dbLocal.Close();
+            dbLocal = null;
+
+            dbEmpresa.Close();
+            dbEmpresa = null;
 
             busquedaReservas = null;
 
@@ -133,7 +137,14 @@ namespace CSTransporteKiosko
             listPersonasEncontradas = null;
             listPersonasSeleccionadas = null;
 
-            printer.ReleaseAndClose(10);
+            if (kiosko != null && kiosko.KioskoConfiguracion != null)
+            {
+                printer.ReleaseAndClose(kiosko.KioskoConfiguracion.ValorPOSPrinterReleaseTimeoutSeconds);
+            }
+            else
+            {
+                printer.ReleaseAndClose(10);
+            }
             printer = null;
         }
 
@@ -143,25 +154,39 @@ namespace CSTransporteKiosko
 
         private bool InicializarKiosko()
         {
-            if (PrepararConexionABaseDeDatos())
+            if (PrepararConexionABaseDeDatosLocal())
             {
                 string macAddress = kiosko.ObtenerMacAddressLocal();
-                if (kiosko.CargarPorMacAddress(database.Connection, macAddress))
+                if (kiosko.CargarPorMacAddress(dbLocal.Connection, macAddress))
                 {
                     if (kiosko.IsFound)
                     {
-                        if (kiosko.KioskoConfiguracionCargar(database.Connection))
+                        if (kiosko.EmpresaCargar(dbLocal.Connection))
                         {
-                            if (kiosko.KioskoConfiguracion.KioskoConfiguracionValoresCargar(database.Connection))
+                            if (PrepararConexionABaseDeDatosEmpresa(kiosko.Empresa.DatabaseName))
                             {
-                                if (kiosko.IdTicketPlantilla.HasValue && ticket.CargarPorID(database.Connection, kiosko.IdTicketPlantilla.Value))
+                                if (kiosko.KioskoConfiguracionCargar(dbLocal.Connection))
                                 {
-                                    if (ticket.IsFound)
+                                    if (kiosko.KioskoConfiguracion.KioskoConfiguracionValoresCargar(dbLocal.Connection))
                                     {
-                                        if (ticket.TicketPlantillaComandosCargar(database.Connection))
+                                        if (kiosko.IdTicketPlantilla.HasValue && ticket.CargarPorID(dbLocal.Connection, kiosko.IdTicketPlantilla.Value))
                                         {
-                                            AgregarEventLog(EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
-                                            return PreparaImpresora();
+                                            if (ticket.IsFound)
+                                            {
+                                                if (ticket.TicketPlantillaComandosCargar(dbLocal.Connection))
+                                                {
+                                                    AgregarEventLog(EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
+                                                    if (System.Diagnostics.Debugger.IsAttached)
+                                                    {
+                                                        PreparaImpresora();
+                                                        return true;
+                                                    }
+                                                    else
+                                                    {
+                                                        return PreparaImpresora();
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -188,22 +213,22 @@ namespace CSTransporteKiosko
             eventLog.IdKiosko = IdKiosko;
             eventLog.Mensaje = mensaje;
             eventLog.Notas = notas;
-            eventLog.Agregar(database.Connection);
+            eventLog.Agregar(dbLocal.Connection);
         }
 
         #endregion
 
         #region Database
 
-        private bool PrepararConexionABaseDeDatos()
+        private bool PrepararConexionABaseDeDatosLocal()
         {
-            database.ApplicationName = CardonerSistemas.My.Application.Info.Title;
-            database.Datasource = Properties.Settings.Default.DatabaseDatasource;
-            database.InitialCatalog = Properties.Settings.Default.DatabaseDatabase;
-            database.UserID = Properties.Settings.Default.DatabaseUserID;
+            dbLocal.ApplicationName = CardonerSistemas.My.Application.Info.Title;
+            dbLocal.Datasource = Properties.Settings.Default.DatabaseDatasource;
+            dbLocal.InitialCatalog = Properties.Settings.Default.DatabaseDatabase;
+            dbLocal.UserID = Properties.Settings.Default.DatabaseUserID;
             if (Properties.Settings.Default.DatabasePassword.Trim().Length == 0)
             {
-                database.Password = "";
+                dbLocal.Password = "";
             }
             else
             {
@@ -211,13 +236,38 @@ namespace CSTransporteKiosko
                 string decryptedPassword = "";
                 if (decrypter.Decrypt(Properties.Settings.Default.DatabasePassword, ref decryptedPassword))
                 {
-                    database.Password = decryptedPassword;
+                    dbLocal.Password = decryptedPassword;
                 }
             }
-            database.WorkstationID = "";
-            database.CreateConnectionString();
+            dbLocal.WorkstationID = "";
+            dbLocal.CreateConnectionString();
 
-            return database.Connect();
+            return dbLocal.Connect();
+        }
+
+        private bool PrepararConexionABaseDeDatosEmpresa(string databaseName)
+        {
+            dbEmpresa.ApplicationName = CardonerSistemas.My.Application.Info.Title;
+            dbEmpresa.Datasource = Properties.Settings.Default.DatabaseDatasource;
+            dbEmpresa.InitialCatalog = databaseName;
+            dbEmpresa.UserID = Properties.Settings.Default.DatabaseUserID;
+            if (Properties.Settings.Default.DatabasePassword.Trim().Length == 0)
+            {
+                dbEmpresa.Password = "";
+            }
+            else
+            {
+                CardonerSistemas.Encrypt.TripleDES decrypter = new CardonerSistemas.Encrypt.TripleDES(CardonerSistemas.Constants.PublicEncryptionPassword);
+                string decryptedPassword = "";
+                if (decrypter.Decrypt(Properties.Settings.Default.DatabasePassword, ref decryptedPassword))
+                {
+                    dbEmpresa.Password = decryptedPassword;
+                }
+            }
+            dbEmpresa.WorkstationID = "";
+            dbEmpresa.CreateConnectionString();
+
+            return dbEmpresa.Connect();
         }
 
         #endregion
@@ -306,7 +356,8 @@ namespace CSTransporteKiosko
         {
             if (pasoActual > 0 && (DateTime.Now - inactivityTimeout).TotalSeconds >= InactivityTimeoutSeconds)
             {
-                busquedaReservas.CerrarConexionABaseDeDatos(database);
+                busquedaReservas.CerrarConexionABaseDeDatos(dbLocal);
+                busquedaReservas.CerrarConexionABaseDeDatos(dbEmpresa);
                 pasoActual = 0;
                 MostrarPasos();
             }
@@ -508,7 +559,7 @@ namespace CSTransporteKiosko
             // Buscar datos en la base de datos
             listPersonasEncontradas.Clear();
 
-            if (busquedaReservas.BuscarViajesPorDocumento(database, kiosko.IdEmpresa, kiosko.IdLugar, textboxPaso2_Valor.Text.Trim(), listPersonasEncontradas, kiosko.KioskoConfiguracion))
+            if (busquedaReservas.BuscarViajesPorDocumento(dbEmpresa, kiosko.IdLugar, textboxPaso2_Valor.Text.Trim(), listPersonasEncontradas, kiosko.KioskoConfiguracion))
             {
                 labelPaso3_Viaje_Origen_Lugar.Text = String.Format("{0} en {1}", listPersonasEncontradas[0].LugarOrigen, listPersonasEncontradas[0].LugarGrupoOrigen);
                 if (listPersonasEncontradas[0].FechaHoraOrigen.Date == DateTime.Now.Date)
@@ -572,10 +623,17 @@ namespace CSTransporteKiosko
             foreach (BusquedaReservas.Persona persona in listPersonasSeleccionadas)
             {
                 ViajeDetalle viajeDetalle = new ViajeDetalle();
-                if (viajeDetalle.RealizarCheckIn(database.Connection, kiosko.IdEmpresa, persona.IDViajeDetalle))
+                if (viajeDetalle.RealizarCheckIn(dbEmpresa.Connection, kiosko.IdEmpresa, persona.IDViajeDetalle))
                 {
                     viajeDetalle = null;
-                    return ticket.SendCommandsToPrinter(persona, printer);
+                    if (printer.IsReady)
+                    {
+                        return ticket.SendCommandsToPrinter(persona, printer);
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 viajeDetalle = null;
             }

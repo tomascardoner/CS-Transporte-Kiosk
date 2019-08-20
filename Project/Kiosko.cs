@@ -75,15 +75,23 @@ namespace CSTransporteKiosko
 
         #region Related entities
 
+        private Empresa _Empresa;
         private KioskoConfiguracion _KioskoConfiguracion;
+
+        public Empresa Empresa { get => _Empresa; }
+        public KioskoConfiguracion KioskoConfiguracion { get => _KioskoConfiguracion; }
+
+        public bool EmpresaCargar(SqlConnection connection)
+        {
+            _Empresa = new Empresa();
+            return _Empresa.CargarPorID(connection, _IdEmpresa);
+        }
 
         public bool KioskoConfiguracionCargar(SqlConnection connection)
         {
             _KioskoConfiguracion = new KioskoConfiguracion();
-            return _KioskoConfiguracion.CargarPorID(connection, IdKioskoConfiguracion);
+            return _KioskoConfiguracion.CargarPorID(connection, _IdKioskoConfiguracion);
         }
-
-        public KioskoConfiguracion KioskoConfiguracion { get => _KioskoConfiguracion; }
 
         #endregion
 

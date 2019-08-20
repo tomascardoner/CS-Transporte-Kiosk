@@ -99,6 +99,7 @@
       <Link>PointOfSale.Printer.cs</Link>
     </Compile>
     <Compile Include="BusquedaReservas.cs" />
+    <Compile Include="Empresa.cs" />
     <Compile Include="EventLog.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
