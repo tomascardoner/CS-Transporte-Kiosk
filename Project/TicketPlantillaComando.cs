@@ -34,6 +34,9 @@ namespace CSTransporteKiosko
             EntityLoadPropertiesErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadPropertiesErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
         }
 
+        private const string FieldDelimiterStartChar = "@";
+        private const string FieldDelimiterEndChar = "@";
+
         #endregion
 
         #region Object private properties
@@ -44,7 +47,7 @@ namespace CSTransporteKiosko
         private short? _IdImagen;
         private Stream _ImagenData;
         private short? _ImagenAncho;
-        private byte? _ImagenPosicion;
+        private short? _ImagenPosicion;
 
         private bool _IsFound = false;
 
@@ -72,7 +75,7 @@ namespace CSTransporteKiosko
             }
         }
         public short? ImagenAncho { get => _ImagenAncho; set => _ImagenAncho = value; }
-        public byte? ImagenPosicion { get => _ImagenPosicion; set => _ImagenPosicion = value; }
+        public short? ImagenPosicion { get => _ImagenPosicion; set => _ImagenPosicion = value; }
 
         public bool IsFound { get => _IsFound; }
 
@@ -182,7 +185,7 @@ namespace CSTransporteKiosko
                 _IdImagen = SQLServer.DataReaderGetShortSafeAsNull(dataReader, EntityFieldNameIdImagen);
                 _ImagenData = SQLServer.DataReaderGetStream(dataReader, EntityFieldNameImagenData);
                 _ImagenAncho = SQLServer.DataReaderGetShortSafeAsNull(dataReader, EntityFieldNameImagenAncho);
-                _ImagenPosicion = SQLServer.DataReaderGetByteSafeAsNull(dataReader, EntityFieldNameImagenPosicion);
+                _ImagenPosicion = SQLServer.DataReaderGetShortSafeAsNull(dataReader, EntityFieldNameImagenPosicion);
                 
                 return true;
             }
@@ -191,6 +194,38 @@ namespace CSTransporteKiosko
                 CardonerSistemas.Error.ProcessError(ex, EntityLoadPropertiesErrorMessage);
                 return false;
             }
+        }
+
+        #endregion
+
+        #region Other methods
+
+        public string GetTextReplacedWithFields(BusquedaReservas.Persona persona)
+        {
+            string replacedText = _Texto;
+            replacedText = replacedText.Replace("LugarGrupoOrigen", persona.LugarGrupoOrigen);
+            replacedText = replacedText.Replace("FechaHoraOrigen", persona.FechaHoraOrigen.ToShortDateString() + " " + persona.FechaHoraOrigen.ToShortDateString());
+            replacedText = replacedText.Replace("FechaOrigen", persona.FechaHoraOrigen.ToShortDateString());
+            replacedText = replacedText.Replace("HoraOrigen", persona.FechaHoraOrigen.ToShortTimeString());
+
+            replacedText = replacedText.Replace("LugarGrupoDestino", persona.LugarGrupoDestino);
+            replacedText = replacedText.Replace("FechaHoraDestino", persona.FechaHoraDestino.ToShortDateString() + " " + persona.FechaHoraDestino.ToShortDateString());
+            replacedText = replacedText.Replace("FechaDestino", persona.FechaHoraDestino.ToShortDateString());
+            replacedText = replacedText.Replace("HoraDestino", persona.FechaHoraDestino.ToShortTimeString());
+
+            replacedText = replacedText.Replace("Vehiculo", persona.Vehiculo);
+
+            replacedText = replacedText.Replace("ApellidoNombre", persona.ApellidoNombre);
+            replacedText = replacedText.Replace("Apellido", persona.Apellido);
+            replacedText = replacedText.Replace("Nombre", persona.Nombre);
+
+            return replacedText;
+        }
+
+        private string ReplaceField(string textoComando, string fieldName, string valor)
+        {
+            string textoParaReemplazar = String.Format("{0}{1}{2}", FieldDelimiterStartChar, fieldName, FieldDelimiterEndChar);
+            return textoComando.Replace(textoParaReemplazar, valor);
         }
 
         #endregion

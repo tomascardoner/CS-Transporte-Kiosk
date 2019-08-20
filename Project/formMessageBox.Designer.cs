@@ -62,7 +62,7 @@
             this.buttonSi.DialogResult = System.Windows.Forms.DialogResult.Yes;
             this.buttonSi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSi.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.buttonSi.Location = new System.Drawing.Point(12, 88);
+            this.buttonSi.Location = new System.Drawing.Point(22, 88);
             this.buttonSi.Name = "buttonSi";
             this.buttonSi.Size = new System.Drawing.Size(120, 46);
             this.buttonSi.TabIndex = 2;
@@ -76,7 +76,7 @@
             this.buttonNo.DialogResult = System.Windows.Forms.DialogResult.No;
             this.buttonNo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonNo.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.buttonNo.Location = new System.Drawing.Point(406, 88);
+            this.buttonNo.Location = new System.Drawing.Point(396, 88);
             this.buttonNo.Name = "buttonNo";
             this.buttonNo.Size = new System.Drawing.Size(120, 46);
             this.buttonNo.TabIndex = 3;

@@ -8,5 +8,5 @@ GRANT SELECT ON Persona TO cstransportekiosko
 GRANT SELECT ON RutaDetalle TO cstransportekiosko
 GRANT SELECT ON Vehiculo TO cstransportekiosko
 GRANT SELECT ON Viaje TO cstransportekiosko
-GRANT SELECT ON ViajeDetalle TO cstransportekiosko
+GRANT SELECT, UPDATE ON ViajeDetalle TO cstransportekiosko
 GO

@@ -121,6 +121,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TicketPlantilla.cs" />
     <Compile Include="TicketPlantillaComando.cs" />
+    <Compile Include="ViajeDetalle.cs" />
     <EmbeddedResource Include="..\..\..\framework-csharp\Controls.OnScreenKeyboardNumeric.resx">
       <Link>Controls.OnScreenKeyboardNumeric.resx</Link>
       <DependentUpon>Controls.OnScreenKeyboardNumeric.cs</DependentUpon>

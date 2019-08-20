@@ -16,8 +16,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_TicketPla
 GO
 
 CREATE PROCEDURE usp_TicketPlantilla_ObtenerComandos
-	@IDTicketPlantilla tinyint,
-	@IDComando tinyint
+	@IDTicketPlantilla tinyint
 	AS
 
 	BEGIN
@@ -26,7 +25,7 @@ CREATE PROCEDURE usp_TicketPlantilla_ObtenerComandos
 
 		SELECT tpc.IDTicketPlantilla, tpc.IDComando, tpc.Texto, tpc.IDImagen, i.ImagenData, tpc.ImagenAncho, tpc.ImagenPosicion
 			FROM TicketPlantillaComando AS tpc LEFT JOIN Imagen AS i ON tpc.IDImagen = i.IDImagen
-			WHERE tpc.IDTicketPlantilla = @IDTicketPlantilla AND tpc.IDComando = @IDComando
+			WHERE tpc.IDTicketPlantilla = @IDTicketPlantilla
 			ORDER BY tpc.IDComando
 	END
 GO

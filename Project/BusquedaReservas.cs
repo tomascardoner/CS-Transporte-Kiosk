@@ -6,7 +6,7 @@ using CardonerSistemas.Database.ADO;
 
 namespace CSTransporteKiosko
 {
-    class BusquedaReservas
+    public class BusquedaReservas
     {
         public class Persona
         {
@@ -29,6 +29,8 @@ namespace CSTransporteKiosko
             }
             public string DocumentoTipo { get; set; } = string.Empty;
             public string DocumentoNumero { get; set; } = string.Empty;
+            public int IDViaje { get; set; } = 0;
+            public int IDViajeDetalle { get; set; } = 0;
             public string LugarOrigen { get; set; } = string.Empty;
             public string LugarGrupoOrigen { get; set; } = string.Empty;
             public DateTime FechaHoraOrigen { get; set; } = DateTime.MinValue;
@@ -36,6 +38,7 @@ namespace CSTransporteKiosko
             public string LugarGrupoDestino { get; set; } = string.Empty;
             public DateTime FechaHoraDestino { get; set; } = DateTime.MinValue;
             public string Vehiculo { get; set; } = string.Empty;
+            public bool Realizado { get; set; } = false;
         }
 
         private bool ConectarABaseDeDatos(SQLServer database)
@@ -88,34 +91,34 @@ namespace CSTransporteKiosko
 
         private bool BuscarReservasPorDocumento(SQLServer database, byte idEmpresa, int idLugar, string documento, ref int idViaje, ref int idViajeDetalle, ref string reservaCodigo, ref byte grupoNumero, KioskoConfiguracion configuracion)
         {
-            SqlCommand sqlCommand = new SqlCommand();
-            SqlDataReader sqlDataReader;
+            SqlCommand command = new SqlCommand();
+            SqlDataReader dataReader;
 
             try
             {
-                sqlCommand.Connection = database.Connection;
-                sqlCommand.CommandText = "usp_ReservasPorDocumento";
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@IDEmpresa", idEmpresa);
-                sqlCommand.Parameters.AddWithValue("@IDLugar", idLugar);
-                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMaxima", configuracion.ValorLugarDuracionPreviaMaximaMinutos);
-                sqlCommand.Parameters.AddWithValue("@LugarDuracionPreviaMinima", configuracion.ValorLugarDuracionPreviaMinimaMinutos);
-                sqlCommand.Parameters.AddWithValue("@DocumentoNumero", documento);
+                command.Connection = database.Connection;
+                command.CommandText = "usp_ReservasPorDocumento";
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@IDEmpresa", idEmpresa);
+                command.Parameters.AddWithValue("@IDLugar", idLugar);
+                command.Parameters.AddWithValue("@LugarDuracionPreviaMaxima", configuracion.ValorLugarDuracionPreviaMaximaMinutos);
+                command.Parameters.AddWithValue("@LugarDuracionPreviaMinima", configuracion.ValorLugarDuracionPreviaMinimaMinutos);
+                command.Parameters.AddWithValue("@DocumentoNumero", documento);
 
-                sqlDataReader = sqlCommand.ExecuteReader(CommandBehavior.SingleRow);
-                sqlCommand.Dispose();
-                sqlCommand = null;
+                dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
+                command.Dispose();
+                command = null;
 
-                if (sqlDataReader.HasRows)
+                if (dataReader.HasRows)
                 {
-                    sqlDataReader.Read();
-                    idViaje = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("IDViaje"));
-                    idViajeDetalle = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("IDViajeDetalle"));
-                    reservaCodigo = sqlDataReader.GetString(sqlDataReader.GetOrdinal("ReservaCodigo"));
-                    grupoNumero = sqlDataReader.GetByte(sqlDataReader.GetOrdinal("GrupoNumero"));
+                    dataReader.Read();
+                    idViaje = SQLServer.DataReaderGetInteger(dataReader, "IDViaje");
+                    idViajeDetalle = SQLServer.DataReaderGetInteger(dataReader, "IDViajeDetalle");
+                    reservaCodigo = SQLServer.DataReaderGetString(dataReader, "ReservaCodigo");
+                    grupoNumero = SQLServer.DataReaderGetByte(dataReader, "GrupoNumero");
 
-                    sqlDataReader.Close();
-                    sqlDataReader = null;
+                    dataReader.Close();
+                    dataReader = null;
 
                     return true;
                 }
@@ -123,8 +126,8 @@ namespace CSTransporteKiosko
                 {
                     MessageBox.Show("No se han encontrado reservas.", configuracion);
 
-                    sqlDataReader.Close();
-                    sqlDataReader = null;
+                    dataReader.Close();
+                    dataReader = null;
 
                     return false;
                 }
@@ -134,9 +137,10 @@ namespace CSTransporteKiosko
             {
                 MessageBox.Show("No se pudo obtener la información.", configuracion);
 
-                sqlCommand = null;
+                command.Dispose();
+                command = null;
 
-                sqlDataReader = null;
+                dataReader = null;
 
                 return false;
             }
@@ -144,73 +148,66 @@ namespace CSTransporteKiosko
 
         private bool BuscarPersonasPorReserva(SQLServer database, byte idEmpresa, int IDViaje, int IDViajeDetalle, string ReservaCodigo, byte GrupoNumero, List<BusquedaReservas.Persona> personaList, KioskoConfiguracion configuracion)
         {
-            SqlCommand sqlCommand = new SqlCommand();
-            SqlDataReader sqlDataReader;
+            SqlCommand command = new SqlCommand();
+            SqlDataReader dataReader;
 
             try
             {
-                sqlCommand.Connection = database.Connection;
-                sqlCommand.CommandText = "usp_PersonasPorReserva";
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@IDEmpresa", idEmpresa);
-                sqlCommand.Parameters.AddWithValue("@IDViaje", IDViaje);
-                sqlCommand.Parameters.AddWithValue("@IDViajeDetalle", IDViajeDetalle);
-                sqlCommand.Parameters.AddWithValue("@ReservaCodigo", ReservaCodigo);
-                sqlCommand.Parameters.AddWithValue("@GrupoNumero", GrupoNumero);
+                command.Connection = database.Connection;
+                command.CommandText = "usp_PersonasPorReserva";
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@IDEmpresa", idEmpresa);
+                command.Parameters.AddWithValue("@IDViaje", IDViaje);
+                command.Parameters.AddWithValue("@IDViajeDetalle", IDViajeDetalle);
+                command.Parameters.AddWithValue("@ReservaCodigo", ReservaCodigo);
+                command.Parameters.AddWithValue("@GrupoNumero", GrupoNumero);
 
-                sqlDataReader = sqlCommand.ExecuteReader(CommandBehavior.SingleResult);
-                sqlCommand.Dispose();
-                sqlCommand = null;
+                dataReader = command.ExecuteReader(CommandBehavior.SingleResult);
+                command.Dispose();
+                command = null;
 
-                if (sqlDataReader.HasRows)
+                if (dataReader.HasRows)
                 {
-                    while (sqlDataReader.Read())
+                    while (dataReader.Read())
                     {
                         Persona nuevaPersona = new Persona();
 
-                        nuevaPersona.IDPersona = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("IDPersona"));
-                        nuevaPersona.Apellido = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Apellido"));
-                        if (!sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal("Nombre")))
-                        {
-                            nuevaPersona.Nombre = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Nombre"));
-                        }
-                        if (!sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal("DocumentoTipo")))
-                        {
-                            nuevaPersona.DocumentoTipo = sqlDataReader.GetString(sqlDataReader.GetOrdinal("DocumentoTipo"));
-                        }
-                        if (!sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal("DocumentoNumero")))
-                        {
-                            nuevaPersona.DocumentoNumero = sqlDataReader.GetString(sqlDataReader.GetOrdinal("DocumentoNumero"));
-                        }
-                        nuevaPersona.LugarOrigen = sqlDataReader.GetString(sqlDataReader.GetOrdinal("LugarOrigen"));
-                        nuevaPersona.LugarGrupoOrigen = sqlDataReader.GetString(sqlDataReader.GetOrdinal("LugarGrupoOrigen"));
-                        nuevaPersona.FechaHoraOrigen = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("FechaHoraOrigen"));
-                        nuevaPersona.LugarDestino = sqlDataReader.GetString(sqlDataReader.GetOrdinal("LugarDestino"));
-                        nuevaPersona.LugarGrupoDestino = sqlDataReader.GetString(sqlDataReader.GetOrdinal("LugarGrupoDestino"));
-                        nuevaPersona.FechaHoraDestino = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("FechaHoraDestino"));
-                        nuevaPersona.Vehiculo = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Vehiculo"));
+                        nuevaPersona.IDPersona = SQLServer.DataReaderGetInteger(dataReader, "IDPersona");
+                        nuevaPersona.Apellido = SQLServer.DataReaderGetString(dataReader, "Apellido");
+                        nuevaPersona.Nombre = SQLServer.DataReaderGetStringSafeAsEmpty(dataReader, "Nombre");
+                        nuevaPersona.DocumentoTipo = SQLServer.DataReaderGetStringSafeAsEmpty(dataReader, "DocumentoTipo");
+                        nuevaPersona.DocumentoNumero = SQLServer.DataReaderGetStringSafeAsNull(dataReader, "DocumentoNumero");
+                        nuevaPersona.IDViaje = IDViaje;
+                        nuevaPersona.IDViajeDetalle = IDViajeDetalle;
+                        nuevaPersona.LugarOrigen = SQLServer.DataReaderGetString(dataReader, "LugarOrigen");
+                        nuevaPersona.LugarGrupoOrigen = SQLServer.DataReaderGetString(dataReader, "LugarGrupoOrigen");
+                        nuevaPersona.FechaHoraOrigen = SQLServer.DataReaderGetDateTime(dataReader, "FechaHoraOrigen");
+                        nuevaPersona.LugarDestino = SQLServer.DataReaderGetString(dataReader, "LugarDestino");
+                        nuevaPersona.LugarGrupoDestino = SQLServer.DataReaderGetString(dataReader, "LugarGrupoDestino");
+                        nuevaPersona.FechaHoraDestino = SQLServer.DataReaderGetDateTime(dataReader, "FechaHoraDestino");
+                        nuevaPersona.Vehiculo = SQLServer.DataReaderGetString(dataReader, "Vehiculo");
 
                         personaList.Add(nuevaPersona);
                         nuevaPersona = null;
                     }
-                    sqlDataReader.Close();
-                    sqlDataReader = null;
+                    dataReader.Close();
+                    dataReader = null;
 
                     return true;
                 }
                 else
                 {
                     MessageBox.Show("No se han encontrado reservas.", configuracion);
-                    sqlDataReader.Close();
-                    sqlDataReader = null;
+                    dataReader.Close();
+                    dataReader = null;
                     return false;
                 }
             }
             catch (Exception)
             {
                 MessageBox.Show("No se pudo obtener la información.", configuracion);
-                sqlCommand = null;
-                sqlDataReader = null;
+                command = null;
+                dataReader = null;
                 return false;
             }
         }

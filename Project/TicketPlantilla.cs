@@ -1,8 +1,11 @@
 ﻿using CardonerSistemas.Database.ADO;
+using CardonerSistemas.Database.Framework;
+using Microsoft.PointOfService;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CSTransporteKiosko
@@ -22,13 +25,13 @@ namespace CSTransporteKiosko
 
         private string EntityLoadErrorMessage;
         private string EntityLoadPropertiesErrorMessage;
-
-        private string EntityLoadRelatedKioskoConfiguracionValorErrorMessage = String.Format("Error al cargar los valores de {0} {1} por Id.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
+        private string EntityLoadRelatedKioskoConfiguracionValorErrorMessage;
 
         public TicketPlantilla()
         {
-            EntityLoadErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
-            EntityLoadPropertiesErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadPropertiesErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
+            EntityLoadErrorMessage = Lite.GetEntityLoadErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
+            EntityLoadPropertiesErrorMessage = Lite.GetEntityLoadPropertiesErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
+            EntityLoadRelatedKioskoConfiguracionValorErrorMessage = String.Format("Error al cargar los valores de {0} {1} por Id.", Lite.GetEntityGenderArticle(EntityDisplayNameIsFemale), EntityDisplayName);
         }
 
         #endregion
@@ -183,6 +186,47 @@ namespace CSTransporteKiosko
                 CardonerSistemas.Error.ProcessError(ex, EntityLoadPropertiesErrorMessage);
                 return false;
             }
+        }
+
+        #endregion
+
+        #region Send commands to printer
+
+        public bool SendCommandsToPrinter(BusquedaReservas.Persona persona, CardonerSistemas.PointOfSale.Printer printer)
+        {
+            foreach (TicketPlantillaComando comando in _TicketPlantillaComandos)
+            {
+                if (comando.IdImagen.HasValue)
+                {
+                    Bitmap bitmap = new Bitmap(comando.ImagenDataAsBitmap);
+                    int width;
+                    int alignment;
+
+                    if (comando.ImagenAncho.HasValue)
+                    {
+                        width = comando.ImagenAncho.Value;
+                    }
+                    else
+                    {
+                        width = PosPrinter.PrinterBitmapAsIs;
+                    }
+                    if (comando.ImagenPosicion.HasValue)
+                    {
+                        alignment = comando.ImagenPosicion.Value;
+                    }
+                    else
+                    {
+                        alignment = PosPrinter.PrinterBitmapLeft;
+                    }
+
+                    return printer.PrintMemoryBitmap(bitmap, width, alignment);
+                }
+                else
+                {
+                    return printer.PrintLine(comando.GetTextReplacedWithFields(persona));
+                }
+            }
+            return true;
         }
 
         #endregion

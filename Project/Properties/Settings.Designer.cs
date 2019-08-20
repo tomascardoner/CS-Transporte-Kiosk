@@ -34,7 +34,7 @@ namespace CSTransporteKiosko.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhosta")]
         public string DatabaseDatasource {
             get {
                 return ((string)(this["DatabaseDatasource"]));

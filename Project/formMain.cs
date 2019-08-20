@@ -16,11 +16,10 @@ namespace CSTransporteKiosko
         private Boolean buscarPorDocumento;
         private int InactivityTimeoutSeconds;
 
-        private EventLog eventLog = new EventLog();
-
         private SQLServer database = new SQLServer();
         private Kiosko kiosko = new Kiosko();
         private BusquedaReservas busquedaReservas = new BusquedaReservas();
+        private TicketPlantilla ticket = new TicketPlantilla();
 
         private short LugarDuracionPreviaMinimaMinutos;
         private short LugarDuracionPreviaMaximaMinutos;
@@ -47,6 +46,8 @@ namespace CSTransporteKiosko
         {
             if (!InicializarKiosko())
             {
+                Application.Exit();
+                return;
             }
             ConfigAndSetAppearance();
             MostrarPasos();
@@ -122,17 +123,17 @@ namespace CSTransporteKiosko
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            eventLog = null;
-
             database.Close();
             database = null;
 
             busquedaReservas = null;
 
+            ticket = null;
+
             listPersonasEncontradas = null;
             listPersonasSeleccionadas = null;
 
-            printer.ReleaseAndClose(kiosko.KioskoConfiguracion.ValorPOSPrinterReleaseTimeoutSeconds);
+            printer.ReleaseAndClose(10);
             printer = null;
         }
 
@@ -153,8 +154,17 @@ namespace CSTransporteKiosko
                         {
                             if (kiosko.KioskoConfiguracion.KioskoConfiguracionValoresCargar(database.Connection))
                             {
-                                AgregarEventLog(EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
-                                return PreparaImpresora();
+                                if (kiosko.IdTicketPlantilla.HasValue && ticket.CargarPorID(database.Connection, kiosko.IdTicketPlantilla.Value))
+                                {
+                                    if (ticket.IsFound)
+                                    {
+                                        if (ticket.TicketPlantillaComandosCargar(database.Connection))
+                                        {
+                                            AgregarEventLog(EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
+                                            return PreparaImpresora();
+                                        }
+                                    }
+                                }
                             }
                         }
                         return false;
@@ -179,7 +189,6 @@ namespace CSTransporteKiosko
             eventLog.Mensaje = mensaje;
             eventLog.Notas = notas;
             eventLog.Agregar(database.Connection);
-            eventLog = null;
         }
 
         #endregion
@@ -204,7 +213,6 @@ namespace CSTransporteKiosko
                 {
                     database.Password = decryptedPassword;
                 }
-                decrypter = null;
             }
             database.WorkstationID = "";
             database.CreateConnectionString();
@@ -326,7 +334,7 @@ namespace CSTransporteKiosko
                 case 3: // Selección de Pasajeros e Impresión
                     if (VerificarPaso3())
                     {
-                        return ImprimirTicket();
+                        return RealizarCheckInEImprimirTicket();
                     }
                     else
                     {
@@ -559,6 +567,21 @@ namespace CSTransporteKiosko
             }
         }
 
+        private bool RealizarCheckInEImprimirTicket()
+        {
+            foreach (BusquedaReservas.Persona persona in listPersonasSeleccionadas)
+            {
+                ViajeDetalle viajeDetalle = new ViajeDetalle();
+                if (viajeDetalle.RealizarCheckIn(database.Connection, kiosko.IdEmpresa, persona.IDViajeDetalle))
+                {
+                    viajeDetalle = null;
+                    return ticket.SendCommandsToPrinter(persona, printer);
+                }
+                viajeDetalle = null;
+            }
+            return false;
+        }
+
         #endregion
 
         #region Impresión de ticket
@@ -568,31 +591,28 @@ namespace CSTransporteKiosko
             return printer.GetOpenClaimAndEnable(Properties.Settings.Default.POSPrinterName, kiosko.KioskoConfiguracion.ValorPOSPrinterClaimTimeoutSeconds);
         }
 
-        private bool ImprimirTicket()
+        private bool OLDImprimirTicket(BusquedaReservas.Persona persona)
         {
-            foreach (BusquedaReservas.Persona persona in listPersonasSeleccionadas)
-            {
-                printer.PrintBitmap("C:\\Users\\Tomas\\Dropbox\\Cardoner Sistemas\\CS-Transporte\\Resource\\Interface\\lobosbus.gif", 500, -2);
-                printer.PrintLineCrLf("");
-                printer.PrintLineCrLf("Salida de:");
-                printer.PrintLineCrLf("<BOLD><DOUBLEHIGH>" + persona.LugarGrupoOrigen.ToUpper());
-                printer.PrintLineCrLf(persona.LugarOrigen);
-                printer.PrintLineCrLf("El día <BOLD><DOUBLEHIGH>{0}<SINGLE><NORMAL> a las <BOLD><DOUBLEHIGH>{1}<SINGLE><NORMAL> horas.", persona.FechaHoraOrigen.ToShortDateString(), persona.FechaHoraOrigen.ToShortTimeString());
-                printer.PrintLineCrLf("");
-                printer.PrintLineCrLf("Llegada a:");                
-                printer.PrintLineCrLf("<BOLD><DOUBLEHIGH>" + persona.LugarGrupoDestino.ToUpper());
-                printer.PrintLineCrLf(persona.LugarDestino);
-                printer.PrintLineCrLf("El día <BOLD><DOUBLEHIGH>{0}<SINGLE><NORMAL> a las <BOLD><DOUBLEHIGH>{1}<SINGLE><NORMAL> horas.", persona.FechaHoraDestino.ToShortDateString(), persona.FechaHoraDestino.ToShortTimeString());
-                printer.PrintLineCrLf("");
-                printer.PrintLineCrLf("Combi nº: <BOLD><DOUBLEHIGH>" + persona.Vehiculo);
-                printer.PrintLineCrLf("");
-                printer.PrintLineCrLf("<CENTER><DOUBLE>" + persona.ApellidoNombre);
-                printer.PrintLineCrLf("");
-                printer.PrintLineCrLf("");
-                printer.PrintLineCrLf("");
-                printer.PrintLineCrLf("");
-                printer.CutPaper(90);
-            }
+            printer.PrintBitmap("C:\\Users\\Tomas\\Dropbox\\Cardoner Sistemas\\CS-Transporte\\Resource\\Interface\\lobosbus.gif", 500, -2);
+            printer.PrintLineCrLf("");
+            printer.PrintLineCrLf("Salida de:");
+            printer.PrintLineCrLf("<BOLD><DOUBLEHIGH>" + persona.LugarGrupoOrigen.ToUpper());
+            printer.PrintLineCrLf(persona.LugarOrigen);
+            printer.PrintLineCrLf("El día <BOLD><DOUBLEHIGH>{0}<SINGLE><NORMAL> a las <BOLD><DOUBLEHIGH>{1}<SINGLE><NORMAL> horas.", persona.FechaHoraOrigen.ToShortDateString(), persona.FechaHoraOrigen.ToShortTimeString());
+            printer.PrintLineCrLf("");
+            printer.PrintLineCrLf("Llegada a:");                
+            printer.PrintLineCrLf("<BOLD><DOUBLEHIGH>" + persona.LugarGrupoDestino.ToUpper());
+            printer.PrintLineCrLf(persona.LugarDestino);
+            printer.PrintLineCrLf("El día <BOLD><DOUBLEHIGH>{0}<SINGLE><NORMAL> a las <BOLD><DOUBLEHIGH>{1}<SINGLE><NORMAL> horas.", persona.FechaHoraDestino.ToShortDateString(), persona.FechaHoraDestino.ToShortTimeString());
+            printer.PrintLineCrLf("");
+            printer.PrintLineCrLf("Combi nº: <BOLD><DOUBLEHIGH>" + persona.Vehiculo);
+            printer.PrintLineCrLf("");
+            printer.PrintLineCrLf("<CENTER><DOUBLE>" + persona.ApellidoNombre);
+            printer.PrintLineCrLf("");
+            printer.PrintLineCrLf("");
+            printer.PrintLineCrLf("");
+            printer.PrintLineCrLf("");
+            printer.CutPaper(90);
             return true;
         }
 

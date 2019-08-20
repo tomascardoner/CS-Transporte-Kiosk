@@ -6,7 +6,7 @@
       <Value Profile="(Default)">MainPOSPrinter</Value>
     </Setting>
     <Setting Name="DatabaseDatasource" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">localhost</Value>
+      <Value Profile="(Default)">localhosta</Value>
     </Setting>
     <Setting Name="DatabaseDatabase" Type="System.String" Scope="Application">
       <Value Profile="(Default)">CSTransporte_Kiosko</Value>
