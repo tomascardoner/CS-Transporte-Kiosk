@@ -39,6 +39,7 @@
             this.panelPaso2 = new System.Windows.Forms.TableLayoutPanel();
             this.textboxPaso2_Valor = new System.Windows.Forms.TextBox();
             this.labelPaso2_Valor = new System.Windows.Forms.Label();
+            this.keyboardNumeric = new CardonerSistemas.OnScreenKeyboard();
             this.panelPaso1 = new System.Windows.Forms.TableLayoutPanel();
             this.radioPaso1_Documento = new System.Windows.Forms.RadioButton();
             this.radioPaso1_Reserva = new System.Windows.Forms.RadioButton();
@@ -71,7 +72,6 @@
             this.panelInicio = new System.Windows.Forms.TableLayoutPanel();
             this.labelInicio_LeyendaIniciar = new System.Windows.Forms.Label();
             this.wmInicio_Player = new AxWMPLib.AxWindowsMediaPlayer();
-            this.keyboardNumeric = new CardonerSistemas.ControlsOnScreenKeyboard();
             this.panelPasos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureboxLogoEmpresa)).BeginInit();
             this.panelUser.SuspendLayout();
@@ -177,6 +177,16 @@
             this.labelPaso2_Valor.TabIndex = 1;
             this.labelPaso2_Valor.Text = "Ingrese el Documento / Reserva:";
             this.labelPaso2_Valor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // keyboardNumeric
+            // 
+            this.keyboardNumeric.DestinationTextBox = this.textboxPaso2_Valor;
+            this.keyboardNumeric.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.keyboardNumeric.KeyboardLayout = CardonerSistemas.OnScreenKeyboard.KeyboardLayoutEnums.NumericCalculator;
+            this.keyboardNumeric.Location = new System.Drawing.Point(418, 168);
+            this.keyboardNumeric.Name = "keyboardNumeric";
+            this.keyboardNumeric.Size = new System.Drawing.Size(294, 180);
+            this.keyboardNumeric.TabIndex = 3;
             // 
             // panelPaso1
             // 
@@ -643,16 +653,6 @@
             this.wmInicio_Player.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(this.WindowsMediaPlayer_PlayStateChange);
             this.wmInicio_Player.ClickEvent += new AxWMPLib._WMPOCXEvents_ClickEventHandler(this.Click_ToStart);
             // 
-            // keyboardNumeric
-            // 
-            this.keyboardNumeric.DestinationTextBox = this.textboxPaso2_Valor;
-            this.keyboardNumeric.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.keyboardNumeric.KeyboardLayout = CardonerSistemas.ControlsOnScreenKeyboard.KeyboardLayoutEnums.NumericCalculator;
-            this.keyboardNumeric.Location = new System.Drawing.Point(418, 168);
-            this.keyboardNumeric.Name = "keyboardNumeric";
-            this.keyboardNumeric.Size = new System.Drawing.Size(294, 180);
-            this.keyboardNumeric.TabIndex = 3;
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -740,7 +740,7 @@
         private System.Windows.Forms.Label labelPaso3_Viaje_Vehiculo;
         private System.Windows.Forms.Label labelPaso3_Viaje_Vehiculo_Leyenda;
         private C1.Win.C1Tile.Tile tile1;
-        private CardonerSistemas.ControlsOnScreenKeyboard keyboardNumeric;
+        private CardonerSistemas.OnScreenKeyboard keyboardNumeric;
     }
 }
 
