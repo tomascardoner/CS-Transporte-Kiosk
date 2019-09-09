@@ -36,6 +36,12 @@
             this.panelPasos = new System.Windows.Forms.TableLayoutPanel();
             this.pictureboxLogoEmpresa = new System.Windows.Forms.PictureBox();
             this.panelUser = new System.Windows.Forms.Panel();
+            this.panelPaso2 = new System.Windows.Forms.TableLayoutPanel();
+            this.textboxPaso2_Valor = new System.Windows.Forms.TextBox();
+            this.labelPaso2_Valor = new System.Windows.Forms.Label();
+            this.panelPaso1 = new System.Windows.Forms.TableLayoutPanel();
+            this.radioPaso1_Documento = new System.Windows.Forms.RadioButton();
+            this.radioPaso1_Reserva = new System.Windows.Forms.RadioButton();
             this.panelPaso3 = new System.Windows.Forms.TableLayoutPanel();
             this.panelPaso3_Viaje_Personas = new System.Windows.Forms.TableLayoutPanel();
             this.panelPaso3_Viaje = new System.Windows.Forms.TableLayoutPanel();
@@ -55,13 +61,6 @@
             this.panelPaso4 = new System.Windows.Forms.TableLayoutPanel();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.panelPaso1 = new System.Windows.Forms.TableLayoutPanel();
-            this.radioPaso1_Documento = new System.Windows.Forms.RadioButton();
-            this.radioPaso1_Reserva = new System.Windows.Forms.RadioButton();
-            this.panelPaso2 = new System.Windows.Forms.TableLayoutPanel();
-            this.textboxPaso2_Valor = new System.Windows.Forms.TextBox();
-            this.labelPaso2_Valor = new System.Windows.Forms.Label();
-            this.onscreenkeyboardNumeric = new CardonerSistemas.ControlsOnScreenKeyboardNumeric();
             this.panelPasosNavegacion = new System.Windows.Forms.TableLayoutPanel();
             this.buttonPasoAnterior = new System.Windows.Forms.Button();
             this.buttonPasoSiguiente = new System.Windows.Forms.Button();
@@ -72,17 +71,18 @@
             this.panelInicio = new System.Windows.Forms.TableLayoutPanel();
             this.labelInicio_LeyendaIniciar = new System.Windows.Forms.Label();
             this.wmInicio_Player = new AxWMPLib.AxWindowsMediaPlayer();
+            this.keyboardNumeric = new CardonerSistemas.ControlsOnScreenKeyboard();
             this.panelPasos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureboxLogoEmpresa)).BeginInit();
             this.panelUser.SuspendLayout();
+            this.panelPaso2.SuspendLayout();
+            this.panelPaso1.SuspendLayout();
             this.panelPaso3.SuspendLayout();
             this.panelPaso3_Viaje_Personas.SuspendLayout();
             this.panelPaso3_Viaje.SuspendLayout();
             this.panelPaso3_Viaje_Origen.SuspendLayout();
             this.panelPaso3_Viaje_Destino.SuspendLayout();
             this.panelPaso4.SuspendLayout();
-            this.panelPaso1.SuspendLayout();
-            this.panelPaso2.SuspendLayout();
             this.panelPasosNavegacion.SuspendLayout();
             this.panelPasosPie.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureboxPasosLogoCompaniaSoftware)).BeginInit();
@@ -122,15 +122,118 @@
             // 
             // panelUser
             // 
+            this.panelUser.Controls.Add(this.panelPaso2);
+            this.panelUser.Controls.Add(this.panelPaso1);
             this.panelUser.Controls.Add(this.panelPaso3);
             this.panelUser.Controls.Add(this.panelPaso4);
-            this.panelUser.Controls.Add(this.panelPaso1);
-            this.panelUser.Controls.Add(this.panelPaso2);
             this.panelUser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelUser.Location = new System.Drawing.Point(3, 105);
             this.panelUser.Name = "panelUser";
             this.panelUser.Size = new System.Drawing.Size(794, 351);
             this.panelUser.TabIndex = 4;
+            // 
+            // panelPaso2
+            // 
+            this.panelPaso2.ColumnCount = 4;
+            this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
+            this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelPaso2.Controls.Add(this.textboxPaso2_Valor, 2, 1);
+            this.panelPaso2.Controls.Add(this.labelPaso2_Valor, 1, 1);
+            this.panelPaso2.Controls.Add(this.keyboardNumeric, 2, 2);
+            this.panelPaso2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelPaso2.Location = new System.Drawing.Point(0, 0);
+            this.panelPaso2.Name = "panelPaso2";
+            this.panelPaso2.RowCount = 3;
+            this.panelPaso2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.panelPaso2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.panelPaso2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.panelPaso2.Size = new System.Drawing.Size(794, 351);
+            this.panelPaso2.TabIndex = 6;
+            this.panelPaso2.Visible = false;
+            // 
+            // textboxPaso2_Valor
+            // 
+            this.textboxPaso2_Valor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.textboxPaso2_Valor.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.textboxPaso2_Valor.Enabled = false;
+            this.textboxPaso2_Valor.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
+            this.textboxPaso2_Valor.Location = new System.Drawing.Point(418, 127);
+            this.textboxPaso2_Valor.MaxLength = 8;
+            this.textboxPaso2_Valor.Name = "textboxPaso2_Valor";
+            this.textboxPaso2_Valor.Size = new System.Drawing.Size(150, 35);
+            this.textboxPaso2_Valor.TabIndex = 2;
+            this.textboxPaso2_Valor.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // labelPaso2_Valor
+            // 
+            this.labelPaso2_Valor.AutoSize = true;
+            this.labelPaso2_Valor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelPaso2_Valor.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
+            this.labelPaso2_Valor.Location = new System.Drawing.Point(81, 124);
+            this.labelPaso2_Valor.Name = "labelPaso2_Valor";
+            this.labelPaso2_Valor.Size = new System.Drawing.Size(331, 41);
+            this.labelPaso2_Valor.TabIndex = 1;
+            this.labelPaso2_Valor.Text = "Ingrese el Documento / Reserva:";
+            this.labelPaso2_Valor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // panelPaso1
+            // 
+            this.panelPaso1.ColumnCount = 3;
+            this.panelPaso1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelPaso1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.panelPaso1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelPaso1.Controls.Add(this.radioPaso1_Documento, 1, 1);
+            this.panelPaso1.Controls.Add(this.radioPaso1_Reserva, 1, 3);
+            this.panelPaso1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelPaso1.Location = new System.Drawing.Point(0, 0);
+            this.panelPaso1.Name = "panelPaso1";
+            this.panelPaso1.RowCount = 5;
+            this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.panelPaso1.Size = new System.Drawing.Size(794, 351);
+            this.panelPaso1.TabIndex = 3;
+            this.panelPaso1.Visible = false;
+            // 
+            // radioPaso1_Documento
+            // 
+            this.radioPaso1_Documento.Appearance = System.Windows.Forms.Appearance.Button;
+            this.radioPaso1_Documento.AutoSize = true;
+            this.radioPaso1_Documento.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.radioPaso1_Documento.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.radioPaso1_Documento.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.radioPaso1_Documento.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.radioPaso1_Documento.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
+            this.radioPaso1_Documento.Location = new System.Drawing.Point(231, 73);
+            this.radioPaso1_Documento.Name = "radioPaso1_Documento";
+            this.radioPaso1_Documento.Size = new System.Drawing.Size(331, 64);
+            this.radioPaso1_Documento.TabIndex = 7;
+            this.radioPaso1_Documento.TabStop = true;
+            this.radioPaso1_Documento.Text = "Ingresar con Nº de Documento";
+            this.radioPaso1_Documento.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.radioPaso1_Documento.UseVisualStyleBackColor = false;
+            // 
+            // radioPaso1_Reserva
+            // 
+            this.radioPaso1_Reserva.Appearance = System.Windows.Forms.Appearance.Button;
+            this.radioPaso1_Reserva.AutoSize = true;
+            this.radioPaso1_Reserva.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.radioPaso1_Reserva.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.radioPaso1_Reserva.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.radioPaso1_Reserva.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.radioPaso1_Reserva.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
+            this.radioPaso1_Reserva.Location = new System.Drawing.Point(231, 213);
+            this.radioPaso1_Reserva.Name = "radioPaso1_Reserva";
+            this.radioPaso1_Reserva.Size = new System.Drawing.Size(331, 64);
+            this.radioPaso1_Reserva.TabIndex = 6;
+            this.radioPaso1_Reserva.TabStop = true;
+            this.radioPaso1_Reserva.Text = "Ingresar con Nº de Reserva";
+            this.radioPaso1_Reserva.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.radioPaso1_Reserva.UseVisualStyleBackColor = false;
             // 
             // panelPaso3
             // 
@@ -410,119 +513,6 @@
             this.radioButton2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.radioButton2.UseVisualStyleBackColor = false;
             // 
-            // panelPaso1
-            // 
-            this.panelPaso1.ColumnCount = 3;
-            this.panelPaso1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.panelPaso1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.panelPaso1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.panelPaso1.Controls.Add(this.radioPaso1_Documento, 1, 1);
-            this.panelPaso1.Controls.Add(this.radioPaso1_Reserva, 1, 3);
-            this.panelPaso1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelPaso1.Location = new System.Drawing.Point(0, 0);
-            this.panelPaso1.Name = "panelPaso1";
-            this.panelPaso1.RowCount = 5;
-            this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelPaso1.Size = new System.Drawing.Size(794, 351);
-            this.panelPaso1.TabIndex = 3;
-            this.panelPaso1.Visible = false;
-            // 
-            // radioPaso1_Documento
-            // 
-            this.radioPaso1_Documento.Appearance = System.Windows.Forms.Appearance.Button;
-            this.radioPaso1_Documento.AutoSize = true;
-            this.radioPaso1_Documento.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.radioPaso1_Documento.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radioPaso1_Documento.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.radioPaso1_Documento.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.radioPaso1_Documento.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.radioPaso1_Documento.Location = new System.Drawing.Point(231, 73);
-            this.radioPaso1_Documento.Name = "radioPaso1_Documento";
-            this.radioPaso1_Documento.Size = new System.Drawing.Size(331, 64);
-            this.radioPaso1_Documento.TabIndex = 7;
-            this.radioPaso1_Documento.TabStop = true;
-            this.radioPaso1_Documento.Text = "Ingresar con Nº de Documento";
-            this.radioPaso1_Documento.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.radioPaso1_Documento.UseVisualStyleBackColor = false;
-            // 
-            // radioPaso1_Reserva
-            // 
-            this.radioPaso1_Reserva.Appearance = System.Windows.Forms.Appearance.Button;
-            this.radioPaso1_Reserva.AutoSize = true;
-            this.radioPaso1_Reserva.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.radioPaso1_Reserva.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radioPaso1_Reserva.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.radioPaso1_Reserva.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.radioPaso1_Reserva.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.radioPaso1_Reserva.Location = new System.Drawing.Point(231, 213);
-            this.radioPaso1_Reserva.Name = "radioPaso1_Reserva";
-            this.radioPaso1_Reserva.Size = new System.Drawing.Size(331, 64);
-            this.radioPaso1_Reserva.TabIndex = 6;
-            this.radioPaso1_Reserva.TabStop = true;
-            this.radioPaso1_Reserva.Text = "Ingresar con Nº de Reserva";
-            this.radioPaso1_Reserva.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.radioPaso1_Reserva.UseVisualStyleBackColor = false;
-            // 
-            // panelPaso2
-            // 
-            this.panelPaso2.ColumnCount = 4;
-            this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
-            this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.panelPaso2.Controls.Add(this.textboxPaso2_Valor, 2, 1);
-            this.panelPaso2.Controls.Add(this.labelPaso2_Valor, 1, 1);
-            this.panelPaso2.Controls.Add(this.onscreenkeyboardNumeric, 2, 2);
-            this.panelPaso2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelPaso2.Location = new System.Drawing.Point(0, 0);
-            this.panelPaso2.Name = "panelPaso2";
-            this.panelPaso2.RowCount = 3;
-            this.panelPaso2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.panelPaso2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.panelPaso2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.panelPaso2.Size = new System.Drawing.Size(794, 351);
-            this.panelPaso2.TabIndex = 6;
-            this.panelPaso2.Visible = false;
-            // 
-            // textboxPaso2_Valor
-            // 
-            this.textboxPaso2_Valor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.textboxPaso2_Valor.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.textboxPaso2_Valor.Enabled = false;
-            this.textboxPaso2_Valor.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.textboxPaso2_Valor.Location = new System.Drawing.Point(418, 127);
-            this.textboxPaso2_Valor.MaxLength = 8;
-            this.textboxPaso2_Valor.Name = "textboxPaso2_Valor";
-            this.textboxPaso2_Valor.Size = new System.Drawing.Size(150, 35);
-            this.textboxPaso2_Valor.TabIndex = 2;
-            this.textboxPaso2_Valor.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // labelPaso2_Valor
-            // 
-            this.labelPaso2_Valor.AutoSize = true;
-            this.labelPaso2_Valor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelPaso2_Valor.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.labelPaso2_Valor.Location = new System.Drawing.Point(81, 124);
-            this.labelPaso2_Valor.Name = "labelPaso2_Valor";
-            this.labelPaso2_Valor.Size = new System.Drawing.Size(331, 41);
-            this.labelPaso2_Valor.TabIndex = 1;
-            this.labelPaso2_Valor.Text = "Ingrese el Documento / Reserva:";
-            this.labelPaso2_Valor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // onscreenkeyboardNumeric
-            // 
-            this.onscreenkeyboardNumeric.DestinationTextBox = this.textboxPaso2_Valor;
-            this.onscreenkeyboardNumeric.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.onscreenkeyboardNumeric.Location = new System.Drawing.Point(418, 168);
-            this.onscreenkeyboardNumeric.Name = "onscreenkeyboardNumeric";
-            this.onscreenkeyboardNumeric.Size = new System.Drawing.Size(294, 180);
-            this.onscreenkeyboardNumeric.TabIndex = 3;
-            this.onscreenkeyboardNumeric.Click += new System.EventHandler(this.KeyboardClick);
-            // 
             // panelPasosNavegacion
             // 
             this.panelPasosNavegacion.ColumnCount = 5;
@@ -653,6 +643,16 @@
             this.wmInicio_Player.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(this.WindowsMediaPlayer_PlayStateChange);
             this.wmInicio_Player.ClickEvent += new AxWMPLib._WMPOCXEvents_ClickEventHandler(this.Click_ToStart);
             // 
+            // keyboardNumeric
+            // 
+            this.keyboardNumeric.DestinationTextBox = this.textboxPaso2_Valor;
+            this.keyboardNumeric.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.keyboardNumeric.KeyboardLayout = CardonerSistemas.ControlsOnScreenKeyboard.KeyboardLayoutEnums.NumericCalculator;
+            this.keyboardNumeric.Location = new System.Drawing.Point(418, 168);
+            this.keyboardNumeric.Name = "keyboardNumeric";
+            this.keyboardNumeric.Size = new System.Drawing.Size(294, 180);
+            this.keyboardNumeric.TabIndex = 3;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -675,6 +675,10 @@
             this.panelPasos.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureboxLogoEmpresa)).EndInit();
             this.panelUser.ResumeLayout(false);
+            this.panelPaso2.ResumeLayout(false);
+            this.panelPaso2.PerformLayout();
+            this.panelPaso1.ResumeLayout(false);
+            this.panelPaso1.PerformLayout();
             this.panelPaso3.ResumeLayout(false);
             this.panelPaso3_Viaje_Personas.ResumeLayout(false);
             this.panelPaso3_Viaje.ResumeLayout(false);
@@ -685,10 +689,6 @@
             this.panelPaso3_Viaje_Destino.PerformLayout();
             this.panelPaso4.ResumeLayout(false);
             this.panelPaso4.PerformLayout();
-            this.panelPaso1.ResumeLayout(false);
-            this.panelPaso1.PerformLayout();
-            this.panelPaso2.ResumeLayout(false);
-            this.panelPaso2.PerformLayout();
             this.panelPasosNavegacion.ResumeLayout(false);
             this.panelPasosPie.ResumeLayout(false);
             this.panelPasosPie.PerformLayout();
@@ -720,7 +720,6 @@
         private System.Windows.Forms.RadioButton radioPaso1_Documento;
         private System.Windows.Forms.RadioButton radioPaso1_Reserva;
         private System.Windows.Forms.PictureBox pictureboxPasosLogoCompaniaSoftware;
-        private CardonerSistemas.ControlsOnScreenKeyboardNumeric onscreenkeyboardNumeric;
         private System.Windows.Forms.TextBox textboxPaso2_Valor;
         private System.Windows.Forms.TableLayoutPanel panelPaso3;
         private System.Windows.Forms.TableLayoutPanel panelPaso3_Viaje_Personas;
@@ -741,6 +740,7 @@
         private System.Windows.Forms.Label labelPaso3_Viaje_Vehiculo;
         private System.Windows.Forms.Label labelPaso3_Viaje_Vehiculo_Leyenda;
         private C1.Win.C1Tile.Tile tile1;
+        private CardonerSistemas.ControlsOnScreenKeyboard keyboardNumeric;
     }
 }
 

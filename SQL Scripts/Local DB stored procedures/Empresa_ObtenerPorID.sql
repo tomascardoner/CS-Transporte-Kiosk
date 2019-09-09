@@ -1,4 +1,4 @@
-USE CSTransporte_Kiosko
+USE CSTransporte
 GO
 
 SET ANSI_NULLS ON
@@ -30,5 +30,5 @@ CREATE PROCEDURE usp_Empresa_ObtenerPorID
 	END
 GO
 
-GRANT EXECUTE ON dbo.usp_Empresa_ObtenerPorID TO cstransportekiosko
+GRANT EXECUTE ON dbo.usp_Empresa_ObtenerPorID TO cstransporte
 GO

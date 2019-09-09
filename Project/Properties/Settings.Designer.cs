@@ -34,7 +34,7 @@ namespace CSTransporteKiosko.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("localhosta")]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
         public string DatabaseDatasource {
             get {
                 return ((string)(this["DatabaseDatasource"]));
@@ -43,7 +43,7 @@ namespace CSTransporteKiosko.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("CSTransporte_Kiosko")]
+        [global::System.Configuration.DefaultSettingValueAttribute("CSTransporte")]
         public string DatabaseDatabase {
             get {
                 return ((string)(this["DatabaseDatabase"]));
@@ -52,7 +52,7 @@ namespace CSTransporteKiosko.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("cstransportekiosko")]
+        [global::System.Configuration.DefaultSettingValueAttribute("cstransporte")]
         public string DatabaseUserID {
             get {
                 return ((string)(this["DatabaseUserID"]));
@@ -61,7 +61,7 @@ namespace CSTransporteKiosko.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("IdcBT5Ecsf4FjrfMtH0YJ4a0L+vIV1iSGkzY30U9akZI28ZlNBx/Z+kPDNsDs+C6")]
+        [global::System.Configuration.DefaultSettingValueAttribute("TL3PAPs8zwNH4E0EJ+E8Jz8L9dNzsY+I6e+gqL9BhBlVp8D+lrjVOeVI4FEOcpsg")]
         public string DatabasePassword {
             get {
                 return ((string)(this["DatabasePassword"]));

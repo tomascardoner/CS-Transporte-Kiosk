@@ -6,16 +6,16 @@
       <Value Profile="(Default)">MainPOSPrinter</Value>
     </Setting>
     <Setting Name="DatabaseDatasource" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">localhosta</Value>
+      <Value Profile="(Default)">localhost</Value>
     </Setting>
     <Setting Name="DatabaseDatabase" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">CSTransporte_Kiosko</Value>
+      <Value Profile="(Default)">CSTransporte</Value>
     </Setting>
     <Setting Name="DatabaseUserID" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">cstransportekiosko</Value>
+      <Value Profile="(Default)">cstransporte</Value>
     </Setting>
     <Setting Name="DatabasePassword" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">IdcBT5Ecsf4FjrfMtH0YJ4a0L+vIV1iSGkzY30U9akZI28ZlNBx/Z+kPDNsDs+C6</Value>
+      <Value Profile="(Default)">TL3PAPs8zwNH4E0EJ+E8Jz8L9dNzsY+I6e+gqL9BhBlVp8D+lrjVOeVI4FEOcpsg</Value>
     </Setting>
   </Settings>
 </SettingsFile>

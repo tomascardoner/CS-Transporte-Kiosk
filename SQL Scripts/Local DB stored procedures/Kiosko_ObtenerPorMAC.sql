@@ -1,4 +1,4 @@
-USE CSTransporte_Kiosko
+USE CSTransporte
 GO
 
 SET ANSI_NULLS ON
@@ -30,5 +30,5 @@ CREATE PROCEDURE usp_Kiosko_ObtenerPorMAC
 	END
 GO
 
-GRANT EXECUTE ON dbo.usp_Kiosko_ObtenerPorMAC TO cstransportekiosko
+GRANT EXECUTE ON dbo.usp_Kiosko_ObtenerPorMAC TO cstransporte
 GO

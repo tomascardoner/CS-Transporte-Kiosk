@@ -28,5 +28,5 @@ CREATE PROCEDURE usp_ViajeDetalle_RealizarCheckIn
 	END
 GO
 
-GRANT EXECUTE ON usp_ViajeDetalle_RealizarCheckIn TO cstransportekiosko
+GRANT EXECUTE ON usp_ViajeDetalle_RealizarCheckIn TO cstransporte
 GO

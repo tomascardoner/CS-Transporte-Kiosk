@@ -1,4 +1,4 @@
-USE CSTransporte_Kiosko
+USE CSTransporte
 GO
 
 SET ANSI_NULLS ON
@@ -34,5 +34,5 @@ CREATE PROCEDURE usp_EventLog_Agregar
 	END
 GO
 
-GRANT EXECUTE ON dbo.usp_EventLog_Agregar TO cstransportekiosko
+GRANT EXECUTE ON dbo.usp_EventLog_Agregar TO cstransporte
 GO

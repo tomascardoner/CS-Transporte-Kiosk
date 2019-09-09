@@ -41,6 +41,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="C1.Win.C1TileControl.4, Version=4.0.20152.67, Culture=neutral, PublicKeyToken=79882d576c6336da, processorArchitecture=MSIL" />
+    <Reference Include="CSOnScreenKeyboard">
+      <HintPath>..\..\..\components\csonscreenkeyboard\bin\Debug\CSOnScreenKeyboard.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.PointOfService, Version=1.14.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft Point Of Service\SDK\Microsoft.PointOfService.dll</HintPath>
@@ -62,22 +65,6 @@
     </Compile>
     <Compile Include="..\..\..\framework-csharp\ConstantsKeys.cs">
       <Link>ConstantsKeys.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\framework-csharp\Controls.OnScreenKeyboardAlphanumeric.cs">
-      <Link>Controls.OnScreenKeyboardAlphanumeric.cs</Link>
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="..\..\..\framework-csharp\Controls.OnScreenKeyboardAlphanumeric.designer.cs">
-      <Link>Controls.OnScreenKeyboardAlphanumeric.designer.cs</Link>
-      <DependentUpon>Controls.OnScreenKeyboardAlphanumeric.cs</DependentUpon>
-    </Compile>
-    <Compile Include="..\..\..\framework-csharp\Controls.OnScreenKeyboardNumeric.cs">
-      <Link>Controls.OnScreenKeyboardNumeric.cs</Link>
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="..\..\..\framework-csharp\Controls.OnScreenKeyboardNumeric.designer.cs">
-      <Link>Controls.OnScreenKeyboardNumeric.designer.cs</Link>
-      <DependentUpon>Controls.OnScreenKeyboardNumeric.cs</DependentUpon>
     </Compile>
     <Compile Include="..\..\..\framework-csharp\Database.ADO.SQLServer.cs">
       <Link>Database.ADO.SQLServer.cs</Link>
@@ -130,14 +117,6 @@
     <Compile Include="TicketPlantilla.cs" />
     <Compile Include="TicketPlantillaComando.cs" />
     <Compile Include="ViajeDetalle.cs" />
-    <EmbeddedResource Include="..\..\..\framework-csharp\Controls.OnScreenKeyboardAlphanumeric.resx">
-      <Link>Controls.OnScreenKeyboardAlphanumeric.resx</Link>
-      <DependentUpon>Controls.OnScreenKeyboardAlphanumeric.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\framework-csharp\Controls.OnScreenKeyboardNumeric.resx">
-      <Link>Controls.OnScreenKeyboardNumeric.resx</Link>
-      <DependentUpon>Controls.OnScreenKeyboardNumeric.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\framework-csharp\ErrorMessageBox.resx">
       <Link>ErrorMessageBox.resx</Link>
       <DependentUpon>ErrorMessageBox.cs</DependentUpon>

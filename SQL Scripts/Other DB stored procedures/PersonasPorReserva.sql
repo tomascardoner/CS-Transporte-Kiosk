@@ -45,5 +45,5 @@ CREATE PROCEDURE usp_PersonasPorReserva
 	END
 GO
 
-GRANT EXECUTE ON dbo.usp_PersonasPorReserva TO cstransportekiosko
+GRANT EXECUTE ON dbo.usp_PersonasPorReserva TO cstransporte
 GO

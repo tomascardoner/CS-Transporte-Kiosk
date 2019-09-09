@@ -1,4 +1,4 @@
-USE CSTransporte_Kiosko
+USE CSTransporte
 GO
 
 SET ANSI_NULLS ON
@@ -30,5 +30,5 @@ CREATE PROCEDURE usp_TicketPlantilla_ObtenerComandos
 	END
 GO
 
-GRANT EXECUTE ON dbo.usp_TicketPlantilla_ObtenerComandos TO cstransportekiosko
+GRANT EXECUTE ON dbo.usp_TicketPlantilla_ObtenerComandos TO cstransporte
 GO
