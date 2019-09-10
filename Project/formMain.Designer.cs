@@ -60,8 +60,6 @@
             this.groupMain = new C1.Win.C1Tile.Group();
             this.tile1 = new C1.Win.C1Tile.Tile();
             this.panelPaso4 = new System.Windows.Forms.TableLayoutPanel();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.panelPasosNavegacion = new System.Windows.Forms.TableLayoutPanel();
             this.buttonPasoAnterior = new System.Windows.Forms.Button();
             this.buttonPasoSiguiente = new System.Windows.Forms.Button();
@@ -82,7 +80,6 @@
             this.panelPaso3_Viaje.SuspendLayout();
             this.panelPaso3_Viaje_Origen.SuspendLayout();
             this.panelPaso3_Viaje_Destino.SuspendLayout();
-            this.panelPaso4.SuspendLayout();
             this.panelPasosNavegacion.SuspendLayout();
             this.panelPasosPie.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureboxPasosLogoCompaniaSoftware)).BeginInit();
@@ -122,10 +119,10 @@
             // 
             // panelUser
             // 
+            this.panelUser.Controls.Add(this.panelPaso4);
             this.panelUser.Controls.Add(this.panelPaso2);
             this.panelUser.Controls.Add(this.panelPaso1);
             this.panelUser.Controls.Add(this.panelPaso3);
-            this.panelUser.Controls.Add(this.panelPaso4);
             this.panelUser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelUser.Location = new System.Drawing.Point(3, 105);
             this.panelUser.Name = "panelUser";
@@ -475,8 +472,6 @@
             this.panelPaso4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.panelPaso4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.panelPaso4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.panelPaso4.Controls.Add(this.radioButton1, 1, 1);
-            this.panelPaso4.Controls.Add(this.radioButton2, 1, 3);
             this.panelPaso4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPaso4.Location = new System.Drawing.Point(0, 0);
             this.panelPaso4.Name = "panelPaso4";
@@ -489,42 +484,6 @@
             this.panelPaso4.Size = new System.Drawing.Size(794, 351);
             this.panelPaso4.TabIndex = 8;
             this.panelPaso4.Visible = false;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.Appearance = System.Windows.Forms.Appearance.Button;
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.radioButton1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radioButton1.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.radioButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.radioButton1.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.radioButton1.Location = new System.Drawing.Point(231, 73);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(331, 64);
-            this.radioButton1.TabIndex = 7;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Ingresar con Nº de Documento";
-            this.radioButton1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.radioButton1.UseVisualStyleBackColor = false;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.Appearance = System.Windows.Forms.Appearance.Button;
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.radioButton2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radioButton2.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.radioButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.radioButton2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.radioButton2.Location = new System.Drawing.Point(231, 213);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(331, 64);
-            this.radioButton2.TabIndex = 6;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Ingresar con Nº de Reserva";
-            this.radioButton2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.radioButton2.UseVisualStyleBackColor = false;
             // 
             // panelPasosNavegacion
             // 
@@ -690,8 +649,6 @@
             this.panelPaso3_Viaje_Origen.PerformLayout();
             this.panelPaso3_Viaje_Destino.ResumeLayout(false);
             this.panelPaso3_Viaje_Destino.PerformLayout();
-            this.panelPaso4.ResumeLayout(false);
-            this.panelPaso4.PerformLayout();
             this.panelPasosNavegacion.ResumeLayout(false);
             this.panelPasosPie.ResumeLayout(false);
             this.panelPasosPie.PerformLayout();
@@ -732,8 +689,6 @@
         private C1.Win.C1Tile.C1TileControl tilecontrolPaso3_Pasajeros;
         private C1.Win.C1Tile.Group groupMain;
         private System.Windows.Forms.TableLayoutPanel panelPaso4;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.TableLayoutPanel panelPaso3_Viaje_Destino;
         private System.Windows.Forms.Label labelPaso3_Viaje_Destino_Lugar;
         private System.Windows.Forms.Label labelPaso3_Viaje_Destino_FechaHora;
