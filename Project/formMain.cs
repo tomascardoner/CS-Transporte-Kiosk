@@ -103,7 +103,7 @@ namespace CSTransporteKiosko
             buttonPasoSiguiente.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonNextForeColor, buttonPasoSiguiente.ForeColor);
 
             // Propiedades del teclado numérico en pantalla
-            // onscreenkeyboardNumeric.Font = kiosko.KioskoConfiguracion.ValorFont;
+            keyboardMain.Font = kiosko.KioskoConfiguracion.ValorKeyboardNumericNumberFont;
 
             InactivityTimeoutSeconds = kiosko.KioskoConfiguracion.ValorInactivityTimeoutSeconds;
             LugarDuracionPreviaMinimaMinutos = kiosko.KioskoConfiguracion.ValorLugarDuracionPreviaMinimaMinutos;
@@ -467,13 +467,7 @@ namespace CSTransporteKiosko
         {
             if (VerificarAvancePaso())
             {
-                if (pasoActual == 0)
-                {
-                    // Este es para saltear el paso de elegir el tipo de búsqueda
-                    radioPaso1_Documento.Checked = true;
-                    pasoActual = 2;
-                }
-                else if (pasoActual == 3)
+                if (pasoActual == 3)
                 {
                     pasoActual = 0;
                 }
@@ -487,16 +481,7 @@ namespace CSTransporteKiosko
 
         private void RetrocederPaso()
         {
-            if (pasoActual == 2)
-            {
-                // Este es para saltear el paso de elegir el tipo de búsqueda
-                radioPaso1_Documento.Checked = true;
-                pasoActual = 0;
-            }
-            else
-            {
-                pasoActual--;
-            }
+            pasoActual--;
             MostrarPasos();
         }
 
@@ -542,10 +527,16 @@ namespace CSTransporteKiosko
             if (buscarPorDocumento)
             {
                 labelPaso2_Valor.Text = "Ingrese el Nº de Documento:";
+                panelPaso2.SetColumnSpan(keyboardMain, 1);
+                panelPaso2.SetColumn(keyboardMain, 2);
+                keyboardMain.KeyboardLayout = CardonerSistemas.OnScreenKeyboard.KeyboardLayoutEnums.NumericCalculator;
             }
             else
             {
                 labelPaso2_Valor.Text = "Ingrese el Nº de Reserva:";
+                panelPaso2.SetColumn(keyboardMain, 1);
+                panelPaso2.SetColumnSpan(keyboardMain, 2);
+                keyboardMain.KeyboardLayout = CardonerSistemas.OnScreenKeyboard.KeyboardLayoutEnums.AlphanumericSpanish;
             }
             textboxPaso2_Valor.Text = "";
         }

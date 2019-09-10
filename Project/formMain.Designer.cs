@@ -39,7 +39,7 @@
             this.panelPaso2 = new System.Windows.Forms.TableLayoutPanel();
             this.textboxPaso2_Valor = new System.Windows.Forms.TextBox();
             this.labelPaso2_Valor = new System.Windows.Forms.Label();
-            this.keyboardNumeric = new CardonerSistemas.OnScreenKeyboard();
+            this.keyboardMain = new CardonerSistemas.OnScreenKeyboard();
             this.panelPaso1 = new System.Windows.Forms.TableLayoutPanel();
             this.radioPaso1_Documento = new System.Windows.Forms.RadioButton();
             this.radioPaso1_Reserva = new System.Windows.Forms.RadioButton();
@@ -141,7 +141,7 @@
             this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.panelPaso2.Controls.Add(this.textboxPaso2_Valor, 2, 1);
             this.panelPaso2.Controls.Add(this.labelPaso2_Valor, 1, 1);
-            this.panelPaso2.Controls.Add(this.keyboardNumeric, 2, 2);
+            this.panelPaso2.Controls.Add(this.keyboardMain, 2, 2);
             this.panelPaso2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPaso2.Location = new System.Drawing.Point(0, 0);
             this.panelPaso2.Name = "panelPaso2";
@@ -178,15 +178,18 @@
             this.labelPaso2_Valor.Text = "Ingrese el Documento / Reserva:";
             this.labelPaso2_Valor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // keyboardNumeric
+            // keyboardMain
             // 
-            this.keyboardNumeric.DestinationTextBox = this.textboxPaso2_Valor;
-            this.keyboardNumeric.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.keyboardNumeric.KeyboardLayout = CardonerSistemas.OnScreenKeyboard.KeyboardLayoutEnums.NumericCalculator;
-            this.keyboardNumeric.Location = new System.Drawing.Point(418, 168);
-            this.keyboardNumeric.Name = "keyboardNumeric";
-            this.keyboardNumeric.Size = new System.Drawing.Size(294, 180);
-            this.keyboardNumeric.TabIndex = 3;
+            this.keyboardMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.keyboardMain.DestinationTextBox = this.textboxPaso2_Valor;
+            this.keyboardMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.keyboardMain.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.keyboardMain.KeyBackColor = System.Drawing.SystemColors.Control;
+            this.keyboardMain.KeyboardLayout = CardonerSistemas.OnScreenKeyboard.KeyboardLayoutEnums.NumericCalculator;
+            this.keyboardMain.Location = new System.Drawing.Point(418, 168);
+            this.keyboardMain.Name = "keyboardMain";
+            this.keyboardMain.Size = new System.Drawing.Size(294, 180);
+            this.keyboardMain.TabIndex = 3;
             // 
             // panelPaso1
             // 
@@ -740,7 +743,7 @@
         private System.Windows.Forms.Label labelPaso3_Viaje_Vehiculo;
         private System.Windows.Forms.Label labelPaso3_Viaje_Vehiculo_Leyenda;
         private C1.Win.C1Tile.Tile tile1;
-        private CardonerSistemas.OnScreenKeyboard keyboardNumeric;
+        private CardonerSistemas.OnScreenKeyboard keyboardMain;
     }
 }
 
