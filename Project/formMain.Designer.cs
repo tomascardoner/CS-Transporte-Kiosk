@@ -36,6 +36,7 @@
             this.panelPasos = new System.Windows.Forms.TableLayoutPanel();
             this.pictureboxLogoEmpresa = new System.Windows.Forms.PictureBox();
             this.panelUser = new System.Windows.Forms.Panel();
+            this.panelPaso4 = new System.Windows.Forms.TableLayoutPanel();
             this.panelPaso2 = new System.Windows.Forms.TableLayoutPanel();
             this.textboxPaso2_Valor = new System.Windows.Forms.TextBox();
             this.labelPaso2_Valor = new System.Windows.Forms.Label();
@@ -59,7 +60,6 @@
             this.tilecontrolPaso3_Pasajeros = new C1.Win.C1Tile.C1TileControl();
             this.groupMain = new C1.Win.C1Tile.Group();
             this.tile1 = new C1.Win.C1Tile.Tile();
-            this.panelPaso4 = new System.Windows.Forms.TableLayoutPanel();
             this.panelPasosNavegacion = new System.Windows.Forms.TableLayoutPanel();
             this.buttonPasoAnterior = new System.Windows.Forms.Button();
             this.buttonPasoSiguiente = new System.Windows.Forms.Button();
@@ -128,6 +128,25 @@
             this.panelUser.Name = "panelUser";
             this.panelUser.Size = new System.Drawing.Size(794, 351);
             this.panelUser.TabIndex = 4;
+            // 
+            // panelPaso4
+            // 
+            this.panelPaso4.ColumnCount = 3;
+            this.panelPaso4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelPaso4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.panelPaso4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelPaso4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelPaso4.Location = new System.Drawing.Point(0, 0);
+            this.panelPaso4.Name = "panelPaso4";
+            this.panelPaso4.RowCount = 5;
+            this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.panelPaso4.Size = new System.Drawing.Size(794, 351);
+            this.panelPaso4.TabIndex = 8;
+            this.panelPaso4.Visible = false;
             // 
             // panelPaso2
             // 
@@ -226,6 +245,7 @@
             this.radioPaso1_Documento.Text = "Ingresar con Nº de Documento";
             this.radioPaso1_Documento.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.radioPaso1_Documento.UseVisualStyleBackColor = false;
+            this.radioPaso1_Documento.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Paso1_Seleccion);
             // 
             // radioPaso1_Reserva
             // 
@@ -244,6 +264,7 @@
             this.radioPaso1_Reserva.Text = "Ingresar con Nº de Reserva";
             this.radioPaso1_Reserva.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.radioPaso1_Reserva.UseVisualStyleBackColor = false;
+            this.radioPaso1_Reserva.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Paso1_Seleccion);
             // 
             // panelPaso3
             // 
@@ -465,25 +486,6 @@
             // 
             this.tile1.Name = "tile1";
             this.tile1.Text = "Pasajero nº 1";
-            // 
-            // panelPaso4
-            // 
-            this.panelPaso4.ColumnCount = 3;
-            this.panelPaso4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.panelPaso4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.panelPaso4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.panelPaso4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelPaso4.Location = new System.Drawing.Point(0, 0);
-            this.panelPaso4.Name = "panelPaso4";
-            this.panelPaso4.RowCount = 5;
-            this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.panelPaso4.Size = new System.Drawing.Size(794, 351);
-            this.panelPaso4.TabIndex = 8;
-            this.panelPaso4.Visible = false;
             // 
             // panelPasosNavegacion
             // 

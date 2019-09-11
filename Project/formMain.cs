@@ -319,6 +319,11 @@ namespace CSTransporteKiosko
             AvanzarPaso();
         }
 
+        private void Paso1_Seleccion(object sender, MouseEventArgs e)
+        {
+            buttonPasoSiguiente.PerformClick();
+        }
+
         private void ButtonPasoSiguiente_Click(object sender, EventArgs e)
         {
             inactivityTimeout = DateTime.Now;
@@ -536,7 +541,7 @@ namespace CSTransporteKiosko
                 labelPaso2_Valor.Text = "Ingrese el Nº de Reserva:";
                 panelPaso2.SetColumn(keyboardMain, 1);
                 panelPaso2.SetColumnSpan(keyboardMain, 2);
-                keyboardMain.KeyboardLayout = CardonerSistemas.OnScreenKeyboard.KeyboardLayoutEnums.AlphanumericSpanish;
+                keyboardMain.KeyboardLayout = CardonerSistemas.OnScreenKeyboard.KeyboardLayoutEnums.AlphanumericOnly;
             }
             textboxPaso2_Valor.Text = "";
         }
@@ -666,5 +671,6 @@ namespace CSTransporteKiosko
         }
 
         #endregion
+
     }
 }
