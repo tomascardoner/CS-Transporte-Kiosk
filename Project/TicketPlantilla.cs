@@ -12,6 +12,7 @@ namespace CSTransporteKiosko
 {
     public class TicketPlantilla
     {
+
         #region Entity definition properties
 
         private const string EntityDBName = "TicketPlantilla";
@@ -230,5 +231,6 @@ namespace CSTransporteKiosko
         }
 
         #endregion
+
     }
 }
