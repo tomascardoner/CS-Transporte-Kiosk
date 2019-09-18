@@ -1,0 +1,8 @@
+2019-09-16:
+	- Tabla ViajeDetalle en cada base de datos
+		- Agregar el campo "AsientoIdentificacion varchar(5) null" después de Asiento
+
+	- Tabla Vehiculo en cada base de datos
+		- Agregar el campo "IDVehiculoConfiguracion tinyint null" antes de Notas
+
+	- Ejecutar los stored procedures de cada DB

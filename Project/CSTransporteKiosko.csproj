@@ -116,6 +116,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TicketPlantilla.cs" />
     <Compile Include="TicketPlantillaComando.cs" />
+    <Compile Include="VehiculoConfiguracion.cs" />
+    <Compile Include="VehiculoConfiguracionDetalle.cs" />
+    <Compile Include="Viaje.cs" />
     <Compile Include="ViajeDetalle.cs" />
     <EmbeddedResource Include="..\..\..\framework-csharp\ErrorMessageBox.resx">
       <Link>ErrorMessageBox.resx</Link>

@@ -2,32 +2,30 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CSTransporteKiosko
 {
-    class ViajeDetalle
+    class VehiculoConfiguracionDetalle
     {
-    
-        #region Entity definition properties
-            
-        private const string EntityDBName = "ViajeDetalle";
 
-        private const string EntityFieldNameIdViajeDetalle = "IDViajeDetalle";
-        private const string EntityFieldNameIdViaje = "IDViaje";
-        private const string EntityFieldNameFechaHora = "FechaHora";
-        private const string EntityFieldNameIDRuta = "IDRuta";
-        private const string EntityFieldNameIndice = "Indice";
-        private const string EntityFieldNameIDPersona = "IDPersona";
+        #region Entity definition properties
+
+        private const string EntityDBName = "VehiculoConfiguracionDetalle";
+
+        private const string EntityFieldNameIdVehiculoConfiguracion = "IDVehiculoConfiguracion";
+        private const string EntityFieldNameIdDetalle = "IDDetalle";
+        private const string EntityFieldNameTipo = "Tipo";
         private const string EntityFieldNameAsientoIdentificacion = "AsientoIdentificacion";
 
         private const bool EntityDisplayNameIsFemale = false;
-        private const string EntityDisplayName = "Detalle del Viaje";
+        private const string EntityDisplayName = "Detalle de Configuración del Vehículo";
 
         private string EntityLoadErrorMessage;
         private string EntityLoadPropertiesErrorMessage;
 
-        public ViajeDetalle()
+        public VehiculoConfiguracionDetalle()
         {
             EntityLoadErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
             EntityLoadPropertiesErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadPropertiesErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
@@ -35,14 +33,23 @@ namespace CSTransporteKiosko
 
         #endregion
 
+        #region Constants
+
+        public const string TipoPuerta = "P";
+        public const string TipoEspacio = "E";
+        public const string TipoConductor = "C";
+        public const string TipoBanio = "B";
+        public const string TipoAsiento = "A";
+        public const string TipoAsientoOcupado = "AO";
+        public const string TipoAsientoSeleccionado = "AS";
+
+        #endregion
+
         #region Object private properties
 
-        private int _IdViajeDetalle;
-        private int _IdViaje;
-        private DateTime _FechaHora;
-        private string _IdRuta;
-        private int _Indice;
-        private int _IdPersona;
+        private byte _IdVehiculoConfiguracion;
+        private byte _IdDetalle;
+        private string _Tipo;
         private string _AsientoIdentificacion;
 
         private bool _IsFound = false;
@@ -51,29 +58,50 @@ namespace CSTransporteKiosko
 
         #region Object public properties
 
-        public int IdViajeDetalle { get => _IdViajeDetalle; }
-        public int IdViaje { get => _IdViaje; set => _IdViaje = value; }
-        public DateTime FechaHora { get => _FechaHora; set => _FechaHora = value; }
-        public string IdRuta { get => _IdRuta; set => _IdRuta = value; }
-        public int Indice { get => _Indice; set => _Indice = value; }
-        public int IdPersona { get => _IdPersona; set => _IdPersona = value; }
+        public byte IdVehiculoConfiguracion { get => _IdVehiculoConfiguracion; }
+        public byte IdDetalle { get => _IdDetalle; set => _IdDetalle = value; }
+        public string Tipo { get => _Tipo; set => _Tipo = value; }
         public string AsientoIdentificacion { get => _AsientoIdentificacion; set => _AsientoIdentificacion = value; }
 
         public bool IsFound { get => _IsFound; }
 
         #endregion
 
+        #region Public methods
+
+        public Image TipoImagen(ref Kiosko kiosko)
+        {
+            switch (_Tipo)
+            {
+                case TipoPuerta:
+                    return kiosko.KioskoConfiguracion.ValorVehiculoConfiguracionPuerta;
+                case TipoEspacio:
+                    return null;
+                case TipoConductor:
+                    return kiosko.KioskoConfiguracion.ValorVehiculoConfiguracionConductor;
+                case TipoBanio:
+                    return null;
+                case TipoAsiento:
+                    return kiosko.KioskoConfiguracion.ValorVehiculoConfiguracionAsientoLibre;
+                default:
+                    return null;
+            }
+        }
+
+        #endregion
+
         #region Load data from database
 
-        public bool CargarPorID(SqlConnection connection, int idViajeDetalle)
+        public bool CargarPorID(SqlConnection connection, byte idVehiculoConfiguracion, byte idDetalle)
         {
             Cursor.Current = Cursors.WaitCursor;
 
             try
             {
-                SqlCommand command = new SqlCommand("usp_ViajeDetalle_ObtenerPorID", connection);
+                SqlCommand command = new SqlCommand("usp_VehiculoConfiguracionDetalle_ObtenerPorID", connection);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@IDViajeDetalle", idViajeDetalle);
+                command.Parameters.AddWithValue("@IDVehiculoConfiguracion", idVehiculoConfiguracion);
+                command.Parameters.AddWithValue("@IDDetalle", idDetalle);
 
                 Cursor.Current = Cursors.Default;
                 return CargarEjecutar(command, EntityLoadErrorMessage);
@@ -132,50 +160,15 @@ namespace CSTransporteKiosko
         {
             try
             {
-                _IdViajeDetalle = SQLServer.DataReaderGetInteger(dataReader, EntityFieldNameIdViajeDetalle);
-                _IdViaje = SQLServer.DataReaderGetInteger(dataReader, EntityFieldNameIdViaje);
-                _FechaHora = SQLServer.DataReaderGetDateTime(dataReader, EntityFieldNameFechaHora);
-                _IdRuta = SQLServer.DataReaderGetString(dataReader, EntityFieldNameIDRuta);
-                _Indice = SQLServer.DataReaderGetInteger(dataReader, EntityFieldNameIndice);
-                _IdPersona = SQLServer.DataReaderGetInteger(dataReader, EntityFieldNameIDPersona);
+                _IdVehiculoConfiguracion = SQLServer.DataReaderGetByte(dataReader, EntityFieldNameIdVehiculoConfiguracion);
+                _IdDetalle = SQLServer.DataReaderGetByte(dataReader, EntityFieldNameIdDetalle);
+                _Tipo = SQLServer.DataReaderGetString(dataReader, EntityFieldNameTipo);
                 _AsientoIdentificacion = SQLServer.DataReaderGetStringSafeAsNull(dataReader, EntityFieldNameAsientoIdentificacion);
                 return true;
             }
             catch (Exception ex)
             {
                 CardonerSistemas.Error.ProcessError(ex, EntityLoadPropertiesErrorMessage);
-                return false;
-            }
-        }
-
-        #endregion
-
-        #region CheckIn
-
-        public bool RealizarCheckIn(SqlConnection connection, byte idEmpresa, int idViajeDetalle)
-        {
-            Cursor.Current = Cursors.WaitCursor;
-
-            try
-            {
-                SqlCommand command = new SqlCommand("usp_ViajeDetalle_RealizarCheckIn", connection);
-                command.CommandType = CommandType.StoredProcedure;
-
-                command.Parameters.AddWithValue("@IDEmpresa", idEmpresa);
-                command.Parameters.AddWithValue("@IDViajeDetalle", idViajeDetalle);
-
-                command.ExecuteNonQuery();
-
-                command.Dispose();
-                command = null;
-
-                Cursor.Current = Cursors.Default;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Cursor.Current = Cursors.Default;
-                CardonerSistemas.Error.ProcessError(ex, "Error al hacer el check-in de la Reserva.");
                 return false;
             }
         }

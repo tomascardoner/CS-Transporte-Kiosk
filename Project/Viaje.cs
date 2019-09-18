@@ -1,33 +1,32 @@
 ﻿using CardonerSistemas.Database.ADO;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace CSTransporteKiosko
 {
-    class ViajeDetalle
+    class Viaje
     {
-    
-        #region Entity definition properties
-            
-        private const string EntityDBName = "ViajeDetalle";
 
-        private const string EntityFieldNameIdViajeDetalle = "IDViajeDetalle";
+        #region Entity definition properties
+
+        private const string EntityDBName = "Viaje";
+
         private const string EntityFieldNameIdViaje = "IDViaje";
         private const string EntityFieldNameFechaHora = "FechaHora";
         private const string EntityFieldNameIDRuta = "IDRuta";
-        private const string EntityFieldNameIndice = "Indice";
-        private const string EntityFieldNameIDPersona = "IDPersona";
-        private const string EntityFieldNameAsientoIdentificacion = "AsientoIdentificacion";
 
         private const bool EntityDisplayNameIsFemale = false;
-        private const string EntityDisplayName = "Detalle del Viaje";
+        private const string EntityDisplayName = "Viaje";
 
         private string EntityLoadErrorMessage;
         private string EntityLoadPropertiesErrorMessage;
 
-        public ViajeDetalle()
+        private string EntityLoadRelatedViajeDetalleErrorMessage = String.Format("Error al cargar los detalles de {0} {1} por Id.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
+
+        public Viaje()
         {
             EntityLoadErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
             EntityLoadPropertiesErrorMessage = CardonerSistemas.Database.Framework.Lite.GetEntityLoadPropertiesErrorMessage(EntityDisplayName, EntityDisplayNameIsFemale);
@@ -37,13 +36,9 @@ namespace CSTransporteKiosko
 
         #region Object private properties
 
-        private int _IdViajeDetalle;
         private int _IdViaje;
         private DateTime _FechaHora;
         private string _IdRuta;
-        private int _Indice;
-        private int _IdPersona;
-        private string _AsientoIdentificacion;
 
         private bool _IsFound = false;
 
@@ -51,13 +46,9 @@ namespace CSTransporteKiosko
 
         #region Object public properties
 
-        public int IdViajeDetalle { get => _IdViajeDetalle; }
         public int IdViaje { get => _IdViaje; set => _IdViaje = value; }
         public DateTime FechaHora { get => _FechaHora; set => _FechaHora = value; }
         public string IdRuta { get => _IdRuta; set => _IdRuta = value; }
-        public int Indice { get => _Indice; set => _Indice = value; }
-        public int IdPersona { get => _IdPersona; set => _IdPersona = value; }
-        public string AsientoIdentificacion { get => _AsientoIdentificacion; set => _AsientoIdentificacion = value; }
 
         public bool IsFound { get => _IsFound; }
 
@@ -65,15 +56,15 @@ namespace CSTransporteKiosko
 
         #region Load data from database
 
-        public bool CargarPorID(SqlConnection connection, int idViajeDetalle)
+        public bool CargarPorID(SqlConnection connection, int idViaje)
         {
             Cursor.Current = Cursors.WaitCursor;
 
             try
             {
-                SqlCommand command = new SqlCommand("usp_ViajeDetalle_ObtenerPorID", connection);
+                SqlCommand command = new SqlCommand("usp_Viaje_ObtenerPorID", connection);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@IDViajeDetalle", idViajeDetalle);
+                command.Parameters.AddWithValue("@IDViaje", idViaje);
 
                 Cursor.Current = Cursors.Default;
                 return CargarEjecutar(command, EntityLoadErrorMessage);
@@ -128,17 +119,13 @@ namespace CSTransporteKiosko
             }
         }
 
-        public bool CargarPropiedades(SqlDataReader dataReader)
+        private bool CargarPropiedades(SqlDataReader dataReader)
         {
             try
             {
-                _IdViajeDetalle = SQLServer.DataReaderGetInteger(dataReader, EntityFieldNameIdViajeDetalle);
                 _IdViaje = SQLServer.DataReaderGetInteger(dataReader, EntityFieldNameIdViaje);
                 _FechaHora = SQLServer.DataReaderGetDateTime(dataReader, EntityFieldNameFechaHora);
                 _IdRuta = SQLServer.DataReaderGetString(dataReader, EntityFieldNameIDRuta);
-                _Indice = SQLServer.DataReaderGetInteger(dataReader, EntityFieldNameIndice);
-                _IdPersona = SQLServer.DataReaderGetInteger(dataReader, EntityFieldNameIDPersona);
-                _AsientoIdentificacion = SQLServer.DataReaderGetStringSafeAsNull(dataReader, EntityFieldNameAsientoIdentificacion);
                 return true;
             }
             catch (Exception ex)
@@ -150,32 +137,51 @@ namespace CSTransporteKiosko
 
         #endregion
 
-        #region CheckIn
+        #region Related entities
 
-        public bool RealizarCheckIn(SqlConnection connection, byte idEmpresa, int idViajeDetalle)
+        private List<ViajeDetalle> _ViajeDetalles = new List<ViajeDetalle>();
+
+        public List<ViajeDetalle> ViajeDetalles { get => _ViajeDetalles; }
+
+        public bool ViajeDetallesCargar(SqlConnection connection)
         {
             Cursor.Current = Cursors.WaitCursor;
 
             try
             {
-                SqlCommand command = new SqlCommand("usp_ViajeDetalle_RealizarCheckIn", connection);
+                SqlCommand command = new SqlCommand("usp_Viaje_ObtenerDetalles", connection);
                 command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@IDViaje", _IdViaje);
 
-                command.Parameters.AddWithValue("@IDEmpresa", idEmpresa);
-                command.Parameters.AddWithValue("@IDViajeDetalle", idViajeDetalle);
-
-                command.ExecuteNonQuery();
-
+                SqlDataReader dataReader;
+                dataReader = command.ExecuteReader(CommandBehavior.SingleResult);
                 command.Dispose();
                 command = null;
 
+                _ViajeDetalles.Clear();
+
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        ViajeDetalle detalle = new ViajeDetalle();
+
+                        detalle.CargarPropiedades(dataReader);
+                        _ViajeDetalles.Add(detalle);
+
+                        detalle = null;
+                    }
+                }
+
+                dataReader.Close();
+                dataReader = null;
                 Cursor.Current = Cursors.Default;
                 return true;
             }
             catch (Exception ex)
             {
                 Cursor.Current = Cursors.Default;
-                CardonerSistemas.Error.ProcessError(ex, "Error al hacer el check-in de la Reserva.");
+                CardonerSistemas.Error.ProcessError(ex, EntityLoadRelatedViajeDetalleErrorMessage);
                 return false;
             }
         }

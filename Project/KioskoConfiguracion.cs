@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 using CardonerSistemas.Database.ADO;
 
@@ -11,6 +10,7 @@ namespace CSTransporteKiosko
 {
     public class KioskoConfiguracion
     {
+
         #region Entity definition properties
 
         private const string EntityDBName = "KioskoConfiguracion";
@@ -61,6 +61,13 @@ namespace CSTransporteKiosko
         // Numeric Keyborad
         private string IdValorKeyboardNumericNumberFont = "KeyboardNumericNumberFont";
         private string IdValorKeyboardNumericSpecialFont = "KeyboardNumericSpecialFont";
+
+        // Seats layout
+        private string IdValorVehiculoConfiguracionPuerta = "VehiculoConfiguracionPuerta";
+        private string IdValorVehiculoConfiguracionConductor = "VehiculoConfiguracionConductor";
+        private string IdValorVehiculoConfiguracionAsientoLibre = "VehiculoConfiguracionAsientoLibre";
+        private string IdValorVehiculoConfiguracionAsientoSeleccionado = "VehiculoConfiguracionAsientoSeleccionado";
+        private string IdValorVehiculoConfiguracionAsientoOcupado = "VehiculoConfiguracionAsientoOcupado";
 
         // POS Printer
         private string IdValorPOSPrinterClaimTimeoutSeconds = "POSPrinterClaimTimeoutSeconds";
@@ -165,6 +172,18 @@ namespace CSTransporteKiosko
         public Font ValorKeyboardNumericNumberFont { get => GetValorFont(IdValorKeyboardNumericNumberFont); }
         public string ValorKeyboardNumericSpecialFontString { get => GetValorString(IdValorKeyboardNumericSpecialFont); }
         public Font ValorKeyboardNumericSpecialFont { get => GetValorFont(IdValorKeyboardNumericSpecialFont); }
+
+        // Seats layout
+        public short? ValorVehiculoConfiguracionPuertaIdImagen { get => GetValorIdImagen(IdValorVehiculoConfiguracionPuerta); }
+        public Image ValorVehiculoConfiguracionPuerta { get => GetValorImagenDataAsBitmap(IdValorVehiculoConfiguracionPuerta); }
+        public short? ValorVehiculoConfiguracionConductorIdImagen { get => GetValorIdImagen(IdValorVehiculoConfiguracionConductor); }
+        public Image ValorVehiculoConfiguracionConductor { get => GetValorImagenDataAsBitmap(IdValorVehiculoConfiguracionConductor); }
+        public short? ValorVehiculoConfiguracionAsientoLibreIdImagen { get => GetValorIdImagen(IdValorVehiculoConfiguracionAsientoLibre); }
+        public Image ValorVehiculoConfiguracionAsientoLibre { get => GetValorImagenDataAsBitmap(IdValorVehiculoConfiguracionAsientoLibre); }
+        public short? ValorVehiculoConfiguracionAsientoSeleccionadoIdImagen { get => GetValorIdImagen(IdValorVehiculoConfiguracionAsientoSeleccionado); }
+        public Image ValorVehiculoConfiguracionAsientoSeleccionado { get => GetValorImagenDataAsBitmap(IdValorVehiculoConfiguracionAsientoSeleccionado); }
+        public short? ValorVehiculoConfiguracionAsientoOcupadoIdImagen { get => GetValorIdImagen(IdValorVehiculoConfiguracionAsientoOcupado); }
+        public Image ValorVehiculoConfiguracionAsientoOcupado { get => GetValorImagenDataAsBitmap(IdValorVehiculoConfiguracionAsientoOcupado); }
 
         // POS Printer
         public int ValorPOSPrinterClaimTimeoutSeconds { get => GetValorNumeroEnteroAsInteger(IdValorPOSPrinterClaimTimeoutSeconds, 2); }
@@ -492,5 +511,6 @@ namespace CSTransporteKiosko
         }
 
         #endregion
+
     }
 }

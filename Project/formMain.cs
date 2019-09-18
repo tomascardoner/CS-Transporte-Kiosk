@@ -12,27 +12,44 @@ namespace CSTransporteKiosko
     {
         #region Declaraciones
 
+        // Variables internas
         private byte pasoActual = 0;
         private Boolean buscarPorDocumento;
         private int InactivityTimeoutSeconds;
+        private DateTime inactivityTimeout = new DateTime(0);
+        private DateTime logoFirstClickTime = new DateTime(0);
+        private DateTime logoSecondClickTime = new DateTime(0);
 
+        // Bases de datos y entidades
         private SQLServer dbLocal = new SQLServer();
         private SQLServer dbEmpresa = new SQLServer();
         private Kiosko kiosko = new Kiosko();
         private BusquedaReservas busquedaReservas = new BusquedaReservas();
+        private VehiculoConfiguracion _VehiculoConfiguracion = new VehiculoConfiguracion();
+        private Viaje _Viaje = new Viaje();
         private TicketPlantilla ticket = new TicketPlantilla();
 
+        // Reservas
         private short LugarDuracionPreviaMinimaMinutos;
         private short LugarDuracionPreviaMaximaMinutos;
-
         private List<BusquedaReservas.Persona> listPersonasEncontradas = new List<BusquedaReservas.Persona>();
         private List<BusquedaReservas.Persona> listPersonasSeleccionadas = new List<BusquedaReservas.Persona>();
 
-        private Printer printer = new Printer();
+        // Asientos
+        private const string SeatNamePrefix = "buttonSeat";
+        private const string SeatNameRowPrefix = "R";
+        private const string SeatNameColumnPrefix = "C";
+        private TableLayoutPanel _panelSeatLayout;
+        private class SeatRowAndCol
+        {
+            public int Row;
+            public int Column;
+        }
+        private Dictionary<string, SeatRowAndCol> _seatsMap = new Dictionary<string, SeatRowAndCol>();
+        private int _SeatsSelected = 0;
 
-        private DateTime inactivityTimeout = new DateTime(0);
-        private DateTime logoFirstClickTime = new DateTime(0);
-        private DateTime logoSecondClickTime = new DateTime(0);
+        // Ticket
+        private Printer printer = new Printer();
 
         #endregion
 
@@ -154,56 +171,68 @@ namespace CSTransporteKiosko
 
         private bool InicializarKiosko()
         {
-            if (PrepararConexionABaseDeDatosLocal())
+            // Conecto a la base de datos de la aplicación
+            if (!PrepararConexionABaseDeDatosLocal())
             {
-                string macAddress = kiosko.ObtenerMacAddressLocal();
-                if (kiosko.CargarPorMacAddress(dbLocal.Connection, macAddress))
+                return false;
+            }
+
+            // Cargo los datos del Kiosko a partir de la Mac Address de la PC
+            string macAddress = kiosko.ObtenerMacAddressLocal();
+            if (!kiosko.CargarPorMacAddress(dbLocal.Connection, macAddress))
+            {
+                return false;
+            }
+            if (!kiosko.IsFound)
+            {
+                // La Mac Address del Kiosko no está en la base de datos, guardo en el log
+                AgregarEventLog(EventLog.TipoLoginFallido, 0, EventLog.MensajeLoginFallido, String.Format("MAC Address: {0}", macAddress));
+                MessageBox.Show("La MAC Address del Kiosko no está registrada en la base de datos.", kiosko.KioskoConfiguracion);
+                return false;
+            }
+
+            // Cargo los datos de la Empresa para la que está configurada el Kiosko
+            // y conecto a la base de datos respectiva
+            if (!kiosko.EmpresaCargar(dbLocal.Connection))
+            {
+                return false;
+            }
+            if (!PrepararConexionABaseDeDatosEmpresa(kiosko.Empresa.DatabaseName))
+            {
+                return false;
+            }
+
+            // Cargo la configuración del Kiosko (Logos, Colores, Tipografías, Tiempos, Ticket, etc)
+            if (!kiosko.KioskoConfiguracionCargar(dbLocal.Connection))
+            {
+                return false;
+            }
+            if (!kiosko.KioskoConfiguracion.KioskoConfiguracionValoresCargar(dbLocal.Connection))
+            {
+                return false;
+            }
+
+            // Cargo el fotmato del Ticket a imprimir para entregar al cliente
+            if (!(kiosko.IdTicketPlantilla.HasValue && ticket.CargarPorID(dbLocal.Connection, kiosko.IdTicketPlantilla.Value) && ticket.IsFound))
+            {
+                return false;
+            }
+            if (!ticket.TicketPlantillaComandosCargar(dbLocal.Connection))
+            {
+                return false;
+            }
+
+            if (!PreparaImpresora())
+            {
+                if (!System.Diagnostics.Debugger.IsAttached)
                 {
-                    if (kiosko.IsFound)
-                    {
-                        if (kiosko.EmpresaCargar(dbLocal.Connection))
-                        {
-                            if (PrepararConexionABaseDeDatosEmpresa(kiosko.Empresa.DatabaseName))
-                            {
-                                if (kiosko.KioskoConfiguracionCargar(dbLocal.Connection))
-                                {
-                                    if (kiosko.KioskoConfiguracion.KioskoConfiguracionValoresCargar(dbLocal.Connection))
-                                    {
-                                        if (kiosko.IdTicketPlantilla.HasValue && ticket.CargarPorID(dbLocal.Connection, kiosko.IdTicketPlantilla.Value))
-                                        {
-                                            if (ticket.IsFound)
-                                            {
-                                                if (ticket.TicketPlantillaComandosCargar(dbLocal.Connection))
-                                                {
-                                                    AgregarEventLog(EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
-                                                    if (System.Diagnostics.Debugger.IsAttached)
-                                                    {
-                                                        PreparaImpresora();
-                                                        return true;
-                                                    }
-                                                    else
-                                                    {
-                                                        return PreparaImpresora();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                    else
-                    {
-                        // La MAC Address del Kiosko no está en la base de datos, guardo en el log
-                        AgregarEventLog(EventLog.TipoLoginFallido, 0, EventLog.MensajeLoginFallido, String.Format("MAC Address: {0}", macAddress));
-                        MessageBox.Show("La MAC Address del Kiosko no está registrada en la base de datos.", kiosko.KioskoConfiguracion);
-                        return false;
-                    }
+                    return false;
                 }
             }
-            return false;
+
+            // Se completó todo correctamente
+            AgregarEventLog(EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
+            return true;
         }
 
         private void AgregarEventLog(string tipo, byte IdKiosko, string mensaje, string notas)
@@ -634,6 +663,214 @@ namespace CSTransporteKiosko
                 viajeDetalle = null;
             }
             return false;
+        }
+
+        #endregion
+
+        #region Selección de Asientos
+
+        private bool PrepararSeleccionAsientos()
+        {
+            // Cargo la configuración del Vehículo
+            if (!_VehiculoConfiguracion.CargarPorID(dbLocal.Connection, 1))
+            {
+                return false;
+            }
+            if (!_VehiculoConfiguracion.VehiculoConfiguracionDetallesCargar(dbLocal.Connection))
+            {
+                return false;
+            }
+
+            // Cargo los datos del viaje
+            if (!_Viaje.CargarPorID(dbEmpresa.Connection, 213092))
+            {
+                return false;
+            }
+            if (!_Viaje.ViajeDetallesCargar(dbEmpresa.Connection))
+            {
+                return false;
+            }
+
+            // Creo el mapa de asientos y marco los ocupados
+            CreateLayout();
+            ShowOccupation();
+            return true;
+        }
+
+        #endregion
+
+        #region Layout
+
+        private void CreateLayout()
+        {
+            this.SuspendLayout();
+
+            DestroyPreviousLayout();
+            CreatePanel();
+            CreateButtonsSequentially();
+
+            this.ResumeLayout();
+        }
+
+        private void DestroyPreviousLayout()
+        {
+            if (_panelSeatLayout != null)
+            {
+                // Clean old keyboard keys
+                foreach (Control button in _panelSeatLayout.Controls)
+                {
+                    _panelSeatLayout.Controls.Remove(button);
+                    button.Dispose();
+                }
+
+                _panelSeatLayout.Dispose();
+            }
+        }
+
+        private void CreatePanel()
+        {
+            // Create the TableLayoutPanel
+            _panelSeatLayout = new TableLayoutPanel();
+            _panelSeatLayout.Name = "panelLayout";
+            _panelSeatLayout.Dock = DockStyle.Fill;
+            _panelSeatLayout.Location = new System.Drawing.Point(0, 0);
+            _panelSeatLayout.TabIndex = 0;
+            panelPaso4.Controls.Add(_panelSeatLayout);
+            _panelSeatLayout.Padding = new Padding(4);
+
+            // Prepare rows
+            _panelSeatLayout.RowCount = _VehiculoConfiguracion.UnidadAncho;
+            Single height = Convert.ToSingle(100) / Convert.ToSingle(_panelSeatLayout.RowCount);
+            for (int row = 0; row < _panelSeatLayout.RowCount; row++)
+            {
+                _panelSeatLayout.RowStyles.Add(new RowStyle(SizeType.Percent, height));
+            }
+
+            // Prepare columns
+            _panelSeatLayout.ColumnCount = _VehiculoConfiguracion.UnidadLargo;
+            Single width = Convert.ToSingle(100) / Convert.ToSingle(_panelSeatLayout.ColumnCount);
+            for (int column = 0; column < _panelSeatLayout.ColumnCount; column++)
+            {
+                _panelSeatLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, width));
+            }
+        }
+
+        private void CreateButtonsSequentially()
+        {
+            int row = 0;
+            int column = 0;
+
+            foreach (VehiculoConfiguracionDetalle detalle in _VehiculoConfiguracion.VehiculoConfiguracionDetalles)
+            {
+                if (detalle.Tipo != VehiculoConfiguracionDetalle.TipoEspacio)
+                {
+                    CreateButton(row, column, detalle);
+                }
+
+                // Increment position variables
+                row++;
+                if (row == _VehiculoConfiguracion.UnidadAncho)
+                {
+                    row = 0;
+                    column++;
+                }
+            }
+        }
+
+        private void CreateButtonsIndexed()
+        {
+            // Rows
+            for (int row = 0; row < _panelSeatLayout.RowCount; row++)
+            {
+                // Columns
+                for (int column = 0; column < _panelSeatLayout.ColumnCount; column++)
+                {
+                    byte idDetalle = (byte)((column * 4) + row + 1);
+                    VehiculoConfiguracionDetalle detalle = _VehiculoConfiguracion.VehiculoConfiguracionDetalles.Find(vcd => vcd.IdDetalle == idDetalle);
+                    if (detalle != null)
+                    {
+                        CreateButton(row, column, detalle);
+                    }
+                }
+            }
+        }
+
+        private void CreateButton(int row, int column, VehiculoConfiguracionDetalle detalle)
+        {
+            PictureBox button = new PictureBox();
+            button.Name = string.Format("{0}{1}{2}{3}{4}", SeatNamePrefix, SeatNameRowPrefix, row, SeatNameColumnPrefix, column);
+            button.Tag = detalle.Tipo;
+            button.Image = detalle.TipoImagen(ref kiosko);
+            button.SizeMode = PictureBoxSizeMode.Zoom;
+            _panelSeatLayout.Controls.Add(button, column, row);
+            button.Dock = DockStyle.Fill;
+            button.MouseUp += Seat_Select;
+            button = null;
+
+            // Add to seats map dictionary
+            if (detalle.Tipo == VehiculoConfiguracionDetalle.TipoAsiento && !String.IsNullOrEmpty(detalle.AsientoIdentificacion))
+            {
+                SeatRowAndCol rowAndCol = new SeatRowAndCol();
+                rowAndCol.Row = row;
+                rowAndCol.Column = column;
+                _seatsMap.Add(detalle.AsientoIdentificacion, rowAndCol);
+                rowAndCol = null;
+            }
+        }
+
+        #endregion
+
+        #region Occupation
+
+        private void ShowOccupation()
+        {
+            foreach (ViajeDetalle detalle in _Viaje.ViajeDetalles)
+            {
+                if (!String.IsNullOrEmpty(detalle.AsientoIdentificacion))
+                {
+                    SeatRowAndCol rowAndCol;
+                    if (_seatsMap.TryGetValue(detalle.AsientoIdentificacion, out rowAndCol))
+                    {
+                        PictureBox button = (PictureBox)_panelSeatLayout.GetControlFromPosition(rowAndCol.Column, rowAndCol.Row);
+                        button.Tag = VehiculoConfiguracionDetalle.TipoAsientoOcupado;
+                        button.Image = kiosko.KioskoConfiguracion.ValorVehiculoConfiguracionAsientoOcupado;
+                        button = null;
+                    }
+                }
+            }
+        }
+
+        private void Seat_Select(object sender, MouseEventArgs e)
+        {
+            PictureBox pictureBox = (PictureBox)sender;
+            switch (pictureBox.Tag.ToString())
+            {
+                case VehiculoConfiguracionDetalle.TipoConductor:
+                    MessageBox.Show("No se puede seleccionar el asiento del Conductor.", kiosko.KioskoConfiguracion);
+                    break;
+                case VehiculoConfiguracionDetalle.TipoAsientoOcupado:
+                    MessageBox.Show("No se puede seleccionar este asiento ya que se encuentra ocupado.", kiosko.KioskoConfiguracion);
+                    break;
+                case VehiculoConfiguracionDetalle.TipoAsiento:
+                    if (_SeatsSelected == listPersonasSeleccionadas.Count)
+                    {
+                        MessageBox.Show(String.Format("Ya se han seleccionado los {0} asientos.", listPersonasSeleccionadas.Count), kiosko.KioskoConfiguracion);
+                    }
+                    else
+                    {
+                        pictureBox.Tag = VehiculoConfiguracionDetalle.TipoAsientoSeleccionado;
+                        pictureBox.Image = kiosko.KioskoConfiguracion.ValorVehiculoConfiguracionAsientoSeleccionado;
+                        _SeatsSelected++;
+                    }
+                    break;
+                case VehiculoConfiguracionDetalle.TipoAsientoSeleccionado:
+                    pictureBox.Tag = VehiculoConfiguracionDetalle.TipoAsiento;
+                    pictureBox.Image = kiosko.KioskoConfiguracion.ValorVehiculoConfiguracionAsientoLibre;
+                    _SeatsSelected--;
+                    break;
+                default:
+                    break;
+            }
         }
 
         #endregion

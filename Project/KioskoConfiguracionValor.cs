@@ -11,6 +11,7 @@ namespace CSTransporteKiosko
 {
     public class KioskoConfiguracionValor
     {
+
         #region Entity definition properties
 
         private const string EntityDBName = "KioskoConfiguracionValor";
@@ -278,5 +279,6 @@ namespace CSTransporteKiosko
         }
 
         #endregion
+
     }
 }
