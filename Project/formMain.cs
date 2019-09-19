@@ -416,15 +416,14 @@ namespace CSTransporteKiosko
                 case 2: // Introducción de los datos a buscar y búsqueda
                     return VerificarPaso2();
 
-                case 3: // Selección de Pasajeros e Impresión
-                    if (VerificarPaso3())
-                    {
-                        return RealizarCheckInEImprimirTicket();
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                case 3: // Selección de Pasajeros
+                    return VerificarPaso3();
+
+                case 4: // Selección de asiento
+                    return VerificarPaso4();
+
+                case 5: // Realizar chekin e imprimir ticket
+                    return RealizarCheckInEImprimirTicket();
 
                 default:
                     break;
@@ -434,11 +433,11 @@ namespace CSTransporteKiosko
 
         private bool VerificarPaso1()
         {
-            if (radioPaso1_Documento.Checked == false & radioPaso1_Reserva.Checked == false)
-            {
-                MessageBox.Show("Debe seleccionar alguna de las opciones de búsqueda.", kiosko.KioskoConfiguracion);
-                return false;
-            }
+            //if (radioPaso1_Documento.Checked == false & radioPaso1_Reserva.Checked == false)
+            //{
+            //    MessageBox.Show("Debe seleccionar alguna de las opciones de búsqueda.", kiosko.KioskoConfiguracion);
+            //    return false;
+            //}
             return true;
         }
 
@@ -478,19 +477,22 @@ namespace CSTransporteKiosko
                 {
                     listPersonasSeleccionadas.Add(listPersonasEncontradas.Find(persona => persona.IDPersona == Convert.ToInt32(tileItem.Tag)));
                 }
-                string mensajeConfirmacion;
-
-                if (tilecontrolPaso3_Pasajeros.CheckedTiles.Length == 1)
-                {
-                    mensajeConfirmacion = "¿Confirma la asistencia de 1 Persona?";
-                }
-                else
-                {
-                    mensajeConfirmacion = String.Format("¿Confirma la asistencia de {0} Personas?", tilecontrolPaso3_Pasajeros.CheckedTiles.Length);
-                }
-
-                return MessageBox.ShowDialog(mensajeConfirmacion, kiosko.KioskoConfiguracion);
+                return true;
             }
+        }
+
+        private bool VerificarPaso4()
+        {
+            string mensajeConfirmacion;
+            if (tilecontrolPaso3_Pasajeros.CheckedTiles.Length == 1)
+            {
+                mensajeConfirmacion = "¿Confirma la asistencia de 1 Persona?";
+            }
+            else
+            {
+                mensajeConfirmacion = String.Format("¿Confirma la asistencia de {0} Personas?", tilecontrolPaso3_Pasajeros.CheckedTiles.Length);
+            }
+            return MessageBox.ShowDialog(mensajeConfirmacion, kiosko.KioskoConfiguracion);
         }
 
         #endregion
@@ -501,7 +503,7 @@ namespace CSTransporteKiosko
         {
             if (VerificarAvancePaso())
             {
-                if (pasoActual == 3)
+                if (pasoActual == 4)
                 {
                     pasoActual = 0;
                 }
@@ -534,12 +536,13 @@ namespace CSTransporteKiosko
             }
             panelInicio.Visible = (pasoActual == 0);
             panelPasos.Visible = (pasoActual > 0);
-            panelPaso1.Visible = (pasoActual == 1);
-            panelPaso2.Visible = (pasoActual == 2);
-            panelPaso3.Visible = (pasoActual == 3);
+            //panelPaso1.Visible = (pasoActual == 1);
+            //panelPaso2.Visible = (pasoActual == 2);
+            //panelPaso3.Visible = (pasoActual == 3);
+            //panelPaso4.Visible = (pasoActual == 4);
             buttonPasoAnterior.Visible = (pasoActual > 0);
             buttonPasoSiguiente.Visible = (pasoActual > 0);
-            if (pasoActual <= 2)
+            if (pasoActual <= 3)
             {
                 buttonPasoSiguiente.Text = "Siguiente";
             }
@@ -551,13 +554,23 @@ namespace CSTransporteKiosko
 
         private void MostrarPaso1()
         {
-            radioPaso1_Documento.Checked = false;
-            radioPaso1_Reserva.Checked = false;
+            //radioPaso1_Documento.Checked = false;
+            //radioPaso1_Reserva.Checked = false;
+
+            Paso1 paso1 = new Paso1();
+            TableLayoutPanel panelPaso1 = (TableLayoutPanel)paso1.Controls[0];
+            paso1 = null;
+
+            panelUser.SuspendLayout();
+            panelUser.Controls.Clear();
+            panelUser.Controls.Add(panelPaso1);
+            panelPaso1.Dock = DockStyle.Fill;
+            panelUser.ResumeLayout();
         }
 
         private void MostrarPaso2()
         {
-            buscarPorDocumento = (radioPaso1_Documento.Checked);
+            buscarPorDocumento = true; // (radioPaso1_Documento.Checked);
             if (buscarPorDocumento)
             {
                 labelPaso2_Valor.Text = "Ingrese el Nº de Documento:";
@@ -641,28 +654,6 @@ namespace CSTransporteKiosko
             {
                 return false;
             }
-        }
-
-        private bool RealizarCheckInEImprimirTicket()
-        {
-            foreach (BusquedaReservas.Persona persona in listPersonasSeleccionadas)
-            {
-                ViajeDetalle viajeDetalle = new ViajeDetalle();
-                if (viajeDetalle.RealizarCheckIn(dbEmpresa.Connection, kiosko.IdEmpresa, persona.IDViajeDetalle))
-                {
-                    viajeDetalle = null;
-                    if (printer.IsReady)
-                    {
-                        return ticket.SendCommandsToPrinter(persona, printer);
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                viajeDetalle = null;
-            }
-            return false;
         }
 
         #endregion
@@ -874,6 +865,28 @@ namespace CSTransporteKiosko
         }
 
         #endregion
+
+        private bool RealizarCheckInEImprimirTicket()
+        {
+            foreach (BusquedaReservas.Persona persona in listPersonasSeleccionadas)
+            {
+                ViajeDetalle viajeDetalle = new ViajeDetalle();
+                if (viajeDetalle.RealizarCheckIn(dbEmpresa.Connection, kiosko.IdEmpresa, persona.IDViajeDetalle))
+                {
+                    viajeDetalle = null;
+                    if (printer.IsReady)
+                    {
+                        return ticket.SendCommandsToPrinter(persona, printer);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                viajeDetalle = null;
+            }
+            return false;
+        }
 
         #region Impresión de ticket
 

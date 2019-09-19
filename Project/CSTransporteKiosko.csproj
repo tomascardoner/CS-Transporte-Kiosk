@@ -107,11 +107,41 @@
     <Compile Include="FormMessageBox.Designer.cs">
       <DependentUpon>FormMessageBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormWelcome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormWelcome.Designer.cs">
+      <DependentUpon>FormWelcome.cs</DependentUpon>
+    </Compile>
     <Compile Include="Imagen.cs" />
     <Compile Include="Kiosko.cs" />
     <Compile Include="KioskoConfiguracion.cs" />
     <Compile Include="KioskoConfiguracionValor.cs" />
     <Compile Include="MessageBox.cs" />
+    <Compile Include="Paso1.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Paso1.Designer.cs">
+      <DependentUpon>Paso1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Paso2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Paso2.Designer.cs">
+      <DependentUpon>Paso2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Paso3.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Paso3.Designer.cs">
+      <DependentUpon>Paso3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Paso4.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Paso4.Designer.cs">
+      <DependentUpon>Paso4.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TicketPlantilla.cs" />
@@ -129,6 +159,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormMessageBox.resx">
       <DependentUpon>FormMessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormWelcome.resx">
+      <DependentUpon>FormWelcome.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Paso1.resx">
+      <DependentUpon>Paso1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Paso2.resx">
+      <DependentUpon>Paso2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Paso3.resx">
+      <DependentUpon>Paso3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Paso4.resx">
+      <DependentUpon>Paso4.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
