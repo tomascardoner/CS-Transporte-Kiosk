@@ -60,46 +60,49 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\framework-csharp\Colors.cs">
+      <Link>Framework\Colors.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\framework-csharp\Constants.cs">
-      <Link>Constants.cs</Link>
+      <Link>Framework\Constants.cs</Link>
     </Compile>
     <Compile Include="..\..\..\framework-csharp\ConstantsKeys.cs">
-      <Link>ConstantsKeys.cs</Link>
+      <Link>Framework\ConstantsKeys.cs</Link>
     </Compile>
     <Compile Include="..\..\..\framework-csharp\Database.ADO.SQLServer.cs">
-      <Link>Database.ADO.SQLServer.cs</Link>
+      <Link>Framework\Database.ADO.SQLServer.cs</Link>
     </Compile>
     <Compile Include="..\..\..\framework-csharp\Database.Framework.Lite.cs">
-      <Link>Database.Framework.Lite.cs</Link>
+      <Link>Framework\Database.Framework.Lite.cs</Link>
     </Compile>
     <Compile Include="..\..\..\framework-csharp\Encrypt.TripleDES.cs">
-      <Link>Encrypt.TripleDES.cs</Link>
+      <Link>Framework\Encrypt.TripleDES.cs</Link>
     </Compile>
     <Compile Include="..\..\..\framework-csharp\Error.cs">
-      <Link>Error.cs</Link>
+      <Link>Framework\Error.cs</Link>
     </Compile>
     <Compile Include="..\..\..\framework-csharp\ErrorMessageBox.cs">
-      <Link>ErrorMessageBox.cs</Link>
+      <Link>Framework\ErrorMessageBox.cs</Link>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\..\..\framework-csharp\ErrorMessageBox.designer.cs">
-      <Link>ErrorMessageBox.designer.cs</Link>
+      <Link>Framework\ErrorMessageBox.designer.cs</Link>
       <DependentUpon>ErrorMessageBox.cs</DependentUpon>
     </Compile>
     <Compile Include="..\..\..\framework-csharp\My.cs">
-      <Link>My.cs</Link>
+      <Link>Framework\My.cs</Link>
     </Compile>
     <Compile Include="..\..\..\framework-csharp\PointOfSale.Printer.cs">
-      <Link>PointOfSale.Printer.cs</Link>
+      <Link>Framework\PointOfSale.Printer.cs</Link>
     </Compile>
     <Compile Include="BusquedaReservas.cs" />
-    <Compile Include="Empresa.cs" />
-    <Compile Include="EventLog.cs" />
-    <Compile Include="FormMain.cs">
+    <Compile Include="Entities\Empresa.cs" />
+    <Compile Include="Entities\EventLog.cs" />
+    <Compile Include="Steps\FormSteps.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormMain.Designer.cs">
-      <DependentUpon>FormMain.cs</DependentUpon>
+    <Compile Include="Steps\FormSteps.Designer.cs">
+      <DependentUpon>FormSteps.cs</DependentUpon>
     </Compile>
     <Compile Include="FormMessageBox.cs">
       <SubType>Form</SubType>
@@ -113,49 +116,49 @@
     <Compile Include="FormWelcome.Designer.cs">
       <DependentUpon>FormWelcome.cs</DependentUpon>
     </Compile>
-    <Compile Include="Imagen.cs" />
-    <Compile Include="Kiosko.cs" />
-    <Compile Include="KioskoConfiguracion.cs" />
-    <Compile Include="KioskoConfiguracionValor.cs" />
+    <Compile Include="Entities\Imagen.cs" />
+    <Compile Include="Entities\Kiosko.cs" />
+    <Compile Include="Entities\KioskoConfiguracion.cs" />
+    <Compile Include="Entities\KioskoConfiguracionValor.cs" />
     <Compile Include="MessageBox.cs" />
-    <Compile Include="Paso1.cs">
+    <Compile Include="Steps\Paso1.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Paso1.Designer.cs">
+    <Compile Include="Steps\Paso1.Designer.cs">
       <DependentUpon>Paso1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Paso2.cs">
+    <Compile Include="Steps\Paso2.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Paso2.Designer.cs">
+    <Compile Include="Steps\Paso2.Designer.cs">
       <DependentUpon>Paso2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Paso3.cs">
+    <Compile Include="Steps\Paso3.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Paso3.Designer.cs">
+    <Compile Include="Steps\Paso3.Designer.cs">
       <DependentUpon>Paso3.cs</DependentUpon>
     </Compile>
-    <Compile Include="Paso4.cs">
+    <Compile Include="Steps\Paso4.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Paso4.Designer.cs">
+    <Compile Include="Steps\Paso4.Designer.cs">
       <DependentUpon>Paso4.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TicketPlantilla.cs" />
-    <Compile Include="TicketPlantillaComando.cs" />
-    <Compile Include="VehiculoConfiguracion.cs" />
-    <Compile Include="VehiculoConfiguracionDetalle.cs" />
-    <Compile Include="Viaje.cs" />
-    <Compile Include="ViajeDetalle.cs" />
+    <Compile Include="Entities\TicketPlantilla.cs" />
+    <Compile Include="Entities\TicketPlantillaComando.cs" />
+    <Compile Include="Entities\VehiculoConfiguracion.cs" />
+    <Compile Include="Entities\VehiculoConfiguracionDetalle.cs" />
+    <Compile Include="Entities\Viaje.cs" />
+    <Compile Include="Entities\ViajeDetalle.cs" />
     <EmbeddedResource Include="..\..\..\framework-csharp\ErrorMessageBox.resx">
-      <Link>ErrorMessageBox.resx</Link>
+      <Link>Framework\ErrorMessageBox.resx</Link>
       <DependentUpon>ErrorMessageBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormMain.resx">
-      <DependentUpon>FormMain.cs</DependentUpon>
+    <EmbeddedResource Include="Steps\FormSteps.resx">
+      <DependentUpon>FormSteps.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMessageBox.resx">
       <DependentUpon>FormMessageBox.cs</DependentUpon>
@@ -163,16 +166,16 @@
     <EmbeddedResource Include="FormWelcome.resx">
       <DependentUpon>FormWelcome.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Paso1.resx">
+    <EmbeddedResource Include="Steps\Paso1.resx">
       <DependentUpon>Paso1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Paso2.resx">
+    <EmbeddedResource Include="Steps\Paso2.resx">
       <DependentUpon>Paso2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Paso3.resx">
+    <EmbeddedResource Include="Steps\Paso3.resx">
       <DependentUpon>Paso3.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Paso4.resx">
+    <EmbeddedResource Include="Steps\Paso4.resx">
       <DependentUpon>Paso4.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />

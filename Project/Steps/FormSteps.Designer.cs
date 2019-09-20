@@ -1,6 +1,6 @@
 ﻿namespace CSTransporteKiosko
 {
-    partial class FormMain
+    partial class FormSteps
     {
         /// <summary>
         /// Required designer variable.
@@ -74,7 +74,6 @@
             this.pictureboxLogoEmpresa.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureboxLogoEmpresa.TabIndex = 1;
             this.pictureboxLogoEmpresa.TabStop = false;
-            this.pictureboxLogoEmpresa.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Click_ToStart);
             // 
             // panelUser
             // 
@@ -190,7 +189,6 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Closing);
             this.Load += new System.EventHandler(this.Form_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyCombinationManager);
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Click_ToStart);
             this.panelPasos.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureboxLogoEmpresa)).EndInit();
             this.panelPasosNavegacion.ResumeLayout(false);

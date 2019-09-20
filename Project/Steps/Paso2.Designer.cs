@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.panelPaso2 = new System.Windows.Forms.TableLayoutPanel();
-            this.textboxPaso2_Valor = new System.Windows.Forms.TextBox();
-            this.labelPaso2_Valor = new System.Windows.Forms.Label();
+            this.labelValor = new System.Windows.Forms.Label();
+            this.textboxValor = new System.Windows.Forms.TextBox();
             this.keyboardMain = new CardonerSistemas.OnScreenKeyboard();
             this.panelPaso2.SuspendLayout();
             this.SuspendLayout();
@@ -43,8 +43,8 @@
             this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
             this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.panelPaso2.Controls.Add(this.labelPaso2_Valor, 1, 1);
-            this.panelPaso2.Controls.Add(this.textboxPaso2_Valor, 2, 1);
+            this.panelPaso2.Controls.Add(this.labelValor, 1, 1);
+            this.panelPaso2.Controls.Add(this.textboxValor, 2, 1);
             this.panelPaso2.Controls.Add(this.keyboardMain, 2, 2);
             this.panelPaso2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPaso2.Location = new System.Drawing.Point(0, 0);
@@ -57,35 +57,35 @@
             this.panelPaso2.TabIndex = 7;
             this.panelPaso2.Visible = false;
             // 
-            // textboxPaso2_Valor
+            // labelValor
             // 
-            this.textboxPaso2_Valor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.textboxPaso2_Valor.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.textboxPaso2_Valor.Enabled = false;
-            this.textboxPaso2_Valor.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.textboxPaso2_Valor.Location = new System.Drawing.Point(365, 189);
-            this.textboxPaso2_Valor.MaxLength = 8;
-            this.textboxPaso2_Valor.Name = "textboxPaso2_Valor";
-            this.textboxPaso2_Valor.Size = new System.Drawing.Size(150, 35);
-            this.textboxPaso2_Valor.TabIndex = 2;
-            this.textboxPaso2_Valor.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.labelValor.AutoSize = true;
+            this.labelValor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelValor.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
+            this.labelValor.Location = new System.Drawing.Point(28, 186);
+            this.labelValor.Name = "labelValor";
+            this.labelValor.Size = new System.Drawing.Size(331, 41);
+            this.labelValor.TabIndex = 1;
+            this.labelValor.Text = "Ingrese el Documento / Reserva:";
+            this.labelValor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // labelPaso2_Valor
+            // textboxValor
             // 
-            this.labelPaso2_Valor.AutoSize = true;
-            this.labelPaso2_Valor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelPaso2_Valor.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.labelPaso2_Valor.Location = new System.Drawing.Point(28, 186);
-            this.labelPaso2_Valor.Name = "labelPaso2_Valor";
-            this.labelPaso2_Valor.Size = new System.Drawing.Size(331, 41);
-            this.labelPaso2_Valor.TabIndex = 1;
-            this.labelPaso2_Valor.Text = "Ingrese el Documento / Reserva:";
-            this.labelPaso2_Valor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.textboxValor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.textboxValor.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.textboxValor.Enabled = false;
+            this.textboxValor.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
+            this.textboxValor.Location = new System.Drawing.Point(365, 189);
+            this.textboxValor.MaxLength = 8;
+            this.textboxValor.Name = "textboxValor";
+            this.textboxValor.Size = new System.Drawing.Size(150, 35);
+            this.textboxValor.TabIndex = 2;
+            this.textboxValor.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // keyboardMain
             // 
             this.keyboardMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.keyboardMain.DestinationTextBox = this.textboxPaso2_Valor;
+            this.keyboardMain.DestinationTextBox = this.textboxValor;
             this.keyboardMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.keyboardMain.ForeColor = System.Drawing.SystemColors.ControlText;
             this.keyboardMain.KeyBackColor = System.Drawing.SystemColors.Control;
@@ -111,8 +111,8 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel panelPaso2;
-        private System.Windows.Forms.Label labelPaso2_Valor;
-        private System.Windows.Forms.TextBox textboxPaso2_Valor;
+        private System.Windows.Forms.Label labelValor;
+        private System.Windows.Forms.TextBox textboxValor;
         private CardonerSistemas.OnScreenKeyboard keyboardMain;
     }
 }

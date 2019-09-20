@@ -58,9 +58,8 @@ namespace CSTransporteKiosko
         private string IdValorMessageBoxButtonBackColor = "MessageBoxButtonBackColor";
         private string IdValorMessageBoxButtonForeColor = "MessageBoxButtonForeColor";
 
-        // Numeric Keyborad
-        private string IdValorKeyboardNumericNumberFont = "KeyboardNumericNumberFont";
-        private string IdValorKeyboardNumericSpecialFont = "KeyboardNumericSpecialFont";
+        // On Screen Keyborad
+        private string IdValorKeyboardFont = "KeyboardFont";
 
         // Seats layout
         private string IdValorVehiculoConfiguracionPuerta = "VehiculoConfiguracionPuerta";
@@ -167,11 +166,9 @@ namespace CSTransporteKiosko
         public int? ValorMessageBoxButtonForeColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorMessageBoxButtonForeColor); }
         public Color? ValorMessageBoxButtonForeColor { get => GetValorColor(IdValorMessageBoxButtonForeColor); }
 
-        // Numeric Keyborad
-        public string ValorKeyboardNumericNumberFontString { get => GetValorString(IdValorKeyboardNumericNumberFont); }
-        public Font ValorKeyboardNumericNumberFont { get => GetValorFont(IdValorKeyboardNumericNumberFont); }
-        public string ValorKeyboardNumericSpecialFontString { get => GetValorString(IdValorKeyboardNumericSpecialFont); }
-        public Font ValorKeyboardNumericSpecialFont { get => GetValorFont(IdValorKeyboardNumericSpecialFont); }
+        // On Screen Keyborad
+        public string ValorKeyboardFontString { get => GetValorString(IdValorKeyboardFont); }
+        public Font ValorKeyboardFont { get => GetValorFont(IdValorKeyboardFont); }
 
         // Seats layout
         public short? ValorVehiculoConfiguracionPuertaIdImagen { get => GetValorIdImagen(IdValorVehiculoConfiguracionPuerta); }

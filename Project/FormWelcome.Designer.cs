@@ -30,18 +30,18 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormWelcome));
             this.panelInicio = new System.Windows.Forms.TableLayoutPanel();
-            this.labelInicio_LeyendaIniciar = new System.Windows.Forms.Label();
-            this.wmInicio_Player = new AxWMPLib.AxWindowsMediaPlayer();
+            this.labelIniciar = new System.Windows.Forms.Label();
+            this.wmPlayer = new AxWMPLib.AxWindowsMediaPlayer();
             this.panelInicio.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.wmInicio_Player)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.wmPlayer)).BeginInit();
             this.SuspendLayout();
             // 
             // panelInicio
             // 
             this.panelInicio.ColumnCount = 1;
             this.panelInicio.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.panelInicio.Controls.Add(this.labelInicio_LeyendaIniciar, 0, 1);
-            this.panelInicio.Controls.Add(this.wmInicio_Player, 0, 0);
+            this.panelInicio.Controls.Add(this.wmPlayer, 0, 0);
+            this.panelInicio.Controls.Add(this.labelIniciar, 0, 1);
             this.panelInicio.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelInicio.Location = new System.Drawing.Point(0, 0);
             this.panelInicio.Name = "panelInicio";
@@ -51,27 +51,29 @@
             this.panelInicio.Size = new System.Drawing.Size(800, 450);
             this.panelInicio.TabIndex = 6;
             // 
-            // labelInicio_LeyendaIniciar
+            // labelIniciar
             // 
-            this.labelInicio_LeyendaIniciar.AutoSize = true;
-            this.labelInicio_LeyendaIniciar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelInicio_LeyendaIniciar.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInicio_LeyendaIniciar.Location = new System.Drawing.Point(3, 400);
-            this.labelInicio_LeyendaIniciar.Name = "labelInicio_LeyendaIniciar";
-            this.labelInicio_LeyendaIniciar.Size = new System.Drawing.Size(794, 50);
-            this.labelInicio_LeyendaIniciar.TabIndex = 4;
-            this.labelInicio_LeyendaIniciar.Text = "Toque la pantalla para comenzar";
-            this.labelInicio_LeyendaIniciar.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelIniciar.AutoSize = true;
+            this.labelIniciar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelIniciar.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelIniciar.Location = new System.Drawing.Point(3, 400);
+            this.labelIniciar.Name = "labelIniciar";
+            this.labelIniciar.Size = new System.Drawing.Size(794, 50);
+            this.labelIniciar.TabIndex = 4;
+            this.labelIniciar.Text = "Toque la pantalla para comenzar";
+            this.labelIniciar.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelIniciar.Click += new System.EventHandler(this.labelIniciar_Click);
             // 
-            // wmInicio_Player
+            // wmPlayer
             // 
-            this.wmInicio_Player.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wmInicio_Player.Enabled = true;
-            this.wmInicio_Player.Location = new System.Drawing.Point(3, 3);
-            this.wmInicio_Player.Name = "wmInicio_Player";
-            this.wmInicio_Player.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("wmInicio_Player.OcxState")));
-            this.wmInicio_Player.Size = new System.Drawing.Size(794, 394);
-            this.wmInicio_Player.TabIndex = 1;
+            this.wmPlayer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wmPlayer.Enabled = true;
+            this.wmPlayer.Location = new System.Drawing.Point(3, 3);
+            this.wmPlayer.Name = "wmPlayer";
+            this.wmPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("wmPlayer.OcxState")));
+            this.wmPlayer.Size = new System.Drawing.Size(794, 394);
+            this.wmPlayer.TabIndex = 1;
+            this.wmPlayer.ClickEvent += new AxWMPLib._WMPOCXEvents_ClickEventHandler(this.wmPlayer_Click);
             // 
             // FormWelcome
             // 
@@ -88,7 +90,7 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.panelInicio.ResumeLayout(false);
             this.panelInicio.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.wmInicio_Player)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.wmPlayer)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -96,7 +98,7 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel panelInicio;
-        private System.Windows.Forms.Label labelInicio_LeyendaIniciar;
-        private AxWMPLib.AxWindowsMediaPlayer wmInicio_Player;
+        private System.Windows.Forms.Label labelIniciar;
+        private AxWMPLib.AxWindowsMediaPlayer wmPlayer;
     }
 }

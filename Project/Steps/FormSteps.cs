@@ -8,8 +8,10 @@ using CardonerSistemas.PointOfSale;
 
 namespace CSTransporteKiosko
 {
-    public partial class FormMain : Form
+    public partial class FormSteps : Form
     {
+
+
         #region Declaraciones
 
         // Variables internas
@@ -55,9 +57,33 @@ namespace CSTransporteKiosko
 
         #region Form stuff
 
-        public FormMain()
+        public FormSteps()
         {
             InitializeComponent();
+        }
+
+        public void SetAppearance(KioskoConfiguracion configuracion)
+        {
+            // Apariencia
+            this.Icon = Properties.Resources.ICON_APP;
+            this.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorScreenBackColor, this.BackColor);
+            labelPasosVersion.Text = Application.ProductVersion;
+
+            // Media
+            pictureboxPasosLogoCompaniaSoftware.Image = configuracion.ValorCompaniaSoftwareLogotipo;
+            pictureboxLogoEmpresa.Image = configuracion.ValorEmpresaLogotipo;
+
+            // Botón anterior
+            buttonPasoAnterior.Font = configuracion.ValorButtonPreviousFont;
+            buttonPasoAnterior.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorButtonPreviousBackColor, buttonPasoAnterior.BackColor);
+            buttonPasoAnterior.ForeColor = CardonerSistemas.Colors.SetColor(configuracion.ValorButtonPreviousForeColor, buttonPasoAnterior.ForeColor);
+
+            // Botón siguiente
+            buttonPasoSiguiente.Font = configuracion.ValorButtonNextFont;
+            buttonPasoSiguiente.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorButtonNextBackColor, buttonPasoSiguiente.BackColor);
+            buttonPasoSiguiente.ForeColor = CardonerSistemas.Colors.SetColor(configuracion.ValorButtonNextForeColor, buttonPasoSiguiente.ForeColor);
+
+            InactivityTimeoutSeconds = configuracion.ValorInactivityTimeoutSeconds;
         }
 
         private void Form_Load(object sender, EventArgs e)
@@ -69,74 +95,6 @@ namespace CSTransporteKiosko
             }
             ConfigAndSetAppearance();
             MostrarPasos();
-        }
-
-        private void ConfigAndSetAppearance()
-        {
-            // Form appearance and version info
-            this.Icon = Properties.Resources.ICON_APP;
-            labelPasosVersion.Text = Application.ProductVersion;
-
-            // Media
-            pictureboxPasosLogoCompaniaSoftware.Image = kiosko.KioskoConfiguracion.ValorCompaniaSoftwareLogotipo;
-            pictureboxLogoEmpresa.Image = kiosko.KioskoConfiguracion.ValorEmpresaLogotipo;
-            wmInicio_Player.uiMode = "none";
-            wmInicio_Player.URL = kiosko.KioskoConfiguracion.ValorVideo;
-
-            // Apariencia
-            this.BackColor = SetColor(kiosko.KioskoConfiguracion.ValorScreenBackColor, this.BackColor);
-
-            // Textos
-            labelPaso2_Valor.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFont;
-            labelPaso2_Valor.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColor, labelPaso2_Valor.ForeColor);
-
-            labelPaso3_Viaje_Origen_Leyenda.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFont;
-            labelPaso3_Viaje_Origen_Leyenda.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColor, labelPaso3_Viaje_Origen_Leyenda.ForeColor);
-            labelPaso3_Viaje_Destino_Leyenda.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFont;
-            labelPaso3_Viaje_Destino_Leyenda.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColor, labelPaso3_Viaje_Destino_Leyenda.ForeColor);
-            labelPaso3_Viaje_Vehiculo_Leyenda.Font = kiosko.KioskoConfiguracion.ValorInformacionLeyendaFont;
-            labelPaso3_Viaje_Vehiculo_Leyenda.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionLeyendaForeColor, labelPaso3_Viaje_Vehiculo_Leyenda.ForeColor);
-
-            labelPaso3_Viaje_Origen_Lugar.Font = kiosko.KioskoConfiguracion.ValorInformacionPrincipalFont;
-            labelPaso3_Viaje_Origen_Lugar.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionPrincipalForeColor, labelPaso3_Viaje_Origen_Lugar.ForeColor);
-            labelPaso3_Viaje_Destino_Lugar.Font = kiosko.KioskoConfiguracion.ValorInformacionPrincipalFont;
-            labelPaso3_Viaje_Destino_Lugar.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionPrincipalForeColor, labelPaso3_Viaje_Destino_Lugar.ForeColor);
-            labelPaso3_Viaje_Vehiculo.Font = kiosko.KioskoConfiguracion.ValorInformacionPrincipalFont;
-            labelPaso3_Viaje_Vehiculo.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionPrincipalForeColor, labelPaso3_Viaje_Vehiculo.ForeColor);
-
-            labelPaso3_Viaje_Origen_FechaHora.Font = kiosko.KioskoConfiguracion.ValorInformacionSecundariaFont;
-            labelPaso3_Viaje_Origen_FechaHora.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionSecundariaForeColor, labelPaso3_Viaje_Origen_FechaHora.ForeColor);
-            labelPaso3_Viaje_Destino_FechaHora.Font = kiosko.KioskoConfiguracion.ValorInformacionSecundariaFont;
-            labelPaso3_Viaje_Destino_FechaHora.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorInformacionSecundariaForeColor, labelPaso3_Viaje_Destino_FechaHora.ForeColor);
-
-            // Botón anterior
-            buttonPasoAnterior.Font = kiosko.KioskoConfiguracion.ValorButtonPreviousFont;
-            buttonPasoAnterior.BackColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonPreviousBackColor, buttonPasoAnterior.BackColor);
-            buttonPasoAnterior.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonPreviousForeColor, buttonPasoAnterior.ForeColor);
-
-            // Botón siguiente
-            buttonPasoSiguiente.Font = kiosko.KioskoConfiguracion.ValorButtonNextFont;
-            buttonPasoSiguiente.BackColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonNextBackColor, buttonPasoSiguiente.BackColor);
-            buttonPasoSiguiente.ForeColor = SetColor(kiosko.KioskoConfiguracion.ValorButtonNextForeColor, buttonPasoSiguiente.ForeColor);
-
-            // Propiedades del teclado numérico en pantalla
-            keyboardMain.Font = kiosko.KioskoConfiguracion.ValorKeyboardNumericNumberFont;
-
-            InactivityTimeoutSeconds = kiosko.KioskoConfiguracion.ValorInactivityTimeoutSeconds;
-            LugarDuracionPreviaMinimaMinutos = kiosko.KioskoConfiguracion.ValorLugarDuracionPreviaMinimaMinutos;
-            LugarDuracionPreviaMaximaMinutos = kiosko.KioskoConfiguracion.ValorLugarDuracionPreviaMaximaMinutos;
-        }
-
-        private Color SetColor(Color? colorNuevo, Color colorPredeterminado)
-        {
-            if (colorNuevo.HasValue)
-            {
-                return colorNuevo.Value;
-            }
-            else
-            {
-                return colorPredeterminado;
-            }
         }
 
         private void Form_Closing(object sender, FormClosingEventArgs e)
@@ -154,9 +112,9 @@ namespace CSTransporteKiosko
             listPersonasEncontradas = null;
             listPersonasSeleccionadas = null;
 
-            if (kiosko != null && kiosko.KioskoConfiguracion != null)
+            if (kiosko != null && configuracion != null)
             {
-                printer.ReleaseAndClose(kiosko.KioskoConfiguracion.ValorPOSPrinterReleaseTimeoutSeconds);
+                printer.ReleaseAndClose(configuracion.ValorPOSPrinterReleaseTimeoutSeconds);
             }
             else
             {
@@ -187,7 +145,7 @@ namespace CSTransporteKiosko
             {
                 // La Mac Address del Kiosko no está en la base de datos, guardo en el log
                 AgregarEventLog(EventLog.TipoLoginFallido, 0, EventLog.MensajeLoginFallido, String.Format("MAC Address: {0}", macAddress));
-                MessageBox.Show("La MAC Address del Kiosko no está registrada en la base de datos.", kiosko.KioskoConfiguracion);
+                MessageBox.Show("La MAC Address del Kiosko no está registrada en la base de datos.", configuracion);
                 return false;
             }
 
@@ -203,11 +161,11 @@ namespace CSTransporteKiosko
             }
 
             // Cargo la configuración del Kiosko (Logos, Colores, Tipografías, Tiempos, Ticket, etc)
-            if (!kiosko.KioskoConfiguracionCargar(dbLocal.Connection))
+            if (!configuracionCargar(dbLocal.Connection))
             {
                 return false;
             }
-            if (!kiosko.KioskoConfiguracion.KioskoConfiguracionValoresCargar(dbLocal.Connection))
+            if (!configuracion.KioskoConfiguracionValoresCargar(dbLocal.Connection))
             {
                 return false;
             }
@@ -311,43 +269,6 @@ namespace CSTransporteKiosko
             }
         }
 
-#pragma warning disable IDE0060 // Remove unused parameter
-        private void WindowsMediaPlayer_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
-#pragma warning restore IDE0060 // Remove unused parameter
-        {
-            if (e.newState == 8)
-            {
-                wmInicio_Player.Ctlcontrols.stop();
-                wmInicio_Player.Ctlcontrols.play();
-            }
-        }
-
-        private void Click_ToStart()
-        {
-            inactivityTimeout = DateTime.Now;
-            if (pasoActual == 0)
-            {
-                if (wmInicio_Player.playState == WMPLib.WMPPlayState.wmppsPlaying)
-                {
-                    wmInicio_Player.Ctlcontrols.stop();
-                }
-            }
-        }
-
-        private void Click_ToStart(object sender, MouseEventArgs e)
-        {
-            Click_ToStart();
-            AvanzarPaso();
-        }
-
-#pragma warning disable IDE0060 // Remove unused parameter
-        private void Click_ToStart(object sender, AxWMPLib._WMPOCXEvents_ClickEvent e)
-#pragma warning restore IDE0060 // Remove unused parameter
-        {
-            Click_ToStart();
-            AvanzarPaso();
-        }
-
         private void Paso1_Seleccion(object sender, MouseEventArgs e)
         {
             buttonPasoSiguiente.PerformClick();
@@ -435,7 +356,7 @@ namespace CSTransporteKiosko
         {
             //if (radioPaso1_Documento.Checked == false & radioPaso1_Reserva.Checked == false)
             //{
-            //    MessageBox.Show("Debe seleccionar alguna de las opciones de búsqueda.", kiosko.KioskoConfiguracion);
+            //    MessageBox.Show("Debe seleccionar alguna de las opciones de búsqueda.", configuracion);
             //    return false;
             //}
             return true;
@@ -448,7 +369,7 @@ namespace CSTransporteKiosko
             {
                 if (textboxPaso2_Valor.Text.Trim().Length < 6)
                 {
-                    MessageBox.Show("El Nº de Documento debe contener al menos 6 (seis) dígitos.", kiosko.KioskoConfiguracion);
+                    MessageBox.Show("El Nº de Documento debe contener al menos 6 (seis) dígitos.", configuracion);
                     return false;
                 }
             }
@@ -456,7 +377,7 @@ namespace CSTransporteKiosko
             {
                 if (textboxPaso2_Valor.Text.Trim().Length < 8)
                 {
-                    MessageBox.Show("Debe ingresar los 8 (ocho) caracteres del Nº de Reserva.", kiosko.KioskoConfiguracion);
+                    MessageBox.Show("Debe ingresar los 8 (ocho) caracteres del Nº de Reserva.", configuracion);
                     return false;
                 }
             }
@@ -468,7 +389,7 @@ namespace CSTransporteKiosko
         {
             if (tilecontrolPaso3_Pasajeros.CheckedTiles.Length == 0)
             {
-                MessageBox.Show("Debe seleccionar al menos una Persona.", kiosko.KioskoConfiguracion);
+                MessageBox.Show("Debe seleccionar al menos una Persona.", configuracion);
                 return false;
             }
             else
@@ -492,7 +413,7 @@ namespace CSTransporteKiosko
             {
                 mensajeConfirmacion = String.Format("¿Confirma la asistencia de {0} Personas?", tilecontrolPaso3_Pasajeros.CheckedTiles.Length);
             }
-            return MessageBox.ShowDialog(mensajeConfirmacion, kiosko.KioskoConfiguracion);
+            return MessageBox.ShowDialog(mensajeConfirmacion, configuracion);
         }
 
         #endregion
@@ -597,7 +518,7 @@ namespace CSTransporteKiosko
             // Buscar datos en la base de datos
             listPersonasEncontradas.Clear();
 
-            if (busquedaReservas.BuscarViajesPorDocumento(dbEmpresa, kiosko.IdLugar, textboxPaso2_Valor.Text.Trim(), listPersonasEncontradas, kiosko.KioskoConfiguracion))
+            if (busquedaReservas.BuscarViajesPorDocumento(dbEmpresa, kiosko.IdLugar, textboxPaso2_Valor.Text.Trim(), listPersonasEncontradas, configuracion))
             {
                 labelPaso3_Viaje_Origen_Lugar.Text = String.Format("{0} en {1}", listPersonasEncontradas[0].LugarOrigen, listPersonasEncontradas[0].LugarGrupoOrigen);
                 if (listPersonasEncontradas[0].FechaHoraOrigen.Date == DateTime.Now.Date)
@@ -824,7 +745,7 @@ namespace CSTransporteKiosko
                     {
                         PictureBox button = (PictureBox)_panelSeatLayout.GetControlFromPosition(rowAndCol.Column, rowAndCol.Row);
                         button.Tag = VehiculoConfiguracionDetalle.TipoAsientoOcupado;
-                        button.Image = kiosko.KioskoConfiguracion.ValorVehiculoConfiguracionAsientoOcupado;
+                        button.Image = configuracion.ValorVehiculoConfiguracionAsientoOcupado;
                         button = null;
                     }
                 }
@@ -837,26 +758,26 @@ namespace CSTransporteKiosko
             switch (pictureBox.Tag.ToString())
             {
                 case VehiculoConfiguracionDetalle.TipoConductor:
-                    MessageBox.Show("No se puede seleccionar el asiento del Conductor.", kiosko.KioskoConfiguracion);
+                    MessageBox.Show("No se puede seleccionar el asiento del Conductor.", configuracion);
                     break;
                 case VehiculoConfiguracionDetalle.TipoAsientoOcupado:
-                    MessageBox.Show("No se puede seleccionar este asiento ya que se encuentra ocupado.", kiosko.KioskoConfiguracion);
+                    MessageBox.Show("No se puede seleccionar este asiento ya que se encuentra ocupado.", configuracion);
                     break;
                 case VehiculoConfiguracionDetalle.TipoAsiento:
                     if (_SeatsSelected == listPersonasSeleccionadas.Count)
                     {
-                        MessageBox.Show(String.Format("Ya se han seleccionado los {0} asientos.", listPersonasSeleccionadas.Count), kiosko.KioskoConfiguracion);
+                        MessageBox.Show(String.Format("Ya se han seleccionado los {0} asientos.", listPersonasSeleccionadas.Count), configuracion);
                     }
                     else
                     {
                         pictureBox.Tag = VehiculoConfiguracionDetalle.TipoAsientoSeleccionado;
-                        pictureBox.Image = kiosko.KioskoConfiguracion.ValorVehiculoConfiguracionAsientoSeleccionado;
+                        pictureBox.Image = configuracion.ValorVehiculoConfiguracionAsientoSeleccionado;
                         _SeatsSelected++;
                     }
                     break;
                 case VehiculoConfiguracionDetalle.TipoAsientoSeleccionado:
                     pictureBox.Tag = VehiculoConfiguracionDetalle.TipoAsiento;
-                    pictureBox.Image = kiosko.KioskoConfiguracion.ValorVehiculoConfiguracionAsientoLibre;
+                    pictureBox.Image = configuracion.ValorVehiculoConfiguracionAsientoLibre;
                     _SeatsSelected--;
                     break;
                 default:
@@ -892,7 +813,7 @@ namespace CSTransporteKiosko
 
         private bool PreparaImpresora()
         {
-            return printer.GetOpenClaimAndEnable(Properties.Settings.Default.POSPrinterName, kiosko.KioskoConfiguracion.ValorPOSPrinterClaimTimeoutSeconds);
+            return printer.GetOpenClaimAndEnable(Properties.Settings.Default.POSPrinterName, configuracion.ValorPOSPrinterClaimTimeoutSeconds);
         }
 
         private bool OLDImprimirTicket(BusquedaReservas.Persona persona)
