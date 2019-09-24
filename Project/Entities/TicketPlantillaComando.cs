@@ -214,7 +214,7 @@ namespace CSTransporteKiosko
             replacedText = replacedText.Replace("FechaDestino", persona.FechaHoraDestino.ToShortDateString());
             replacedText = replacedText.Replace("HoraDestino", persona.FechaHoraDestino.ToShortTimeString());
 
-            replacedText = replacedText.Replace("Vehiculo", persona.Vehiculo);
+            replacedText = replacedText.Replace("Vehiculo", persona.VehiculoNombre);
 
             replacedText = replacedText.Replace("ApellidoNombre", persona.ApellidoNombre);
             replacedText = replacedText.Replace("Apellido", persona.Apellido);

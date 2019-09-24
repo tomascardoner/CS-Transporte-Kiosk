@@ -30,8 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormWelcome));
             this.panelInicio = new System.Windows.Forms.TableLayoutPanel();
-            this.labelIniciar = new System.Windows.Forms.Label();
             this.wmPlayer = new AxWMPLib.AxWindowsMediaPlayer();
+            this.labelIniciar = new System.Windows.Forms.Label();
             this.panelInicio.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.wmPlayer)).BeginInit();
             this.SuspendLayout();
@@ -51,6 +51,17 @@
             this.panelInicio.Size = new System.Drawing.Size(800, 450);
             this.panelInicio.TabIndex = 6;
             // 
+            // wmPlayer
+            // 
+            this.wmPlayer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wmPlayer.Enabled = true;
+            this.wmPlayer.Location = new System.Drawing.Point(3, 3);
+            this.wmPlayer.Name = "wmPlayer";
+            this.wmPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("wmPlayer.OcxState")));
+            this.wmPlayer.Size = new System.Drawing.Size(794, 394);
+            this.wmPlayer.TabIndex = 1;
+            this.wmPlayer.ClickEvent += new AxWMPLib._WMPOCXEvents_ClickEventHandler(this.wmPlayer_Click);
+            // 
             // labelIniciar
             // 
             this.labelIniciar.AutoSize = true;
@@ -63,17 +74,6 @@
             this.labelIniciar.Text = "Toque la pantalla para comenzar";
             this.labelIniciar.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.labelIniciar.Click += new System.EventHandler(this.labelIniciar_Click);
-            // 
-            // wmPlayer
-            // 
-            this.wmPlayer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wmPlayer.Enabled = true;
-            this.wmPlayer.Location = new System.Drawing.Point(3, 3);
-            this.wmPlayer.Name = "wmPlayer";
-            this.wmPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("wmPlayer.OcxState")));
-            this.wmPlayer.Size = new System.Drawing.Size(794, 394);
-            this.wmPlayer.TabIndex = 1;
-            this.wmPlayer.ClickEvent += new AxWMPLib._WMPOCXEvents_ClickEventHandler(this.wmPlayer_Click);
             // 
             // FormWelcome
             // 

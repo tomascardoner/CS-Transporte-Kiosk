@@ -35,7 +35,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "Paso4";
-            this.Size = new System.Drawing.Size(462, 321);
+            this.Size = new System.Drawing.Size(288, 210);
             this.ResumeLayout(false);
 
         }

@@ -69,7 +69,6 @@
             this.panelPaso3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.panelPaso3.Size = new System.Drawing.Size(832, 499);
             this.panelPaso3.TabIndex = 8;
-            this.panelPaso3.Visible = false;
             // 
             // panelViaje_Personas
             // 
@@ -262,6 +261,7 @@
             this.tilecontrolPasajeros.TextX = 0;
             this.tilecontrolPasajeros.TextY = 0;
             this.tilecontrolPasajeros.UncheckTilesOnClick = false;
+            this.tilecontrolPasajeros.TileClicked += new System.EventHandler<C1.Win.C1Tile.TileEventArgs>(this.ClickEnPasajero);
             // 
             // groupMain
             // 

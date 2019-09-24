@@ -106,7 +106,7 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel panelPaso1;
-        private System.Windows.Forms.RadioButton radioDocumento;
         private System.Windows.Forms.RadioButton radioReserva;
+        private System.Windows.Forms.RadioButton radioDocumento;
     }
 }

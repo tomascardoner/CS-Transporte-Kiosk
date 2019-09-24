@@ -69,20 +69,20 @@ namespace CSTransporteKiosko
 
         #region Public methods
 
-        public Image TipoImagen(ref Kiosko kiosko)
+        public Image TipoImagen(KioskoConfiguracion kioskoConfiguracion)
         {
             switch (_Tipo)
             {
                 case TipoPuerta:
-                    return kiosko.KioskoConfiguracion.ValorVehiculoConfiguracionPuerta;
+                    return kioskoConfiguracion.ValorVehiculoConfiguracionPuerta;
                 case TipoEspacio:
                     return null;
                 case TipoConductor:
-                    return kiosko.KioskoConfiguracion.ValorVehiculoConfiguracionConductor;
+                    return kioskoConfiguracion.ValorVehiculoConfiguracionConductor;
                 case TipoBanio:
                     return null;
                 case TipoAsiento:
-                    return kiosko.KioskoConfiguracion.ValorVehiculoConfiguracionAsientoLibre;
+                    return kioskoConfiguracion.ValorVehiculoConfiguracionAsientoLibre;
                 default:
                     return null;
             }

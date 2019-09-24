@@ -120,7 +120,6 @@
     <Compile Include="Entities\Kiosko.cs" />
     <Compile Include="Entities\KioskoConfiguracion.cs" />
     <Compile Include="Entities\KioskoConfiguracionValor.cs" />
-    <Compile Include="MessageBox.cs" />
     <Compile Include="Steps\Paso1.cs">
       <SubType>UserControl</SubType>
     </Compile>

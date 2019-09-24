@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using CardonerSistemas;
 using System.Windows.Forms;
 
 namespace CSTransporteKiosko
@@ -10,64 +10,37 @@ namespace CSTransporteKiosko
             InitializeComponent();
         }
 
-        public FormMessageBox(string messageText, KioskoConfiguracion configuracion)
+        public void SetAppearance(KioskoConfiguracion configuracion)
         {
-            InitializeComponent();
+            BackColor = Colors.SetColor(configuracion.ValorMessageBoxBackColor, this.BackColor);
 
-            setAppearance(messageText, configuracion);
-
-            labelMessage.Text = messageText;
-        }
-
-        void setAppearance(string messageText, KioskoConfiguracion configuracion)
-        {
-            this.BackColor = SetColor(configuracion.ValorMessageBoxBackColor, this.BackColor);
-
-            labelMessage.ForeColor = SetColor(configuracion.ValorMessageBoxForeColor, labelMessage.ForeColor);
+            labelMessage.ForeColor = Colors.SetColor(configuracion.ValorMessageBoxForeColor, labelMessage.ForeColor);
             labelMessage.Font = configuracion.ValorMessageBoxFont;
 
-            buttonSi.BackColor = SetColor(configuracion.ValorMessageBoxButtonBackColor, buttonSi.BackColor);
-            buttonSi.ForeColor = SetColor(configuracion.ValorMessageBoxButtonForeColor, buttonSi.ForeColor);
+            buttonSi.BackColor = Colors.SetColor(configuracion.ValorMessageBoxButtonBackColor, buttonSi.BackColor);
+            buttonSi.ForeColor = Colors.SetColor(configuracion.ValorMessageBoxButtonForeColor, buttonSi.ForeColor);
             buttonSi.Font = configuracion.ValorMessageBoxButtonFont;
-            buttonSi.Visible = messageText.EndsWith("?");
 
-            buttonAceptar.BackColor = SetColor(configuracion.ValorMessageBoxButtonBackColor, buttonAceptar.BackColor);
-            buttonAceptar.ForeColor = SetColor(configuracion.ValorMessageBoxButtonForeColor, buttonAceptar.ForeColor);
+            buttonAceptar.BackColor = buttonSi.BackColor;
+            buttonAceptar.ForeColor = buttonSi.ForeColor;
             buttonAceptar.Font = configuracion.ValorMessageBoxButtonFont;
-            buttonAceptar.Visible = !messageText.EndsWith("?");
 
-            buttonNo.BackColor = SetColor(configuracion.ValorMessageBoxButtonBackColor, buttonNo.BackColor);
-            buttonNo.ForeColor = SetColor(configuracion.ValorMessageBoxButtonForeColor, buttonNo.ForeColor);
+            buttonNo.BackColor = buttonSi.BackColor;
+            buttonNo.ForeColor = buttonSi.ForeColor;
             buttonNo.Font = configuracion.ValorMessageBoxButtonFont;
+        }
+
+        public DialogResult Show(string messageText)
+        {
+            labelMessage.Text = messageText;
+            buttonSi.Visible = messageText.EndsWith("?");
+            buttonAceptar.Visible = !messageText.EndsWith("?");
             buttonNo.Visible = messageText.EndsWith("?");
+            return this.ShowDialog();
         }
 
-        private Color SetColor(Color? colorNuevo, Color colorPredeterminado)
+        private void ButtonClick(object sender, System.EventArgs e)
         {
-            if (colorNuevo.HasValue)
-            {
-                return colorNuevo.Value;
-            }
-            else
-            {
-                return colorPredeterminado;
-            }
-        }
-
-        private void buttonAceptar_Click(object sender, System.EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void ButtonSi_Click(object sender, System.EventArgs e)
-        {
-            this.DialogResult = DialogResult.Yes;
-            this.Close();
-        }
-
-        private void ButtonNo_Click(object sender, System.EventArgs e)
-        {
-            this.DialogResult = DialogResult.No;
             this.Close();
         }
     }

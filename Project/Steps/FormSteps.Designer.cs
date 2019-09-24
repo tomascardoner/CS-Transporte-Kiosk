@@ -164,7 +164,6 @@
             this.pictureboxPasosLogoCompaniaSoftware.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureboxPasosLogoCompaniaSoftware.TabIndex = 0;
             this.pictureboxPasosLogoCompaniaSoftware.TabStop = false;
-            this.pictureboxPasosLogoCompaniaSoftware.Click += new System.EventHandler(this.SoftwareCompanyClick);
             // 
             // timerMain
             // 
@@ -172,22 +171,19 @@
             this.timerMain.Interval = 1000;
             this.timerMain.Tick += new System.EventHandler(this.TimerMain_Tick);
             // 
-            // FormMain
+            // FormSteps
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(800, 600);
             this.ControlBox = false;
             this.Controls.Add(this.panelPasos);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.KeyPreview = true;
-            this.Name = "FormMain";
+            this.Name = "FormSteps";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Closing);
-            this.Load += new System.EventHandler(this.Form_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyCombinationManager);
             this.panelPasos.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureboxLogoEmpresa)).EndInit();
@@ -209,8 +205,8 @@
         private System.Windows.Forms.Button buttonPasoAnterior;
         private System.Windows.Forms.TableLayoutPanel panelPasosPie;
         private System.Windows.Forms.Label labelPasosVersion;
-        private System.Windows.Forms.Panel panelUser;
         private System.Windows.Forms.PictureBox pictureboxPasosLogoCompaniaSoftware;
+        private System.Windows.Forms.Panel panelUser;
     }
 }
 

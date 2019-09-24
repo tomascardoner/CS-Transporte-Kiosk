@@ -37,6 +37,7 @@
             // buttonAceptar
             // 
             this.buttonAceptar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.buttonAceptar.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.buttonAceptar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAceptar.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
             this.buttonAceptar.Location = new System.Drawing.Point(209, 88);
@@ -45,7 +46,7 @@
             this.buttonAceptar.TabIndex = 0;
             this.buttonAceptar.Text = "Aceptar";
             this.buttonAceptar.UseVisualStyleBackColor = false;
-            this.buttonAceptar.Click += new System.EventHandler(this.buttonAceptar_Click);
+            this.buttonAceptar.Click += new System.EventHandler(this.ButtonClick);
             // 
             // labelMessage
             // 
@@ -68,7 +69,7 @@
             this.buttonSi.TabIndex = 2;
             this.buttonSi.Text = "Si";
             this.buttonSi.UseVisualStyleBackColor = false;
-            this.buttonSi.Click += new System.EventHandler(this.ButtonSi_Click);
+            this.buttonSi.Click += new System.EventHandler(this.ButtonClick);
             // 
             // buttonNo
             // 
@@ -82,7 +83,7 @@
             this.buttonNo.TabIndex = 3;
             this.buttonNo.Text = "No";
             this.buttonNo.UseVisualStyleBackColor = false;
-            this.buttonNo.Click += new System.EventHandler(this.ButtonNo_Click);
+            this.buttonNo.Click += new System.EventHandler(this.ButtonClick);
             // 
             // FormMessageBox
             // 

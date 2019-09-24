@@ -37,7 +37,6 @@
             // 
             // panelPaso2
             // 
-            this.panelPaso2.BackColor = System.Drawing.Color.White;
             this.panelPaso2.ColumnCount = 4;
             this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.panelPaso2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -55,7 +54,6 @@
             this.panelPaso2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.panelPaso2.Size = new System.Drawing.Size(687, 506);
             this.panelPaso2.TabIndex = 7;
-            this.panelPaso2.Visible = false;
             // 
             // labelValor
             // 

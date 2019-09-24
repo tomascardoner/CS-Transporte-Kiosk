@@ -37,11 +37,12 @@ namespace CSTransporteKiosko
             public string LugarDestino { get; set; } = string.Empty;
             public string LugarGrupoDestino { get; set; } = string.Empty;
             public DateTime FechaHoraDestino { get; set; } = DateTime.MinValue;
-            public string Vehiculo { get; set; } = string.Empty;
+            public string VehiculoNombre { get; set; } = string.Empty;
+            public byte IDVehiculoConfiguracion { get; set; } = 0;
             public bool Realizado { get; set; } = false;
         }
 
-        private bool ConectarABaseDeDatos(SQLServer database)
+        static private bool ConectarABaseDeDatos(SQLServer database)
         {
             if (!database.IsConnected())
             {
@@ -53,7 +54,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        public bool CerrarConexionABaseDeDatos(SQLServer database)
+        static public bool CerrarConexionABaseDeDatos(SQLServer database)
         {
             if (!database.IsConnected())
             {
@@ -65,7 +66,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        public bool BuscarViajesPorDocumento(SQLServer database, int idLugar, string Documento, List<BusquedaReservas.Persona> personaList, KioskoConfiguracion configuracion)
+        static public bool BuscarViajesPorDocumento(SQLServer database, int idLugar, string Documento, List<BusquedaReservas.Persona> personas, KioskoConfiguracion configuracion, FormMessageBox messageBox)
         {
             int IDViaje = 0;
             int IDViajeDetalle = 0;
@@ -74,9 +75,9 @@ namespace CSTransporteKiosko
 
             if (ConectarABaseDeDatos(database))
             {
-                if (BuscarReservasPorDocumento(database, idLugar, Documento, ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero, configuracion))
+                if (BuscarReservasPorDocumento(database, idLugar, Documento, ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero, configuracion, messageBox))
                 {
-                    return BuscarPersonasPorReserva(database, IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero, personaList, configuracion);
+                    return BuscarPersonasPorReserva(database, IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero, personas, configuracion, messageBox);
                 }
                 else
                 {
@@ -89,7 +90,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        private bool BuscarReservasPorDocumento(SQLServer database, int idLugar, string documento, ref int idViaje, ref int idViajeDetalle, ref string reservaCodigo, ref byte grupoNumero, KioskoConfiguracion configuracion)
+        static private bool BuscarReservasPorDocumento(SQLServer database, int idLugar, string documento, ref int idViaje, ref int idViajeDetalle, ref string reservaCodigo, ref byte grupoNumero, KioskoConfiguracion configuracion, FormMessageBox messageBox)
         {
             SqlCommand command = new SqlCommand();
             SqlDataReader dataReader;
@@ -123,7 +124,7 @@ namespace CSTransporteKiosko
                 }
                 else
                 {
-                    MessageBox.Show("No se han encontrado reservas.", configuracion);
+                    messageBox.Show("No se han encontrado reservas.");
 
                     dataReader.Close();
                     dataReader = null;
@@ -134,7 +135,7 @@ namespace CSTransporteKiosko
             }
             catch (Exception)
             {
-                MessageBox.Show("No se pudo obtener la información.", configuracion);
+                messageBox.Show("No se pudo obtener la información.");
 
                 command.Dispose();
                 command = null;
@@ -145,7 +146,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        private bool BuscarPersonasPorReserva(SQLServer database, int IDViaje, int IDViajeDetalle, string ReservaCodigo, byte GrupoNumero, List<BusquedaReservas.Persona> personaList, KioskoConfiguracion configuracion)
+        static private bool BuscarPersonasPorReserva(SQLServer database, int IDViaje, int IDViajeDetalle, string ReservaCodigo, byte GrupoNumero, List<BusquedaReservas.Persona> personas, KioskoConfiguracion configuracion, FormMessageBox messageBox)
         {
             SqlCommand command = new SqlCommand();
             SqlDataReader dataReader;
@@ -164,6 +165,7 @@ namespace CSTransporteKiosko
                 command.Dispose();
                 command = null;
 
+                personas.Clear();
                 if (dataReader.HasRows)
                 {
                     while (dataReader.Read())
@@ -183,9 +185,10 @@ namespace CSTransporteKiosko
                         nuevaPersona.LugarDestino = SQLServer.DataReaderGetString(dataReader, "LugarDestino");
                         nuevaPersona.LugarGrupoDestino = SQLServer.DataReaderGetString(dataReader, "LugarGrupoDestino");
                         nuevaPersona.FechaHoraDestino = SQLServer.DataReaderGetDateTime(dataReader, "FechaHoraDestino");
-                        nuevaPersona.Vehiculo = SQLServer.DataReaderGetString(dataReader, "Vehiculo");
+                        nuevaPersona.VehiculoNombre = SQLServer.DataReaderGetString(dataReader, "VehiculoNombre");
+                        nuevaPersona.IDVehiculoConfiguracion = SQLServer.DataReaderGetByteSafeAsMinValue(dataReader, "IDVehiculoConfiguracion");
 
-                        personaList.Add(nuevaPersona);
+                        personas.Add(nuevaPersona);
                         nuevaPersona = null;
                     }
                     dataReader.Close();
@@ -195,7 +198,7 @@ namespace CSTransporteKiosko
                 }
                 else
                 {
-                    MessageBox.Show("No se han encontrado reservas.", configuracion);
+                    messageBox.Show("No se han encontrado reservas.");
                     dataReader.Close();
                     dataReader = null;
                     return false;
@@ -203,7 +206,7 @@ namespace CSTransporteKiosko
             }
             catch (Exception)
             {
-                MessageBox.Show("No se pudo obtener la información.", configuracion);
+                messageBox.Show("No se pudo obtener la información.");
                 command = null;
                 dataReader = null;
                 return false;

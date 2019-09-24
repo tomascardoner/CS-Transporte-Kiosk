@@ -12,12 +12,17 @@ namespace CSTransporteKiosko
 
         public void SetAppearance(KioskoConfiguracion configuracion)
         {
-            // Apariencia
-            this.Icon = Properties.Resources.ICON_APP;
-            this.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorScreenBackColor, this.BackColor);
-            panelInicio.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorInformacionPrincipalForeColor, panelInicio.BackColor);
+            if (!System.Diagnostics.Debugger.IsAttached)
+            {
+                TopLevel = true;
+                TopMost = true;
+            }
+
+            Icon = Properties.Resources.ICON_APP;
+            BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorScreenBackColor, this.BackColor);
+            panelInicio.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorScreenBackColor, panelInicio.BackColor);
             labelIniciar.ForeColor = CardonerSistemas.Colors.SetColor(configuracion.ValorInformacionPrincipalForeColor, labelIniciar.ForeColor);
-            labelIniciar.Font = configuracion.ValorInformacionPrincipalFont;
+            labelIniciar.Font = configuracion.ValorInformacionSecundariaFont;
 
             // Media
             wmPlayer.uiMode = "none";
@@ -36,14 +41,12 @@ namespace CSTransporteKiosko
 
         private void Iniciar()
         {
-            //inactivityTimeout = DateTime.Now;
-            //if (pasoNumero == 0)
-            //{
-            //    if (wmInicio_Player.playState == WMPLib.WMPPlayState.wmppsPlaying)
-            //    {
-            //        wmInicio_Player.Ctlcontrols.stop();
-            //    }
-            //}
+            // Si se está ejecutando el video, lo detengo
+            if (wmPlayer.playState == WMPLib.WMPPlayState.wmppsPlaying)
+            {
+                wmPlayer.Ctlcontrols.stop();
+            }
+            this.Close();
         }
     }
 }
