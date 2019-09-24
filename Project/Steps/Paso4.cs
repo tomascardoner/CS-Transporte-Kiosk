@@ -30,16 +30,33 @@ namespace CSTransporteKiosko
 
         public bool Verificar(ref FormMessageBox messageBox, int cantidadPersonas)
         {
-            string mensajeConfirmacion;
-            if (cantidadPersonas == 1)
+            int asientosPendientesDeSeleccionar = cantidadPersonas - seatsSelected;
+            if (asientosPendientesDeSeleccionar == cantidadPersonas)
             {
-                mensajeConfirmacion = "¿Confirma la asistencia de 1 Persona?";
+                if (cantidadPersonas == 1)
+                {
+                    messageBox.Show("Debe seleccionar el asiento.");
+                }
+                else
+                {
+                    messageBox.Show("Debe seleccionar los asientos.");
+                }
+                return false;
+            }
+            else if (asientosPendientesDeSeleccionar == 1)
+            {
+                messageBox.Show("Falta seleccionar un asiento.");
+                return false;
+            }
+            else if (asientosPendientesDeSeleccionar > 0)
+            {
+                messageBox.Show(String.Format("Faltan seleccionar {0} asientos.", asientosPendientesDeSeleccionar));
+                return false;
             }
             else
             {
-                mensajeConfirmacion = String.Format("¿Confirma la asistencia de {0} Personas?", cantidadPersonas);
+                return true;
             }
-            return (messageBox.Show(mensajeConfirmacion) == DialogResult.Yes);
         }
 
         public bool PrepararParaMostrar(FormMessageBox formMessageBox, SQLServer dbLocal, SQLServer dbEmpresa, KioskoConfiguracion kioskoConfig, byte idVehiculoConfiguracion, int idViaje, int cantidadPersonasSeleccionadas)
@@ -307,26 +324,5 @@ namespace CSTransporteKiosko
 
         #endregion
 
-        //private bool RealizarCheckInEImprimirTicket()
-        //{
-        //    foreach (BusquedaReservas.Persona persona in listPersonasSeleccionadas)
-        //    {
-        //        ViajeDetalle viajeDetalle = new ViajeDetalle();
-        //        if (viajeDetalle.RealizarCheckIn(dbEmpresa.Connection, kiosko.IdEmpresa, persona.IDViajeDetalle))
-        //        {
-        //            viajeDetalle = null;
-        //            if (printer.IsReady)
-        //            {
-        //                return ticket.SendCommandsToPrinter(persona, printer);
-        //            }
-        //            else
-        //            {
-        //                return false;
-        //            }
-        //        }
-        //        viajeDetalle = null;
-        //    }
-        //    return false;
-        //}
     }
 }

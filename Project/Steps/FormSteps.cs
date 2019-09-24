@@ -253,5 +253,37 @@ namespace CSTransporteKiosko
 
         #endregion
 
+        //if (cantidadPersonas == 1)
+        //{
+        //    mensajeConfirmacion = "¿Confirma la asistencia de 1 Persona?";
+        //}
+        //else
+        //{
+        //    mensajeConfirmacion = String.Format("¿Confirma la asistencia de {0} Personas?", cantidadPersonas);
+        //}
+        //return (messageBox.Show(mensajeConfirmacion) == DialogResult.Yes);
+
+        //private bool RealizarCheckInEImprimirTicket()
+        //{
+        //    foreach (BusquedaReservas.Persona persona in listPersonasSeleccionadas)
+        //    {
+        //        ViajeDetalle viajeDetalle = new ViajeDetalle();
+        //        if (viajeDetalle.RealizarCheckIn(dbEmpresa.Connection, kiosko.IdEmpresa, persona.IDViajeDetalle))
+        //        {
+        //            viajeDetalle = null;
+        //            if (printer.IsReady)
+        //            {
+        //                return ticket.SendCommandsToPrinter(persona, printer);
+        //            }
+        //            else
+        //            {
+        //                return false;
+        //            }
+        //        }
+        //        viajeDetalle = null;
+        //    }
+        //    return false;
+        //}
+
     }
 }
