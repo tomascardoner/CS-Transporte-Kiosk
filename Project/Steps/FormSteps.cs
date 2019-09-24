@@ -92,6 +92,11 @@ namespace CSTransporteKiosko
             buttonPasoSiguiente.ForeColor = CardonerSistemas.Colors.SetColor(configuracion.ValorButtonNextForeColor, buttonPasoSiguiente.ForeColor);
 
             inactivityTimeoutSeconds = configuracion.ValorInactivityTimeoutSeconds;
+
+            paso1.SetAppearance(configuracion);
+            paso2.SetAppearance(configuracion);
+            paso3.SetAppearance(configuracion);
+            paso4.SetAppearance(configuracion);
         }
 
         #endregion

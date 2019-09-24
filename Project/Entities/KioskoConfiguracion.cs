@@ -67,6 +67,7 @@ namespace CSTransporteKiosko
         private string IdValorVehiculoConfiguracionAsientoLibre = "VehiculoConfiguracionAsientoLibre";
         private string IdValorVehiculoConfiguracionAsientoSeleccionado = "VehiculoConfiguracionAsientoSeleccionado";
         private string IdValorVehiculoConfiguracionAsientoOcupado = "VehiculoConfiguracionAsientoOcupado";
+        private string IdValorVehiculoConfiguracionCellPadding = "VehiculoConfiguracionCellPadding";
 
         // POS Printer
         private string IdValorPOSPrinterClaimTimeoutSeconds = "POSPrinterClaimTimeoutSeconds";
@@ -181,6 +182,7 @@ namespace CSTransporteKiosko
         public Image ValorVehiculoConfiguracionAsientoSeleccionado { get => GetValorImagenDataAsBitmap(IdValorVehiculoConfiguracionAsientoSeleccionado); }
         public short? ValorVehiculoConfiguracionAsientoOcupadoIdImagen { get => GetValorIdImagen(IdValorVehiculoConfiguracionAsientoOcupado); }
         public Image ValorVehiculoConfiguracionAsientoOcupado { get => GetValorImagenDataAsBitmap(IdValorVehiculoConfiguracionAsientoOcupado); }
+        public byte ValorVehiculoConfiguracionCellPadding { get => GetValorNumeroEnteroAsByte(IdValorVehiculoConfiguracionCellPadding, 0); }
 
         // POS Printer
         public int ValorPOSPrinterClaimTimeoutSeconds { get => GetValorNumeroEnteroAsInteger(IdValorPOSPrinterClaimTimeoutSeconds, 2); }

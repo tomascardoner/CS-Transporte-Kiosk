@@ -28,18 +28,39 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.panelPaso4 = new System.Windows.Forms.TableLayoutPanel();
             this.SuspendLayout();
+            // 
+            // panelPaso4
+            // 
+            this.panelPaso4.ColumnCount = 3;
+            this.panelPaso4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelPaso4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.panelPaso4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelPaso4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelPaso4.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+            this.panelPaso4.Location = new System.Drawing.Point(0, 0);
+            this.panelPaso4.Name = "panelPaso4";
+            this.panelPaso4.RowCount = 3;
+            this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.panelPaso4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.panelPaso4.Size = new System.Drawing.Size(518, 324);
+            this.panelPaso4.TabIndex = 0;
             // 
             // Paso4
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panelPaso4);
             this.Name = "Paso4";
-            this.Size = new System.Drawing.Size(288, 210);
+            this.Size = new System.Drawing.Size(518, 324);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.TableLayoutPanel panelPaso4;
     }
 }

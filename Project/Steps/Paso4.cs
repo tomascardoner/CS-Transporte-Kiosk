@@ -28,6 +28,11 @@ namespace CSTransporteKiosko
             InitializeComponent();
         }
 
+        public void SetAppearance(KioskoConfiguracion configuracion)
+        {
+            panelPaso4.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorScreenBackColor, panelPaso4.BackColor);
+        }
+
         public bool Verificar(ref FormMessageBox messageBox, int cantidadPersonas)
         {
             int asientosPendientesDeSeleccionar = cantidadPersonas - seatsSelected;
@@ -130,8 +135,8 @@ namespace CSTransporteKiosko
             // panelSeatLayout.Dock = DockStyle.Fill;
             panelSeatLayout.Location = new System.Drawing.Point(0, 0);
             panelSeatLayout.TabIndex = 0;
-            Controls.Add(panelSeatLayout);
-            panelSeatLayout.Padding = new Padding(4);
+            panelPaso4.Controls.Add(panelSeatLayout, 1, 1);
+            panelSeatLayout.Padding = new Padding(kioskoConfiguracion.ValorVehiculoConfiguracionCellPadding);
 
             // Prepare rows
             panelSeatLayout.RowCount = vehiculoConfiguracion.UnidadAncho;
@@ -197,11 +202,6 @@ namespace CSTransporteKiosko
 
             // Calcular la altura total
             panelSeatLayout.Height = (panelSeatLayout.RowCount * (panelSeatLayout.Padding.Top + height + panelSeatLayout.Padding.Bottom));
-
-            // Establezco la posición
-            int x = (ClientSize.Width - panelSeatLayout.Width) / 2;
-            int y = (ClientSize.Height - panelSeatLayout.Height) / 2;
-            panelSeatLayout.Location = new System.Drawing.Point(x, y);
         }
 
         private void CreateButtonsSequentially(VehiculoConfiguracion vehiculoConfiguracion)
