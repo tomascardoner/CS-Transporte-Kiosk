@@ -7,6 +7,7 @@ namespace CSTransporteKiosko
 {
     public partial class FormSteps : Form
     {
+
         #region Declaraciones
 
         // Steps components

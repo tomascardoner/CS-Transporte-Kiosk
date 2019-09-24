@@ -22,9 +22,6 @@ namespace CSTransporteKiosko
             SQLServer dbLocal = new SQLServer();
             SQLServer dbEmpresa = new SQLServer();
             Kiosko kiosko = new Kiosko();
-            BusquedaReservas busquedaReservas = new BusquedaReservas();
-            VehiculoConfiguracion vehiculoConfiguracion = new VehiculoConfiguracion();
-            Viaje viaje = new Viaje();
             TicketPlantilla ticket = new TicketPlantilla();
             Printer printer = new Printer();
 
@@ -62,23 +59,12 @@ namespace CSTransporteKiosko
             #region Close and clean-up objects
 
             welcome.Close();
-            welcome.Dispose();
             steps.Close();
-            steps.Dispose();
             messageBox.Close();
-            messageBox.Dispose();
 
             dbLocal.Close();
-            dbLocal = null;
             dbEmpresa.Close();
-            dbEmpresa = null;
-            kiosko = null;
-            busquedaReservas = null;
-            vehiculoConfiguracion = null;
-            viaje = null;
-            ticket = null;
             printer.Close();
-            printer = null;
 
             #endregion
 
@@ -154,11 +140,13 @@ namespace CSTransporteKiosko
 
         static private void AgregarEventLog(ref SQLServer dbLocal, string tipo, byte IdKiosko, string mensaje, string notas)
         {
-            EventLog eventLog = new EventLog();
-            eventLog.Tipo = tipo;
-            eventLog.IdKiosko = IdKiosko;
-            eventLog.Mensaje = mensaje;
-            eventLog.Notas = notas;
+            EventLog eventLog = new EventLog
+            {
+                Tipo = tipo,
+                IdKiosko = IdKiosko,
+                Mensaje = mensaje,
+                Notas = notas
+            };
             eventLog.Agregar(dbLocal.Connection);
         }
 
@@ -189,6 +177,7 @@ namespace CSTransporteKiosko
                 {
                     dbLocal.Password = decryptedPassword;
                 }
+                decrypter.Dispose();
             }
             dbLocal.WorkstationID = "";
             dbLocal.CreateConnectionString();
@@ -214,6 +203,7 @@ namespace CSTransporteKiosko
                 {
                     dbEmpresa.Password = decryptedPassword;
                 }
+                decrypter.Dispose();
             }
             dbEmpresa.WorkstationID = "";
             dbEmpresa.CreateConnectionString();
