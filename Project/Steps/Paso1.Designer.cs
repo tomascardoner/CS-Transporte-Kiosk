@@ -52,43 +52,35 @@
             this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.panelPaso1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.panelPaso1.Size = new System.Drawing.Size(480, 317);
-            this.panelPaso1.TabIndex = 5;
+            this.panelPaso1.TabIndex = 0;
             // 
             // radioDocumento
             // 
             this.radioDocumento.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioDocumento.AutoSize = true;
-            this.radioDocumento.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.radioDocumento.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radioDocumento.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.radioDocumento.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.radioDocumento.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.radioDocumento.Location = new System.Drawing.Point(74, 66);
+            this.radioDocumento.Location = new System.Drawing.Point(157, 66);
             this.radioDocumento.Name = "radioDocumento";
-            this.radioDocumento.Size = new System.Drawing.Size(331, 57);
-            this.radioDocumento.TabIndex = 7;
-            this.radioDocumento.TabStop = true;
+            this.radioDocumento.Size = new System.Drawing.Size(166, 57);
+            this.radioDocumento.TabIndex = 0;
             this.radioDocumento.Text = "Ingresar con Nº de Documento";
             this.radioDocumento.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.radioDocumento.UseVisualStyleBackColor = false;
+            this.radioDocumento.CheckedChanged += new System.EventHandler(this.OpcionSeleccionada);
             // 
             // radioReserva
             // 
             this.radioReserva.Appearance = System.Windows.Forms.Appearance.Button;
             this.radioReserva.AutoSize = true;
-            this.radioReserva.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.radioReserva.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radioReserva.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.radioReserva.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.radioReserva.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.radioReserva.Location = new System.Drawing.Point(74, 192);
+            this.radioReserva.Location = new System.Drawing.Point(157, 192);
             this.radioReserva.Name = "radioReserva";
-            this.radioReserva.Size = new System.Drawing.Size(331, 57);
-            this.radioReserva.TabIndex = 6;
-            this.radioReserva.TabStop = true;
+            this.radioReserva.Size = new System.Drawing.Size(166, 57);
+            this.radioReserva.TabIndex = 1;
             this.radioReserva.Text = "Ingresar con Nº de Reserva";
             this.radioReserva.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.radioReserva.UseVisualStyleBackColor = false;
+            this.radioReserva.CheckedChanged += new System.EventHandler(this.OpcionSeleccionada);
             // 
             // Paso1
             // 

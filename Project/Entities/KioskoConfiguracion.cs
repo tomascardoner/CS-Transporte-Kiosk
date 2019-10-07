@@ -50,6 +50,12 @@ namespace CSTransporteKiosko
         private string IdValorButtonNextBackColor = "ButtonNextBackColor";
         private string IdValorButtonNextForeColor = "ButtonNextForeColor";
 
+        // Búsqueda
+        private string IdValorButtonTipoBusquedaBackColor = "ButtonTipoBusquedaBackColor";
+        private string IdValorButtonTipoBusquedaForeColor = "ButtonTipoBusquedaForeColor";
+        private string IdValorButtonTipoBusquedaFont = "ButtonTipoBusquedaFont";
+        private string IdValorButtonBuscarImagen = "ButtonBuscarImagen";
+
         // Mesage box
         private string IdValorMessageBoxFont = "MessageBoxFont";
         private string IdValorMessageBoxBackColor = "MessageBoxBackColor";
@@ -67,7 +73,7 @@ namespace CSTransporteKiosko
         private string IdValorVehiculoConfiguracionAsientoLibre = "VehiculoConfiguracionAsientoLibre";
         private string IdValorVehiculoConfiguracionAsientoSeleccionado = "VehiculoConfiguracionAsientoSeleccionado";
         private string IdValorVehiculoConfiguracionAsientoOcupado = "VehiculoConfiguracionAsientoOcupado";
-        private string IdValorVehiculoConfiguracionCellPadding = "VehiculoConfiguracionCellPadding";
+        private string IdValorVehiculoConfiguracionCellMargin = "VehiculoConfiguracionCellMargin";
 
         // POS Printer
         private string IdValorPOSPrinterClaimTimeoutSeconds = "POSPrinterClaimTimeoutSeconds";
@@ -152,6 +158,16 @@ namespace CSTransporteKiosko
         public int? ValorButtonNextForeColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorButtonNextForeColor); }
         public Color? ValorButtonNextForeColor { get => GetValorColor(IdValorButtonNextForeColor); }
 
+        // Botones de búsqueda
+        public string ValorButtonTipoBusquedaFontString { get => GetValorString(IdValorButtonTipoBusquedaFont); }
+        public Font ValorButtonTipoBusquedaFont { get => GetValorFont(IdValorButtonTipoBusquedaFont); }
+        public int? ValorButtonTipoBusquedaBackColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorButtonTipoBusquedaBackColor); }
+        public Color? ValorButtonTipoBusquedaBackColor { get => GetValorColor(IdValorButtonTipoBusquedaBackColor); }
+        public int? ValorButtonTipoBusquedaForeColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorButtonTipoBusquedaForeColor); }
+        public Color? ValorButtonTipoBusquedaForeColor { get => GetValorColor(IdValorButtonTipoBusquedaForeColor); }
+        public short? ValorButtonBuscarIdImagen { get => GetValorIdImagen(IdValorButtonBuscarImagen); }
+        public Image ValorButtonBuscarImagen { get => GetValorImagenDataAsBitmap(IdValorButtonBuscarImagen); }
+
         // Mesage box
         public string ValorMessageBoxFontString { get => GetValorString(IdValorMessageBoxFont); }
         public Font ValorMessageBoxFont { get => GetValorFont(IdValorMessageBoxFont); }
@@ -182,7 +198,7 @@ namespace CSTransporteKiosko
         public Image ValorVehiculoConfiguracionAsientoSeleccionado { get => GetValorImagenDataAsBitmap(IdValorVehiculoConfiguracionAsientoSeleccionado); }
         public short? ValorVehiculoConfiguracionAsientoOcupadoIdImagen { get => GetValorIdImagen(IdValorVehiculoConfiguracionAsientoOcupado); }
         public Image ValorVehiculoConfiguracionAsientoOcupado { get => GetValorImagenDataAsBitmap(IdValorVehiculoConfiguracionAsientoOcupado); }
-        public byte ValorVehiculoConfiguracionCellPadding { get => GetValorNumeroEnteroAsByte(IdValorVehiculoConfiguracionCellPadding, 0); }
+        public byte ValorVehiculoConfiguracionCellMargin { get => GetValorNumeroEnteroAsByte(IdValorVehiculoConfiguracionCellMargin, 3); }
 
         // POS Printer
         public int ValorPOSPrinterClaimTimeoutSeconds { get => GetValorNumeroEnteroAsInteger(IdValorPOSPrinterClaimTimeoutSeconds, 2); }

@@ -95,6 +95,9 @@
     <Compile Include="..\..\..\framework-csharp\PointOfSale.Printer.cs">
       <Link>Framework\PointOfSale.Printer.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\framework-csharp\String.cs">
+      <Link>Framework\String.cs</Link>
+    </Compile>
     <Compile Include="BusquedaReservas.cs" />
     <Compile Include="Entities\Empresa.cs" />
     <Compile Include="Entities\EventLog.cs" />

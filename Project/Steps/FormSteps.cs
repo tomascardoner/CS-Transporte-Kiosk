@@ -37,6 +37,7 @@ namespace CSTransporteKiosko
         public FormSteps()
         {
             InitializeComponent();
+            timerMain.Enabled = !System.Diagnostics.Debugger.IsAttached;
             CreateSteps();
         }
 
@@ -47,10 +48,12 @@ namespace CSTransporteKiosko
             paso1 = new Paso1();
             panelUser.Controls.Add(paso1);
             paso1.Dock = DockStyle.Fill;
+            paso1.TipoBusquedaCambiada += ButtonPasoSiguiente_Click;
 
             paso2 = new Paso2();
             panelUser.Controls.Add(paso2);
             paso2.Dock = DockStyle.Fill;
+            paso2.SearchButtonPressed += ButtonPasoSiguiente_Click;
 
             paso3 = new Paso3();
             panelUser.Controls.Add(paso3);
@@ -111,18 +114,6 @@ namespace CSTransporteKiosko
             }
         }
 
-        private void ButtonPasoSiguiente_Click(object sender, EventArgs e)
-        {
-            RegistrarActividad();
-            AvanzarPaso();
-        }
-
-        private void ButtonPasoAnterior_Click(object sender, EventArgs e)
-        {
-            RegistrarActividad();
-            RetrocederPaso();
-        }
-
         private void TimerMain_Tick(object sender, EventArgs e)
         {
             if ((DateTime.Now - lastActivityDateTime).TotalSeconds >= inactivityTimeoutSeconds)
@@ -139,6 +130,18 @@ namespace CSTransporteKiosko
         #endregion
 
         #region Avance de Pasos
+
+        private void ButtonPasoAnterior_Click(object sender, EventArgs e)
+        {
+            RegistrarActividad();
+            RetrocederPaso();
+        }
+
+        private void ButtonPasoSiguiente_Click(object sender, EventArgs e)
+        {
+            RegistrarActividad();
+            AvanzarPaso();
+        }
 
         internal void PrepararParaMostrar(SQLServer databaseLocal, SQLServer databaseEmpresa, Kiosko kioskoObj, FormMessageBox formMessageBox)
         {
@@ -160,9 +163,19 @@ namespace CSTransporteKiosko
                 case 2: // Introducción de los datos a buscar y búsqueda
                     if (paso2.Verificar(ref messageBox))
                     {
-                        return BusquedaReservas.BuscarViajesPorDocumento(dbEmpresa, kiosko.IdLugar, paso2.ValorIngresado, personas, kiosko.KioskoConfiguracion, messageBox);
+                        if (paso1.BusquedaPorDocumento)
+                        {
+                            return BusquedaReservas.BuscarViajesPorDocumento(dbEmpresa, kiosko.IdLugar, paso2.ValorIngresado, personas, kiosko.KioskoConfiguracion, messageBox);
+                        }
+                        else
+                        {
+                            return BusquedaReservas.BuscarViajesPorReserva(dbEmpresa, kiosko.IdLugar, paso2.ValorIngresado, personas, kiosko.KioskoConfiguracion, messageBox);
+                        }
                     }
-                    return false;
+                    else
+                    {
+                        return false;
+                    }
 
                 case 3: // Selección de Pasajeros
                     return paso3.Verificar(ref messageBox);
@@ -235,7 +248,7 @@ namespace CSTransporteKiosko
                     paso3.PrepararParaMostrar(personas);
                     break;
                 case 4:
-                    paso4.PrepararParaMostrar(messageBox, dbLocal, dbEmpresa, kiosko.KioskoConfiguracion, personas[0].IDVehiculoConfiguracion, personas[0].IDViaje, paso3.PersonasSeleccionadas.Count);
+                    paso4.PrepararParaMostrar(messageBox, dbLocal, dbEmpresa, kiosko.KioskoConfiguracion, personas[0].IDVehiculoConfiguracion, personas[0].IDViaje, paso3.PersonasSeleccionadas);
                     break;
                 default:
                     break;
@@ -244,8 +257,8 @@ namespace CSTransporteKiosko
             paso2.Visible = (pasoActual == 2);
             paso3.Visible = (pasoActual == 3);
             paso4.Visible = (pasoActual == 4);
-            buttonPasoAnterior.Visible = (pasoActual > 0);
-            buttonPasoSiguiente.Visible = (pasoActual > 0);
+            buttonPasoAnterior.Visible = (pasoActual > 1);
+            buttonPasoSiguiente.Visible = (pasoActual > 2);
             if (pasoActual <= 3)
             {
                 buttonPasoSiguiente.Text = "Siguiente";

@@ -66,23 +66,35 @@ namespace CSTransporteKiosko
             }
         }
 
-        static public bool BuscarViajesPorDocumento(SQLServer database, int idLugar, string Documento, List<BusquedaReservas.Persona> personas, KioskoConfiguracion configuracion, FormMessageBox messageBox)
+        static public bool BuscarViajesPorDocumento(SQLServer database, int idLugar, string documentoNumero, List<BusquedaReservas.Persona> personas, KioskoConfiguracion configuracion, FormMessageBox messageBox)
         {
-            int IDViaje = 0;
-            int IDViajeDetalle = 0;
-            string ReservaCodigo = null;
-            byte GrupoNumero = 0;
+            int idViaje = 0;
+            int idViajeDetalle = 0;
+            string reservaCodigo = null;
+            byte grupoNumero = 0;
 
             if (ConectarABaseDeDatos(database))
             {
-                if (BuscarReservasPorDocumento(database, idLugar, Documento, ref IDViaje, ref IDViajeDetalle, ref ReservaCodigo, ref GrupoNumero, configuracion, messageBox))
+                if (BuscarReservasPorDocumento(database, idLugar, documentoNumero, ref idViaje, ref idViajeDetalle, ref reservaCodigo, ref grupoNumero, configuracion, messageBox))
                 {
-                    return BuscarPersonasPorReserva(database, IDViaje, IDViajeDetalle, ReservaCodigo, GrupoNumero, personas, configuracion, messageBox);
+                    return BuscarPersonasPorReserva(database, idViaje, idViajeDetalle, reservaCodigo, grupoNumero, personas, configuracion, messageBox);
                 }
                 else
                 {
                     return false;
                 }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        static public bool BuscarViajesPorReserva(SQLServer database, int idLugar, string reservaNumero, List<BusquedaReservas.Persona> personas, KioskoConfiguracion configuracion, FormMessageBox messageBox)
+        {
+            if (ConectarABaseDeDatos(database))
+            {
+                return BuscarPersonasPorReserva(database, 0, 0, reservaNumero, 0, personas, configuracion, messageBox);
             }
             else
             {

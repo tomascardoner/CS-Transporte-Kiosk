@@ -7,8 +7,12 @@ namespace CSTransporteKiosko
 {
     public partial class Paso4 : UserControl
     {
+
+        #region Declarations
+
         private FormMessageBox messageBox;
         private KioskoConfiguracion kioskoConfiguracion;
+        private List<BusquedaReservas.Persona> personas;
         private int cantidadAsientosASeleccionar;
 
         private const string SeatNamePrefix = "buttonSeat";
@@ -21,7 +25,11 @@ namespace CSTransporteKiosko
             public int Column;
         }
         private Dictionary<string, SeatRowAndCol> seatsMap = new Dictionary<string, SeatRowAndCol>();
-        private int seatsSelected = 0;
+        private List<string> seatsSelected = new List<string>();
+
+        #endregion
+
+        #region Main functions
 
         public Paso4()
         {
@@ -31,11 +39,14 @@ namespace CSTransporteKiosko
         public void SetAppearance(KioskoConfiguracion configuracion)
         {
             panelPaso4.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorScreenBackColor, panelPaso4.BackColor);
+
+            labelEncabezadoPasajeros.Font = configuracion.ValorInformacionPrincipalFont;
+            labelEnbezadoAsientos.Font = labelEncabezadoPasajeros.Font;
         }
 
         public bool Verificar(ref FormMessageBox messageBox, int cantidadPersonas)
         {
-            int asientosPendientesDeSeleccionar = cantidadPersonas - seatsSelected;
+            int asientosPendientesDeSeleccionar = cantidadPersonas - seatsSelected.Count;
             if (asientosPendientesDeSeleccionar == cantidadPersonas)
             {
                 if (cantidadPersonas == 1)
@@ -64,13 +75,14 @@ namespace CSTransporteKiosko
             }
         }
 
-        public bool PrepararParaMostrar(FormMessageBox formMessageBox, SQLServer dbLocal, SQLServer dbEmpresa, KioskoConfiguracion kioskoConfig, byte idVehiculoConfiguracion, int idViaje, int cantidadPersonasSeleccionadas)
+        public bool PrepararParaMostrar(FormMessageBox formMessageBox, SQLServer dbLocal, SQLServer dbEmpresa, KioskoConfiguracion kioskoConfig, byte idVehiculoConfiguracion, int idViaje, List<BusquedaReservas.Persona> personasSeleccionadas)
         {
             messageBox = formMessageBox;
             kioskoConfiguracion = kioskoConfig;
             VehiculoConfiguracion vehiculoConfiguracion = new VehiculoConfiguracion();
             Viaje viaje = new Viaje();
-            cantidadAsientosASeleccionar = cantidadPersonasSeleccionadas;
+            personas = personasSeleccionadas;
+            cantidadAsientosASeleccionar = personasSeleccionadas.Count;
 
             // Cargo la configuración del Vehículo
             if (!vehiculoConfiguracion.CargarPorID(dbLocal.Connection, idVehiculoConfiguracion))
@@ -95,8 +107,12 @@ namespace CSTransporteKiosko
             // Creo el mapa de asientos y marco los ocupados
             CreateLayout(vehiculoConfiguracion);
             ShowOccupation(viaje);
+            TablaAsignacionCrearPasajeros();
+
             return true;
         }
+
+        #endregion
 
         #region Layout
 
@@ -125,6 +141,8 @@ namespace CSTransporteKiosko
 
                 panelSeatLayout.Dispose();
             }
+            seatsMap.Clear();
+            seatsSelected.Clear();
         }
 
         private void CreatePanel(VehiculoConfiguracion vehiculoConfiguracion)
@@ -132,11 +150,10 @@ namespace CSTransporteKiosko
             // Create the TableLayoutPanel
             panelSeatLayout = new TableLayoutPanel();
             panelSeatLayout.Name = "panelLayout";
-            // panelSeatLayout.Dock = DockStyle.Fill;
             panelSeatLayout.Location = new System.Drawing.Point(0, 0);
             panelSeatLayout.TabIndex = 0;
-            panelPaso4.Controls.Add(panelSeatLayout, 1, 1);
-            panelSeatLayout.Padding = new Padding(kioskoConfiguracion.ValorVehiculoConfiguracionCellPadding);
+            panelSeatLayoutBorder.Controls.Add(panelSeatLayout);
+            panelSeatLayoutBorder.BorderStyle = BorderStyle.FixedSingle;
 
             // Prepare rows
             panelSeatLayout.RowCount = vehiculoConfiguracion.UnidadAncho;
@@ -247,10 +264,11 @@ namespace CSTransporteKiosko
         private void CreateButton(int row, int column, VehiculoConfiguracionDetalle detalle)
         {
             PictureBox button = new PictureBox();
-            button.Name = string.Format("{0}{1}{2}{3}{4}", SeatNamePrefix, SeatNameRowPrefix, row, SeatNameColumnPrefix, column);
-            button.Tag = detalle.Tipo;
+            button.Name = String.Format("{0}{1}{2}{3}{4}", SeatNamePrefix, SeatNameRowPrefix, row, SeatNameColumnPrefix, column);
+            button.Tag = String.Format("{0}|{1}", detalle.Tipo, detalle.AsientoIdentificacion);
             button.Image = detalle.TipoImagen(kioskoConfiguracion);
             button.SizeMode = PictureBoxSizeMode.Zoom;
+            button.Margin = new Padding(kioskoConfiguracion.ValorVehiculoConfiguracionCellMargin);
             panelSeatLayout.Controls.Add(button, column, row);
             button.Dock = DockStyle.Fill;
             button.MouseUp += Seat_Select;
@@ -281,8 +299,8 @@ namespace CSTransporteKiosko
                     if (seatsMap.TryGetValue(detalle.AsientoIdentificacion, out rowAndCol))
                     {
                         PictureBox button = (PictureBox)panelSeatLayout.GetControlFromPosition(rowAndCol.Column, rowAndCol.Row);
-                        button.Tag = VehiculoConfiguracionDetalle.TipoAsientoOcupado;
                         button.Image = kioskoConfiguracion.ValorVehiculoConfiguracionAsientoOcupado;
+                        button.Tag = String.Format("{0}|{1}", VehiculoConfiguracionDetalle.TipoAsientoOcupado, detalle.AsientoIdentificacion);
                         button = null;
                     }
                 }
@@ -292,7 +310,9 @@ namespace CSTransporteKiosko
         private void Seat_Select(object sender, MouseEventArgs e)
         {
             PictureBox pictureBox = (PictureBox)sender;
-            switch (pictureBox.Tag.ToString())
+            string tipo = CardonerSistemas.String.GetSubString(pictureBox.Tag.ToString(), 0, "|");
+            string asiento = CardonerSistemas.String.GetSubString(pictureBox.Tag.ToString(), 1, "|");
+            switch (tipo)
             {
                 case VehiculoConfiguracionDetalle.TipoConductor:
                     messageBox.Show("No se puede seleccionar el asiento del Conductor.");
@@ -301,25 +321,102 @@ namespace CSTransporteKiosko
                     messageBox.Show("No se puede seleccionar este asiento ya que se encuentra ocupado.");
                     break;
                 case VehiculoConfiguracionDetalle.TipoAsiento:
-                    if (seatsSelected == cantidadAsientosASeleccionar)
+                    if (seatsSelected.Count == cantidadAsientosASeleccionar)
                     {
-                        messageBox.Show(String.Format("Ya se han seleccionado los {0} asientos.", cantidadAsientosASeleccionar));
+                        if (cantidadAsientosASeleccionar == 1)
+                        {
+                            messageBox.Show("Ya se ha seleccionado el asiento. Para cambiarlo, toque en el asiento asignado.");
+                        }
+                        else
+                        {
+                            messageBox.Show(String.Format("Ya se han seleccionado los {0} asientos.", cantidadAsientosASeleccionar));
+                        }
                     }
                     else
                     {
-                        pictureBox.Tag = VehiculoConfiguracionDetalle.TipoAsientoSeleccionado;
                         pictureBox.Image = kioskoConfiguracion.ValorVehiculoConfiguracionAsientoSeleccionado;
-                        seatsSelected++;
+                        pictureBox.Tag = String.Format("{0}|{1}", VehiculoConfiguracionDetalle.TipoAsientoSeleccionado, asiento);
+                        seatsSelected.Add(asiento);
+                        TablaAsignacionAgregarAsiento(asiento);
                     }
                     break;
                 case VehiculoConfiguracionDetalle.TipoAsientoSeleccionado:
-                    pictureBox.Tag = VehiculoConfiguracionDetalle.TipoAsiento;
                     pictureBox.Image = kioskoConfiguracion.ValorVehiculoConfiguracionAsientoLibre;
-                    seatsSelected--;
+                    pictureBox.Tag = String.Format("{0}|{1}", VehiculoConfiguracionDetalle.TipoAsiento, asiento);
+                    seatsSelected.RemoveAt(seatsSelected.Count -1);
+                    TablaAsignacionBorrarUltimoAsiento();
                     break;
                 default:
                     break;
             }
+        }
+
+        #endregion
+
+        #region Seats assignation table
+
+        private void TablaAsignacionVaciar()
+        {
+            for (int row = 1, j = panelPasajerosAsientos.RowCount; row < j; row++)
+            {
+                // Eliminar label del pasajero
+                Label pasajero = (Label)panelPasajerosAsientos.GetControlFromPosition(0, row);
+                if (pasajero != null)
+                {
+                    panelPasajerosAsientos.Controls.Remove(pasajero);
+                    pasajero.Dispose();
+                    pasajero = null;
+                }
+
+                // Eliminar label del asiento
+                Label asiento = (Label)panelPasajerosAsientos.GetControlFromPosition(0, row);
+                if (asiento != null)
+                { 
+                    panelPasajerosAsientos.Controls.Remove(asiento);
+                    asiento.Dispose();
+                    asiento = null;
+                }
+            }
+            panelPasajerosAsientos.RowCount = 1;
+        }
+
+        private void TablaAsignacionCrearPasajeros()
+        {
+            TablaAsignacionVaciar();
+
+            // Completo la tabla de asignación de asientos con los nombres de los pasajeros
+            foreach (BusquedaReservas.Persona persona in personas)
+            {
+                panelPasajerosAsientos.RowCount++;
+
+                // Pasajero
+                Label labelPasajero = new Label();
+                panelPasajerosAsientos.Controls.Add(labelPasajero, 0, panelPasajerosAsientos.RowCount - 1);
+                labelPasajero.Text = persona.ApellidoNombre;
+                labelPasajero.Font = kioskoConfiguracion.ValorInformacionSecundariaFont;
+                labelPasajero.AutoSize = true;
+                labelPasajero.Dock = DockStyle.Fill;
+
+                // Asiento
+                Label labelAsiento = new Label();
+                panelPasajerosAsientos.Controls.Add(labelAsiento, 1, panelPasajerosAsientos.RowCount - 1);
+                labelAsiento.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+                labelAsiento.Font = kioskoConfiguracion.ValorInformacionSecundariaFont;
+                labelAsiento.AutoSize = true;
+                labelAsiento.Dock = DockStyle.Fill;
+            }
+        }
+
+        private void TablaAsignacionAgregarAsiento(string asiento)
+        {
+            Label asientoLabel = (Label)panelPasajerosAsientos.GetControlFromPosition(1, seatsSelected.Count);
+            asientoLabel.Text = asiento;
+        }
+
+        private void TablaAsignacionBorrarUltimoAsiento()
+        {
+            Label asientoLabel = (Label)panelPasajerosAsientos.GetControlFromPosition(1, seatsSelected.Count + 1);
+            asientoLabel.Text = "";
         }
 
         #endregion

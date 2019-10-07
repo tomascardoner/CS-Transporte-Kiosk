@@ -1,9 +1,11 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace CSTransporteKiosko
 {
     public partial class Paso1 : UserControl
     {
+        public event EventHandler TipoBusquedaCambiada;
         public  bool BusquedaPorDocumento { get => radioDocumento.Checked; }
 
         public Paso1()
@@ -15,13 +17,13 @@ namespace CSTransporteKiosko
         {
             panelPaso1.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorScreenBackColor, BackColor);
 
-            radioDocumento.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorInformacionPrincipalForeColor, radioDocumento.BackColor);
-            radioDocumento.ForeColor = CardonerSistemas.Colors.SetColor(configuracion.ValorInformacionPrincipalForeColor, radioDocumento.ForeColor);
-            radioDocumento.Font = configuracion.ValorInformacionPrincipalFont;
+            radioDocumento.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorButtonTipoBusquedaBackColor, radioDocumento.BackColor);
+            radioDocumento.ForeColor = CardonerSistemas.Colors.SetColor(configuracion.ValorButtonTipoBusquedaForeColor, radioDocumento.ForeColor);
+            radioDocumento.Font = configuracion.ValorButtonTipoBusquedaFont;
 
             radioReserva.BackColor = radioDocumento.BackColor;
             radioReserva.ForeColor = radioDocumento.ForeColor;
-            radioReserva.Font = configuracion.ValorInformacionPrincipalFont;
+            radioReserva.Font = radioDocumento.Font;
         }
 
         public void PrepararParaMostrar()
@@ -32,7 +34,7 @@ namespace CSTransporteKiosko
 
         public bool Verificar(ref FormMessageBox messageBox)
         {
-            if (radioDocumento.Checked | radioReserva.Checked)
+            if (radioDocumento.Checked || radioReserva.Checked)
             {
                 return true;
             }
@@ -40,6 +42,15 @@ namespace CSTransporteKiosko
             {
                 messageBox.Show("Debe seleccionar alguna de las opciones de búsqueda.");
                 return false;
+            }
+        }
+
+        private void OpcionSeleccionada(object sender, System.EventArgs e)
+        {
+            RadioButton radioButton = (RadioButton)sender;
+            if (TipoBusquedaCambiada != null && radioButton.Checked)
+            {
+                TipoBusquedaCambiada(this, e);
             }
         }
     }

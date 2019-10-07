@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace CSTransporteKiosko
 {
@@ -6,6 +7,7 @@ namespace CSTransporteKiosko
     {
         bool buscarPorDocumento;
 
+        public event EventHandler SearchButtonPressed;
         public string ValorIngresado { get => textboxValor.Text.Trim(); }
 
         public Paso2()
@@ -22,6 +24,11 @@ namespace CSTransporteKiosko
             //textboxValor.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorScreenBackColor, textboxValor.BackColor);
             //textboxValor.ForeColor =
             textboxValor.Font = configuracion.ValorInformacionPrincipalFont;
+
+            buttonBuscar.Image = configuracion.ValorButtonBuscarImagen;
+            buttonBuscar.Font = configuracion.ValorMessageBoxButtonFont;
+            buttonBuscar.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorMessageBoxButtonBackColor, buttonBuscar.BackColor);
+            buttonBuscar.ForeColor = CardonerSistemas.Colors.SetColor(configuracion.ValorMessageBoxButtonForeColor, buttonBuscar.ForeColor);
 
             keyboardMain.Font = configuracion.ValorKeyboardFont;
         }
@@ -65,6 +72,11 @@ namespace CSTransporteKiosko
                 }
             }
             return true;
+        }
+
+        private void buttonBuscar_Click(object sender, EventArgs e)
+        {
+            SearchButtonPressed(this, e);
         }
     }
 }
