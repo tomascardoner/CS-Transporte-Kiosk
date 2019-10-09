@@ -74,6 +74,10 @@ namespace CSTransporteKiosko
         private string IdValorVehiculoConfiguracionAsientoSeleccionado = "VehiculoConfiguracionAsientoSeleccionado";
         private string IdValorVehiculoConfiguracionAsientoOcupado = "VehiculoConfiguracionAsientoOcupado";
         private string IdValorVehiculoConfiguracionCellMargin = "VehiculoConfiguracionCellMargin";
+        private string IdValorVehiculoConfiguracionAsientoIdentificacionFont = "VehiculoConfiguracionAsientoIdentificacionFont";
+        private string IdValorVehiculoConfiguracionAsientoIdentificacionForeColor = "VehiculoConfiguracionAsientoIdentificacionForeColor";
+        private string IdValorVehiculoConfiguracionAsientoIdentificacionPosicionX = "VehiculoConfiguracionAsientoIdentificacionPosicionX";
+        private string IdValorVehiculoConfiguracionAsientoIdentificacionPosicionY = "VehiculoConfiguracionAsientoIdentificacionPosicionY";
 
         // POS Printer
         private string IdValorPOSPrinterClaimTimeoutSeconds = "POSPrinterClaimTimeoutSeconds";
@@ -199,6 +203,12 @@ namespace CSTransporteKiosko
         public short? ValorVehiculoConfiguracionAsientoOcupadoIdImagen { get => GetValorIdImagen(IdValorVehiculoConfiguracionAsientoOcupado); }
         public Image ValorVehiculoConfiguracionAsientoOcupado { get => GetValorImagenDataAsBitmap(IdValorVehiculoConfiguracionAsientoOcupado); }
         public byte ValorVehiculoConfiguracionCellMargin { get => GetValorNumeroEnteroAsByte(IdValorVehiculoConfiguracionCellMargin, 3); }
+        public string ValorVehiculoConfiguracionAsientoIdentificacionFontString { get => GetValorString(IdValorVehiculoConfiguracionAsientoIdentificacionFont); }
+        public Font ValorVehiculoConfiguracionAsientoIdentificacionFont { get => GetValorFont(IdValorVehiculoConfiguracionAsientoIdentificacionFont); }
+        public int? ValorVehiculoConfiguracionAsientoIdentificacionForeColorAsInteger { get => GetValorNumeroEnteroAsInteger(IdValorVehiculoConfiguracionAsientoIdentificacionForeColor); }
+        public Color? ValorVehiculoConfiguracionAsientoIdentificacionForeColor { get => GetValorColor(IdValorVehiculoConfiguracionAsientoIdentificacionForeColor); }
+        public int ValorVehiculoConfiguracionAsientoIdentificacionPosicionX { get => GetValorNumeroEnteroAsInteger(IdValorVehiculoConfiguracionAsientoIdentificacionPosicionX, 0); }
+        public int ValorVehiculoConfiguracionAsientoIdentificacionPosicionY { get => GetValorNumeroEnteroAsInteger(IdValorVehiculoConfiguracionAsientoIdentificacionPosicionY, 0); }
 
         // POS Printer
         public int ValorPOSPrinterClaimTimeoutSeconds { get => GetValorNumeroEnteroAsInteger(IdValorPOSPrinterClaimTimeoutSeconds, 2); }

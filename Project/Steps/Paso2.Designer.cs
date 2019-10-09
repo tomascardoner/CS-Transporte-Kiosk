@@ -86,6 +86,7 @@
             // textboxValor
             // 
             this.textboxValor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.textboxValor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textboxValor.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.textboxValor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textboxValor.Enabled = false;
@@ -96,6 +97,7 @@
             this.textboxValor.Size = new System.Drawing.Size(141, 35);
             this.textboxValor.TabIndex = 3;
             this.textboxValor.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textboxValor.WordWrap = false;
             // 
             // panelValorYBusqueda
             // 

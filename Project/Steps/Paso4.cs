@@ -1,6 +1,8 @@
 ﻿using CardonerSistemas.Database.ADO;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace CSTransporteKiosko
@@ -15,6 +17,7 @@ namespace CSTransporteKiosko
         private List<BusquedaReservas.Persona> personas;
         private int cantidadAsientosASeleccionar;
 
+        // Seats layout
         private const string SeatNamePrefix = "buttonSeat";
         private const string SeatNameRowPrefix = "R";
         private const string SeatNameColumnPrefix = "C";
@@ -25,7 +28,10 @@ namespace CSTransporteKiosko
             public int Column;
         }
         private Dictionary<string, SeatRowAndCol> seatsMap = new Dictionary<string, SeatRowAndCol>();
-        private List<string> seatsSelected = new List<string>();
+
+        // Seats assignation table
+        private TableLayoutPanel panelSeatsAssignation;
+        private Dictionary<string, int> seatsAssignation = new Dictionary<string, int>();
 
         #endregion
 
@@ -39,14 +45,11 @@ namespace CSTransporteKiosko
         public void SetAppearance(KioskoConfiguracion configuracion)
         {
             panelPaso4.BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorScreenBackColor, panelPaso4.BackColor);
-
-            labelEncabezadoPasajeros.Font = configuracion.ValorInformacionPrincipalFont;
-            labelEnbezadoAsientos.Font = labelEncabezadoPasajeros.Font;
         }
 
         public bool Verificar(ref FormMessageBox messageBox, int cantidadPersonas)
         {
-            int asientosPendientesDeSeleccionar = cantidadPersonas - seatsSelected.Count;
+            int asientosPendientesDeSeleccionar = cantidadPersonas - seatsAssignation.Count;
             if (asientosPendientesDeSeleccionar == cantidadPersonas)
             {
                 if (cantidadPersonas == 1)
@@ -105,34 +108,34 @@ namespace CSTransporteKiosko
             }
 
             // Creo el mapa de asientos y marco los ocupados
-            CreateLayout(vehiculoConfiguracion);
+            CreateSeatsLayout(vehiculoConfiguracion);
             ShowOccupation(viaje);
-            TablaAsignacionCrearPasajeros();
+            CreateSeatsAssignationTable();
 
             return true;
         }
 
         #endregion
 
-        #region Layout
+        #region Seats Layout
 
-        private void CreateLayout(VehiculoConfiguracion vehiculoConfiguracion)
+        private void CreateSeatsLayout(VehiculoConfiguracion vehiculoConfiguracion)
         {
             SuspendLayout();
 
-            DestroyPreviousLayout();
-            CreatePanel(vehiculoConfiguracion);
-            CreateButtonsSequentially(vehiculoConfiguracion);
-            // CreateButtonsIndexed(vehiculoConfiguracion);
+            DestroyPreviousSeatsLayout();
+            CreateSeatsPanel(vehiculoConfiguracion);
+            CreateSeatsButtonsSequentially(vehiculoConfiguracion);
+            // CreateSeatsButtonsIndexed(vehiculoConfiguracion);
 
             ResumeLayout();
         }
 
-        private void DestroyPreviousLayout()
+        private void DestroyPreviousSeatsLayout()
         {
             if (panelSeatLayout != null)
             {
-                // Clean old keyboard keys
+                // Clean old seats buttons
                 foreach (Control button in panelSeatLayout.Controls)
                 {
                     panelSeatLayout.Controls.Remove(button);
@@ -142,10 +145,9 @@ namespace CSTransporteKiosko
                 panelSeatLayout.Dispose();
             }
             seatsMap.Clear();
-            seatsSelected.Clear();
         }
 
-        private void CreatePanel(VehiculoConfiguracion vehiculoConfiguracion)
+        private void CreateSeatsPanel(VehiculoConfiguracion vehiculoConfiguracion)
         {
             // Create the TableLayoutPanel
             panelSeatLayout = new TableLayoutPanel();
@@ -171,10 +173,10 @@ namespace CSTransporteKiosko
                 panelSeatLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, width));
             }
 
-            ResizeAndPositionPanel();
+            ResizeAndPositionSeatsPanel();
         }
 
-        private void ResizeAndPositionPanel()
+        private void ResizeAndPositionSeatsPanel()
         {
             // Obtener el ancho máximo de las imágenes
             int width = kioskoConfiguracion.ValorVehiculoConfiguracionPuerta.Width;
@@ -221,7 +223,7 @@ namespace CSTransporteKiosko
             panelSeatLayout.Height = (panelSeatLayout.RowCount * (panelSeatLayout.Padding.Top + height + panelSeatLayout.Padding.Bottom));
         }
 
-        private void CreateButtonsSequentially(VehiculoConfiguracion vehiculoConfiguracion)
+        private void CreateSeatsButtonsSequentially(VehiculoConfiguracion vehiculoConfiguracion)
         {
             int row = 0;
             int column = 0;
@@ -230,7 +232,7 @@ namespace CSTransporteKiosko
             {
                 if (detalle.Tipo != VehiculoConfiguracionDetalle.TipoEspacio)
                 {
-                    CreateButton(row, column, detalle);
+                    CreateSeatButton(row, column, detalle);
                 }
 
                 // Increment position variables
@@ -243,7 +245,7 @@ namespace CSTransporteKiosko
             }
         }
 
-        private void CreateButtonsIndexed(VehiculoConfiguracion vehiculoConfiguracion)
+        private void CreateSeatsButtonsIndexed(VehiculoConfiguracion vehiculoConfiguracion)
         {
             // Rows
             for (int row = 0; row < panelSeatLayout.RowCount; row++)
@@ -255,13 +257,13 @@ namespace CSTransporteKiosko
                     VehiculoConfiguracionDetalle detalle = vehiculoConfiguracion.VehiculoConfiguracionDetalles.Find(vcd => vcd.IdDetalle == idDetalle);
                     if (detalle != null)
                     {
-                        CreateButton(row, column, detalle);
+                        CreateSeatButton(row, column, detalle);
                     }
                 }
             }
         }
 
-        private void CreateButton(int row, int column, VehiculoConfiguracionDetalle detalle)
+        private void CreateSeatButton(int row, int column, VehiculoConfiguracionDetalle detalle)
         {
             PictureBox button = new PictureBox();
             button.Name = String.Format("{0}{1}{2}{3}{4}", SeatNamePrefix, SeatNameRowPrefix, row, SeatNameColumnPrefix, column);
@@ -272,7 +274,11 @@ namespace CSTransporteKiosko
             panelSeatLayout.Controls.Add(button, column, row);
             button.Dock = DockStyle.Fill;
             button.MouseUp += Seat_Select;
+            button.Paint += Seat_Paint;
             button = null;
+
+            // Draw seat number on screen
+
 
             // Add to seats map dictionary
             if (detalle.Tipo == VehiculoConfiguracionDetalle.TipoAsiento && !String.IsNullOrEmpty(detalle.AsientoIdentificacion))
@@ -282,6 +288,27 @@ namespace CSTransporteKiosko
                 rowAndCol.Column = column;
                 seatsMap.Add(detalle.AsientoIdentificacion, rowAndCol);
                 rowAndCol = null;
+            }
+        }
+
+        private void Seat_Paint(object sender, PaintEventArgs e)
+        {
+            PictureBox pictureBoxSeat = (PictureBox)sender;
+            string asiento = CardonerSistemas.String.GetSubString(pictureBoxSeat.Tag.ToString(), 1, "|");
+            if (asiento != string.Empty)
+            {
+                Brush brush;
+                if (kioskoConfiguracion.ValorVehiculoConfiguracionAsientoIdentificacionForeColor.HasValue)
+                {
+                    brush = new SolidBrush(kioskoConfiguracion.ValorVehiculoConfiguracionAsientoIdentificacionForeColor.Value);
+                }
+                else
+                {
+                    brush = Brushes.Black;
+                }
+                Point point = new Point(kioskoConfiguracion.ValorVehiculoConfiguracionAsientoIdentificacionPosicionX, kioskoConfiguracion.ValorVehiculoConfiguracionAsientoIdentificacionPosicionY);
+
+                e.Graphics.DrawString(asiento, kioskoConfiguracion.ValorVehiculoConfiguracionAsientoIdentificacionFont, brush, point);
             }
         }
 
@@ -321,7 +348,7 @@ namespace CSTransporteKiosko
                     messageBox.Show("No se puede seleccionar este asiento ya que se encuentra ocupado.");
                     break;
                 case VehiculoConfiguracionDetalle.TipoAsiento:
-                    if (seatsSelected.Count == cantidadAsientosASeleccionar)
+                    if (seatsAssignation.Count == cantidadAsientosASeleccionar)
                     {
                         if (cantidadAsientosASeleccionar == 1)
                         {
@@ -336,15 +363,22 @@ namespace CSTransporteKiosko
                     {
                         pictureBox.Image = kioskoConfiguracion.ValorVehiculoConfiguracionAsientoSeleccionado;
                         pictureBox.Tag = String.Format("{0}|{1}", VehiculoConfiguracionDetalle.TipoAsientoSeleccionado, asiento);
-                        seatsSelected.Add(asiento);
-                        TablaAsignacionAgregarAsiento(asiento);
+                        foreach (BusquedaReservas.Persona persona in personas)
+                        {
+                            if (!seatsAssignation.ContainsValue(persona.IDPersona))
+                            {
+                                seatsAssignation.Add(asiento, persona.IDPersona);
+                                break;
+                            }
+                        }
+                        SeatsAssignationTableRefresh();
                     }
                     break;
                 case VehiculoConfiguracionDetalle.TipoAsientoSeleccionado:
                     pictureBox.Image = kioskoConfiguracion.ValorVehiculoConfiguracionAsientoLibre;
                     pictureBox.Tag = String.Format("{0}|{1}", VehiculoConfiguracionDetalle.TipoAsiento, asiento);
-                    seatsSelected.RemoveAt(seatsSelected.Count -1);
-                    TablaAsignacionBorrarUltimoAsiento();
+                    seatsAssignation.Remove(asiento);
+                    SeatsAssignationTableRefresh();
                     break;
                 default:
                     break;
@@ -355,68 +389,121 @@ namespace CSTransporteKiosko
 
         #region Seats assignation table
 
-        private void TablaAsignacionVaciar()
+        private void CreateSeatsAssignationTable()
         {
-            for (int row = 1, j = panelPasajerosAsientos.RowCount; row < j; row++)
-            {
-                // Eliminar label del pasajero
-                Label pasajero = (Label)panelPasajerosAsientos.GetControlFromPosition(0, row);
-                if (pasajero != null)
-                {
-                    panelPasajerosAsientos.Controls.Remove(pasajero);
-                    pasajero.Dispose();
-                    pasajero = null;
-                }
+            SuspendLayout();
 
-                // Eliminar label del asiento
-                Label asiento = (Label)panelPasajerosAsientos.GetControlFromPosition(0, row);
-                if (asiento != null)
-                { 
-                    panelPasajerosAsientos.Controls.Remove(asiento);
-                    asiento.Dispose();
-                    asiento = null;
-                }
-            }
-            panelPasajerosAsientos.RowCount = 1;
+            DestroyPreviousSeatsAssignationTable();
+            CreateSeatsAssignationTablePanelHeaders();
+            CreateSeatsAssignationTablePanelRows();
+
+            ResumeLayout();
         }
 
-        private void TablaAsignacionCrearPasajeros()
+        private void DestroyPreviousSeatsAssignationTable()
         {
-            TablaAsignacionVaciar();
-
-            // Completo la tabla de asignación de asientos con los nombres de los pasajeros
-            foreach (BusquedaReservas.Persona persona in personas)
+            if (panelSeatsAssignation != null)
             {
-                panelPasajerosAsientos.RowCount++;
+                foreach (Label label in panelSeatsAssignation.Controls)
+                {
+                    panelSeatsAssignation.Controls.Remove(label);
+                    label.Dispose();
+                }
 
-                // Pasajero
+                panelSeatsAssignation.Dispose();
+            }
+
+            seatsAssignation.Clear();
+        }
+
+        private void CreateSeatsAssignationTablePanelHeaders()
+        {
+            // Create the TableLayoutPanel
+            panelSeatsAssignation = new TableLayoutPanel();
+            panelSeatsAssignationContainer.Controls.Add(panelSeatsAssignation, 1, 1);
+            panelSeatsAssignation.Dock = DockStyle.Fill;
+            panelSeatsAssignation.Name = "panelSeatsAssignation";
+            panelSeatsAssignation.Location = new System.Drawing.Point(0, 0);
+            panelSeatsAssignation.TabIndex = 0;
+            panelSeatsAssignation.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            panelSeatsAssignation.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panelSeatsAssignation.AutoSize = true;
+
+            // Prepare columns
+            panelSeatsAssignation.ColumnCount = 2;
+            for (int column = 0; column < panelSeatsAssignation.ColumnCount; column++)
+            {
+                panelSeatsAssignation.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            }
+
+            // Prepare header columns labels
+            Single height = Convert.ToSingle(100) / Convert.ToSingle(personas.Count + 1);
+            panelSeatsAssignation.RowCount = personas.Count + 1;
+            panelSeatsAssignation.RowStyles.Add(new RowStyle(SizeType.Percent, height));
+            // Passenger header
+            Label labelPassengerHeader = new Label();
+            panelSeatsAssignation.Controls.Add(labelPassengerHeader, 0, 0);
+            labelPassengerHeader.AutoSize = true;
+            labelPassengerHeader.Name = "labelPassengerHeader";
+            labelPassengerHeader.Text = "Pasajero";
+            labelPassengerHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            labelPassengerHeader.Dock = DockStyle.Fill;
+            labelPassengerHeader.Font = kioskoConfiguracion.ValorInformacionPrincipalFont;
+            // Seats header
+            Label labelSeatHeader = new Label();
+            panelSeatsAssignation.Controls.Add(labelSeatHeader, 1, 0);
+            labelSeatHeader.AutoSize = true;
+            labelSeatHeader.Name = "labelSeatHeader";
+            labelSeatHeader.Text = "Asiento";
+            labelSeatHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            labelSeatHeader.Dock = DockStyle.Fill;
+            labelSeatHeader.Font = labelPassengerHeader.Font;
+        }
+
+        private void CreateSeatsAssignationTablePanelRows()
+        {
+            Single height = Convert.ToSingle(100) / Convert.ToSingle(panelSeatsAssignation.RowCount);
+
+            // Prepare rows
+            for (int row = 1; row < panelSeatsAssignation.RowCount; row++)
+            {
+                panelSeatsAssignation.RowStyles.Add(new RowStyle(SizeType.Percent, height));
+
+                // Create passenger label
                 Label labelPasajero = new Label();
-                panelPasajerosAsientos.Controls.Add(labelPasajero, 0, panelPasajerosAsientos.RowCount - 1);
-                labelPasajero.Text = persona.ApellidoNombre;
+                panelSeatsAssignation.Controls.Add(labelPasajero, 0, row);
+                labelPasajero.Text = personas[row - 1].ApellidoNombre;
                 labelPasajero.Font = kioskoConfiguracion.ValorInformacionSecundariaFont;
+                labelPasajero.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
                 labelPasajero.AutoSize = true;
                 labelPasajero.Dock = DockStyle.Fill;
 
-                // Asiento
+                // Create seat label
                 Label labelAsiento = new Label();
-                panelPasajerosAsientos.Controls.Add(labelAsiento, 1, panelPasajerosAsientos.RowCount - 1);
+                panelSeatsAssignation.Controls.Add(labelAsiento, 1, row);
                 labelAsiento.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
                 labelAsiento.Font = kioskoConfiguracion.ValorInformacionSecundariaFont;
+                labelAsiento.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
                 labelAsiento.AutoSize = true;
                 labelAsiento.Dock = DockStyle.Fill;
             }
         }
 
-        private void TablaAsignacionAgregarAsiento(string asiento)
+        private void SeatsAssignationTableRefresh()
         {
-            Label asientoLabel = (Label)panelPasajerosAsientos.GetControlFromPosition(1, seatsSelected.Count);
-            asientoLabel.Text = asiento;
-        }
-
-        private void TablaAsignacionBorrarUltimoAsiento()
-        {
-            Label asientoLabel = (Label)panelPasajerosAsientos.GetControlFromPosition(1, seatsSelected.Count + 1);
-            asientoLabel.Text = "";
+            for (int personaindex = 0; personaindex < personas.Count; personaindex++)
+            {
+                Label labelAsiento = (Label)panelSeatsAssignation.GetControlFromPosition(1, personaindex + 1);
+                string asiento = seatsAssignation.FirstOrDefault(s => s.Value == personas[personaindex].IDPersona).Key;
+                if (asiento == null)
+                {
+                    labelAsiento.Text = string.Empty;
+                }
+                else
+                {
+                    labelAsiento.Text = asiento;
+                }
+            }
         }
 
         #endregion
