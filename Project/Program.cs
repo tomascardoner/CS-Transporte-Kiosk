@@ -49,7 +49,7 @@ namespace CSTransporteKiosko
                 steps.Hide();
                 welcome.ShowDialog();
 
-                steps.PrepararParaMostrar(dbLocal, dbEmpresa, kiosko, messageBox);
+                steps.PrepararParaMostrar(dbLocal, dbEmpresa, kiosko, messageBox, ticket, printer);
                 if (steps.ShowDialog() == DialogResult.Cancel)
                 {
                     break;

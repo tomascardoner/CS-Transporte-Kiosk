@@ -8,9 +8,16 @@ namespace CSTransporteKiosko
 {
     public partial class Paso3 : UserControl
     {
+
+        #region Declarations
+
         private List<BusquedaReservas.Persona> personasSeleccionadas = new List<BusquedaReservas.Persona>();
 
         public List<BusquedaReservas.Persona> PersonasSeleccionadas { get => personasSeleccionadas; }
+
+        #endregion
+
+        #region Main functions
 
         public Paso3()
         {
@@ -99,13 +106,6 @@ namespace CSTransporteKiosko
             }
         }
 
-        public void ClickEnPasajero(object sender, C1.Win.C1Tile.TileEventArgs e)
-        {
-            e.Tile.Checked = !e.Tile.Checked;
-
-            // TODO: Raise activity event
-        }
-
         public bool Verificar(ref FormMessageBox messageBox)
         {
             if (tilecontrolPasajeros.CheckedTiles.Length == 0)
@@ -122,5 +122,19 @@ namespace CSTransporteKiosko
                 return true;
             }
         }
+
+        #endregion
+
+        #region Events
+
+        public void ClickEnPasajero(object sender, C1.Win.C1Tile.TileEventArgs e)
+        {
+            e.Tile.Checked = !e.Tile.Checked;
+
+            // TODO: Raise activity event
+        }
+
+        #endregion
+
     }
 }

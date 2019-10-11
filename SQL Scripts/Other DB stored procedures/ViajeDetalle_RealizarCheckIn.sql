@@ -15,7 +15,8 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_ViajeDeta
 GO
 
 CREATE PROCEDURE usp_ViajeDetalle_RealizarCheckIn
-	@IDViajeDetalle int
+	@IDViajeDetalle int,
+	@AsientoIdentificacion varchar(5)
 	AS
 
 	BEGIN
@@ -23,7 +24,7 @@ CREATE PROCEDURE usp_ViajeDetalle_RealizarCheckIn
 		SET NOCOUNT ON;
 
 		UPDATE ViajeDetalle
-			SET Realizado = 1, FechaHoraModificacion = GETDATE()
+			SET AsientoIdentificacion = @AsientoIdentificacion, Realizado = 1, FechaHoraModificacion = GETDATE()
 			WHERE IDViajeDetalle = @IDViajeDetalle
 	END
 GO

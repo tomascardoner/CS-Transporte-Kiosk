@@ -152,7 +152,7 @@ namespace CSTransporteKiosko
 
         #region CheckIn
 
-        public bool RealizarCheckIn(SqlConnection connection, byte idEmpresa, int idViajeDetalle)
+        public bool RealizarCheckIn(SqlConnection connection, int idViajeDetalle, string asientoIdentificacion)
         {
             Cursor.Current = Cursors.WaitCursor;
 
@@ -161,8 +161,8 @@ namespace CSTransporteKiosko
                 SqlCommand command = new SqlCommand("usp_ViajeDetalle_RealizarCheckIn", connection);
                 command.CommandType = CommandType.StoredProcedure;
 
-                command.Parameters.AddWithValue("@IDEmpresa", idEmpresa);
                 command.Parameters.AddWithValue("@IDViajeDetalle", idViajeDetalle);
+                command.Parameters.AddWithValue("@asientoIdentificacion", asientoIdentificacion);
 
                 command.ExecuteNonQuery();
 

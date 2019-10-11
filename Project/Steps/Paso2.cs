@@ -5,10 +5,17 @@ namespace CSTransporteKiosko
 {
     public partial class Paso2 : UserControl
     {
+
+        #region Declarations
+
         bool buscarPorDocumento;
 
         public event EventHandler SearchButtonPressed;
         public string ValorIngresado { get => textboxValor.Text.Trim(); }
+
+        #endregion
+
+        #region Main functions
 
         public Paso2()
         {
@@ -74,9 +81,16 @@ namespace CSTransporteKiosko
             return true;
         }
 
+        #endregion
+
+        #region Events
+
         private void buttonBuscar_Click(object sender, EventArgs e)
         {
             SearchButtonPressed(this, e);
         }
+
+        #endregion
+
     }
 }

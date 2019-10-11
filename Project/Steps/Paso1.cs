@@ -5,8 +5,15 @@ namespace CSTransporteKiosko
 {
     public partial class Paso1 : UserControl
     {
+
+        #region Declarations
+
         public event EventHandler TipoBusquedaCambiada;
         public  bool BusquedaPorDocumento { get => radioDocumento.Checked; }
+
+        #endregion
+
+        #region Main functions
 
         public Paso1()
         {
@@ -45,6 +52,10 @@ namespace CSTransporteKiosko
             }
         }
 
+        #endregion
+
+        #region Events
+
         private void OpcionSeleccionada(object sender, System.EventArgs e)
         {
             RadioButton radioButton = (RadioButton)sender;
@@ -53,5 +64,8 @@ namespace CSTransporteKiosko
                 TipoBusquedaCambiada(this, e);
             }
         }
+
+        #endregion
+
     }
 }

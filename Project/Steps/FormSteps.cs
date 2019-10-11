@@ -1,4 +1,5 @@
 ﻿using CardonerSistemas.Database.ADO;
+using CardonerSistemas.PointOfSale;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -26,6 +27,8 @@ namespace CSTransporteKiosko
         SQLServer dbLocal;
         SQLServer dbEmpresa;
         Kiosko kiosko;
+        TicketPlantilla ticket = new TicketPlantilla();
+        Printer printer = new Printer();
 
         // Reservas
         List<BusquedaReservas.Persona> personas = new List<BusquedaReservas.Persona>();
@@ -143,7 +146,7 @@ namespace CSTransporteKiosko
             AvanzarPaso();
         }
 
-        internal void PrepararParaMostrar(SQLServer databaseLocal, SQLServer databaseEmpresa, Kiosko kioskoObj, FormMessageBox formMessageBox)
+        internal void PrepararParaMostrar(SQLServer databaseLocal, SQLServer databaseEmpresa, Kiosko kioskoObj, FormMessageBox formMessageBox, TicketPlantilla ticket, CardonerSistemas.PointOfSale.Printer printer)
         {
             dbLocal = databaseLocal;
             dbEmpresa = databaseEmpresa;
@@ -181,10 +184,7 @@ namespace CSTransporteKiosko
                     return paso3.Verificar(ref messageBox);
 
                 case 4: // Selección de asiento
-                    return paso4.Verificar(ref messageBox, paso3.PersonasSeleccionadas.Count);
-
-                case 5: // Realizar chekin e imprimir ticket
-                    return true; // RealizarCheckInEImprimirTicket();
+                    return paso4.Verificar(ref messageBox);
 
                 default:
                     break;
@@ -207,6 +207,7 @@ namespace CSTransporteKiosko
                         }
                         pasoActual++;
                         break;
+
                     case 3:
                         if (personas[0].IDVehiculoConfiguracion == Byte.MinValue)
                         {
@@ -217,9 +218,14 @@ namespace CSTransporteKiosko
                             pasoActual++;
                         }
                         break;
+
                     case 4:
-                        pasoActual = 1;
+                        if (RealizarCheckInEImprimirTicket())
+                        {
+                            pasoActual = 1;
+                        }
                         break;
+
                     default:
                         pasoActual++;
                         break;
@@ -248,7 +254,8 @@ namespace CSTransporteKiosko
                     paso3.PrepararParaMostrar(personas);
                     break;
                 case 4:
-                    paso4.PrepararParaMostrar(messageBox, dbLocal, dbEmpresa, kiosko.KioskoConfiguracion, personas[0].IDVehiculoConfiguracion, personas[0].IDViaje, paso3.PersonasSeleccionadas);
+                    paso4.Personas = paso3.PersonasSeleccionadas;
+                    paso4.PrepararParaMostrar(messageBox, dbLocal, dbEmpresa, kiosko.KioskoConfiguracion, personas[0].IDVehiculoConfiguracion, personas[0].IDViaje);
                     break;
                 default:
                     break;
@@ -271,37 +278,31 @@ namespace CSTransporteKiosko
 
         #endregion
 
-        //if (cantidadPersonas == 1)
-        //{
-        //    mensajeConfirmacion = "¿Confirma la asistencia de 1 Persona?";
-        //}
-        //else
-        //{
-        //    mensajeConfirmacion = String.Format("¿Confirma la asistencia de {0} Personas?", cantidadPersonas);
-        //}
-        //return (messageBox.Show(mensajeConfirmacion) == DialogResult.Yes);
+        #region Check-in
 
-        //private bool RealizarCheckInEImprimirTicket()
-        //{
-        //    foreach (BusquedaReservas.Persona persona in listPersonasSeleccionadas)
-        //    {
-        //        ViajeDetalle viajeDetalle = new ViajeDetalle();
-        //        if (viajeDetalle.RealizarCheckIn(dbEmpresa.Connection, kiosko.IdEmpresa, persona.IDViajeDetalle))
-        //        {
-        //            viajeDetalle = null;
-        //            if (printer.IsReady)
-        //            {
-        //                return ticket.SendCommandsToPrinter(persona, printer);
-        //            }
-        //            else
-        //            {
-        //                return false;
-        //            }
-        //        }
-        //        viajeDetalle = null;
-        //    }
-        //    return false;
-        //}
+        private bool RealizarCheckInEImprimirTicket()
+        {
+            foreach (BusquedaReservas.Persona persona in paso4.Personas)
+            {
+                ViajeDetalle viajeDetalle = new ViajeDetalle();
+                if (!viajeDetalle.RealizarCheckIn(dbEmpresa.Connection, persona.IDViajeDetalle, persona.AsientoIdentificacion))
+                {
+                    viajeDetalle = null;
+                    return false;
+                }
+                viajeDetalle = null;
+                if (printer.IsReady)
+                {
+                    if (!ticket.SendCommandsToPrinter(persona, printer))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        #endregion
 
     }
 }

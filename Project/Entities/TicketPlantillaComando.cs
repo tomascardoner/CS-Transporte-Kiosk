@@ -220,6 +220,8 @@ namespace CSTransporteKiosko
             replacedText = replacedText.Replace("Apellido", persona.Apellido);
             replacedText = replacedText.Replace("Nombre", persona.Nombre);
 
+            replacedText = replacedText.Replace("AsientoIdentificacion", persona.AsientoIdentificacion);
+
             return replacedText;
         }
 

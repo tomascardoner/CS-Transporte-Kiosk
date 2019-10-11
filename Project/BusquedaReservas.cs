@@ -40,6 +40,7 @@ namespace CSTransporteKiosko
             public string VehiculoNombre { get; set; } = string.Empty;
             public byte IDVehiculoConfiguracion { get; set; } = 0;
             public bool Realizado { get; set; } = false;
+            public string AsientoIdentificacion { get; set; } = string.Empty;
         }
 
         static private bool ConectarABaseDeDatos(SQLServer database)
@@ -190,7 +191,7 @@ namespace CSTransporteKiosko
                         nuevaPersona.DocumentoTipo = SQLServer.DataReaderGetStringSafeAsEmpty(dataReader, "DocumentoTipo");
                         nuevaPersona.DocumentoNumero = SQLServer.DataReaderGetStringSafeAsNull(dataReader, "DocumentoNumero");
                         nuevaPersona.IDViaje = IDViaje;
-                        nuevaPersona.IDViajeDetalle = IDViajeDetalle;
+                        nuevaPersona.IDViajeDetalle = SQLServer.DataReaderGetInteger(dataReader, "IDViajeDetalle");
                         nuevaPersona.LugarOrigen = SQLServer.DataReaderGetString(dataReader, "LugarOrigen");
                         nuevaPersona.LugarGrupoOrigen = SQLServer.DataReaderGetString(dataReader, "LugarGrupoOrigen");
                         nuevaPersona.FechaHoraOrigen = SQLServer.DataReaderGetDateTime(dataReader, "FechaHoraOrigen");
