@@ -284,6 +284,7 @@ namespace CSTransporteKiosko
         {
             foreach (BusquedaReservas.Persona persona in paso4.Personas)
             {
+                // Guardo el check-in de la reserva en la base de datos
                 ViajeDetalle viajeDetalle = new ViajeDetalle();
                 if (!viajeDetalle.RealizarCheckIn(dbEmpresa.Connection, persona.IDViajeDetalle, persona.AsientoIdentificacion))
                 {
@@ -291,14 +292,20 @@ namespace CSTransporteKiosko
                     return false;
                 }
                 viajeDetalle = null;
+
                 if (printer.IsReady)
                 {
+                    // Imprimo el ticket de la reserva
                     if (!ticket.SendCommandsToPrinter(persona, printer))
                     {
                         return false;
                     }
                 }
             }
+
+            // Actualizo la fecha/hora de la última operación del kiosko
+            kiosko.ActualizarUltimaOperacion(dbLocal.Connection, kiosko.IdKiosko);
+
             return true;
         }
 

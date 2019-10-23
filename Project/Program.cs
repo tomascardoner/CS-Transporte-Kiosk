@@ -89,7 +89,7 @@ namespace CSTransporteKiosko
             if (!kiosko.IsFound)
             {
                 // La Mac Address del Kiosko no está en la base de datos, guardo en el log
-                AgregarEventLog(ref dbLocal, EventLog.TipoLoginFallido, 0, EventLog.MensajeLoginFallido, String.Format("MAC Address: {0}", macAddress));
+                AgregarEventLog(dbLocal, EventLog.TipoLoginFallido, 0, EventLog.MensajeLoginFallido, String.Format("MAC Address: {0}", macAddress));
                 MessageBox.Show("La MAC Address del Kiosko no está registrada en la base de datos.");
                 return false;
             }
@@ -134,11 +134,12 @@ namespace CSTransporteKiosko
             }
 
             // Se completó todo correctamente
-            AgregarEventLog(ref dbLocal, EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
+            kiosko.ActualizarUltimaConexion(dbLocal.Connection, kiosko.IdKiosko);
+            AgregarEventLog(dbLocal, EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
             return true;
         }
 
-        static private void AgregarEventLog(ref SQLServer dbLocal, string tipo, byte IdKiosko, string mensaje, string notas)
+        static private void AgregarEventLog(SQLServer dbLocal, string tipo, byte IdKiosko, string mensaje, string notas)
         {
             EventLog eventLog = new EventLog
             {

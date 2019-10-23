@@ -37,7 +37,8 @@ CREATE PROCEDURE usp_ReservasPorDocumento
 				INNER JOIN ViajeDetalle AS vd ON p.IDPersona = vd.IDPersona)
 				INNER JOIN Viaje AS v ON vd.FechaHora = v.FechaHora AND vd.IDRuta = v.IDRuta)
 				INNER JOIN RutaDetalle AS rd ON v.IDRuta = rd.IDRuta AND rd.IDLugar = @IDLugar
-			WHERE DATEADD(minute, rd.Duracion, v.FechaHora) BETWEEN DATEADD(minute, -@LugarDuracionPreviaMaxima, GETDATE()) AND DATEADD(minute, -@LugarDuracionPreviaMinima, GETDATE())
+			WHERE vd.IDOrigen = @IDLugar
+				AND DATEADD(minute, rd.Duracion, v.FechaHora) BETWEEN DATEADD(minute, -@LugarDuracionPreviaMaxima, GETDATE()) AND DATEADD(minute, -@LugarDuracionPreviaMinima, GETDATE())
 				AND p.DocumentoNumero = @DocumentoNumero
 	END
 GO

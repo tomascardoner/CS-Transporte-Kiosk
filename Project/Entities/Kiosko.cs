@@ -9,6 +9,7 @@ namespace CSTransporteKiosko
 {
     class Kiosko
     {
+
         #region Entity definition properties
 
         private const string EntityFieldNameIdKiosko = "IDKiosko";
@@ -242,5 +243,62 @@ namespace CSTransporteKiosko
         }
 
         #endregion
+
+        #region Save data to database
+
+        public bool ActualizarUltimaConexion(SqlConnection connection, byte idKiosko)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            try
+            {
+                SqlCommand command = new SqlCommand("usp_Kiosko_ActualizarUltimaConexion", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@IDKiosko", idKiosko);
+
+                command.ExecuteNonQuery();
+
+                command.Dispose();
+                command = null;
+
+                Cursor.Current = Cursors.Default;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Cursor.Current = Cursors.Default;
+                CardonerSistemas.Error.ProcessError(ex, "Error al actualizar la última conexión del Kiosko.");
+                return false;
+            }
+        }
+
+        public bool ActualizarUltimaOperacion(SqlConnection connection, byte idKiosko)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            try
+            {
+                SqlCommand command = new SqlCommand("usp_Kiosko_ActualizarUltimaOperacion", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@IDKiosko", idKiosko);
+
+                command.ExecuteNonQuery();
+
+                command.Dispose();
+                command = null;
+
+                Cursor.Current = Cursors.Default;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Cursor.Current = Cursors.Default;
+                CardonerSistemas.Error.ProcessError(ex, "Error al actualizar la última operación del Kiosko.");
+                return false;
+            }
+        }
+
+        #endregion
+
     }
 }
