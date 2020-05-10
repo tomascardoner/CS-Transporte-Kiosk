@@ -1,6 +1,7 @@
 ﻿using CardonerSistemas.Database.ADO;
 using CardonerSistemas.PointOfSale;
 using System;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace CSTransporteKiosko
@@ -11,12 +12,12 @@ namespace CSTransporteKiosko
         /// Application for CS-Transporte Kiosko
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            #region Objects creation
+            #region Objects and variable creation
 
             // Bases de datos y entidades
             SQLServer dbLocal = new SQLServer();
@@ -24,6 +25,12 @@ namespace CSTransporteKiosko
             Kiosko kiosko = new Kiosko();
             TicketPlantilla ticket = new TicketPlantilla();
             Printer printer = new Printer();
+
+            // Declarations
+            if (args.Length > 0)
+            {
+                Globals.debug = (args[0].ToUpper() == "DEBUG");
+            }
 
             #endregion
 
@@ -64,7 +71,10 @@ namespace CSTransporteKiosko
 
             dbLocal.Close();
             dbEmpresa.Close();
-            printer.Close();
+            if (kiosko != null && kiosko.KioskoConfiguracion != null)
+            {
+                printer.ReleaseAndClose(kiosko.KioskoConfiguracion.ValorPOSPrinterReleaseTimeoutSeconds);
+            }
 
             #endregion
 
@@ -79,6 +89,10 @@ namespace CSTransporteKiosko
             {
                 return false;
             }
+            if (Globals.debug)
+            {
+                MessageBox.Show("Se estableció la conexión a la base de datos local.", "DEBUG", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
 
             // Cargo los datos del Kiosko a partir de la Mac Address de la PC
             string macAddress = kiosko.ObtenerMacAddressLocal();
@@ -89,7 +103,7 @@ namespace CSTransporteKiosko
             if (!kiosko.IsFound)
             {
                 // La Mac Address del Kiosko no está en la base de datos, guardo en el log
-                AgregarEventLog(dbLocal, EventLog.TipoLoginFallido, 0, EventLog.MensajeLoginFallido, String.Format("MAC Address: {0}", macAddress));
+                AgregarEventLog(dbLocal.Connection, EventLog.TipoLoginFallido, 0, EventLog.MensajeLoginFallido, String.Format("MAC Address: {0}", macAddress));
                 MessageBox.Show("La MAC Address del Kiosko no está registrada en la base de datos.");
                 return false;
             }
@@ -104,6 +118,10 @@ namespace CSTransporteKiosko
             {
                 return false;
             }
+            if (Globals.debug)
+            {
+                MessageBox.Show("Se estableció la conexión a la base de datos de la Empresa.", "DEBUG", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
 
             // Cargo la configuración del Kiosko (Logos, Colores, Tipografías, Tiempos, Ticket, etc)
             if (!kiosko.KioskoConfiguracionCargar(dbLocal.Connection))
@@ -113,6 +131,10 @@ namespace CSTransporteKiosko
             if (!kiosko.KioskoConfiguracion.KioskoConfiguracionValoresCargar(dbLocal.Connection))
             {
                 return false;
+            }
+            if (Globals.debug)
+            {
+                MessageBox.Show("Se cargó la configuración del Kiosko.", "DEBUG", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             // Cargo el formato del Ticket a imprimir para entregar al cliente
@@ -124,6 +146,10 @@ namespace CSTransporteKiosko
             {
                 return false;
             }
+            if (Globals.debug)
+            {
+                MessageBox.Show("Se cargó la plantilla y los comandos del Ticket.", "DEBUG", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
 
             if (!PreparaImpresora(ref printer, kiosko.KioskoConfiguracion.ValorPOSPrinterClaimTimeoutSeconds))
             {
@@ -132,23 +158,15 @@ namespace CSTransporteKiosko
                     return false;
                 }
             }
+            if (Globals.debug)
+            {
+                MessageBox.Show($"Se inicializó y preparó la impresora. IsReady={printer.IsReady}", "DEBUG", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
 
             // Se completó todo correctamente
             kiosko.ActualizarUltimaConexion(dbLocal.Connection, kiosko.IdKiosko);
-            AgregarEventLog(dbLocal, EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
+            AgregarEventLog(dbLocal.Connection, EventLog.TipoLoginExitoso, kiosko.IdKiosko, EventLog.MensajeLoginExitoso, String.Empty);
             return true;
-        }
-
-        static private void AgregarEventLog(SQLServer dbLocal, string tipo, byte IdKiosko, string mensaje, string notas)
-        {
-            EventLog eventLog = new EventLog
-            {
-                Tipo = tipo,
-                IdKiosko = IdKiosko,
-                Mensaje = mensaje,
-                Notas = notas
-            };
-            eventLog.Agregar(dbLocal.Connection);
         }
 
         static private bool PreparaImpresora(ref Printer printer, int claimTimeout)
@@ -213,6 +231,22 @@ namespace CSTransporteKiosko
         }
 
         #endregion
+
+        #region EventLog
+
+        static public void AgregarEventLog(SqlConnection connection, string tipo, byte IdKiosko, string mensaje, string notas)
+        {
+            EventLog eventLog = new EventLog
+            {
+                Tipo = tipo,
+                IdKiosko = IdKiosko,
+                Mensaje = mensaje,
+                Notas = notas
+            };
+            eventLog.Agregar(connection);
+        }
+
+        #endregion 
 
     }
 }

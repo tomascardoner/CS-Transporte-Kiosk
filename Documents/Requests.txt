@@ -1,0 +1,10 @@
+2020-05-06:
+	- Cambiar el color de las teclas/botones al hacer click
+	- Indicar con un reloj que está trabajando
+	- Ver video que no funciona
+	- Poner botón de Siguiente en lugar de buscar
+	- Mover teclados?
+	- Agregar columna de Asiento en las planillas
+	- Poder especificar la configuración de asientos en CS-Transporte
+	- Agregar el logo a la tabla TicketComando:
+		1	1	NULL	21	500	-2

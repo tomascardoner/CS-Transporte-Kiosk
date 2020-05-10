@@ -195,6 +195,10 @@ namespace CSTransporteKiosko
 
         public bool SendCommandsToPrinter(BusquedaReservas.Persona persona, CardonerSistemas.PointOfSale.Printer printer)
         {
+            if (Globals.debug)
+            {
+                MessageBox.Show("Inicio de impresión de ticket.", "DEBUG", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             foreach (TicketPlantillaComando comando in _TicketPlantillaComandos)
             {
                 if (comando.IdImagen.HasValue)
@@ -220,11 +224,29 @@ namespace CSTransporteKiosko
                         alignment = PosPrinter.PrinterBitmapLeft;
                     }
 
-                    return printer.PrintMemoryBitmap(bitmap, width, alignment);
+                    try
+                    {
+                        printer.PrintMemoryBitmap(bitmap, width, alignment);
+                    }
+                    catch (Exception ex)
+                    {
+                        Cursor.Current = Cursors.Default;
+                        CardonerSistemas.Error.ProcessError(ex, "Error al imprimir la imagen.");
+                        return false;
+                    }
                 }
                 else
                 {
-                    return printer.PrintLine(comando.GetTextReplacedWithFields(persona));
+                    try
+                    {
+                        printer.PrintLine(comando.GetTextReplacedWithFields(persona));
+                    }
+                    catch (Exception ex)
+                    {
+                        Cursor.Current = Cursors.Default;
+                        CardonerSistemas.Error.ProcessError(ex, "Error al imprimir la línea de texto.");
+                        return false;
+                    }
                 }
             }
             return true;

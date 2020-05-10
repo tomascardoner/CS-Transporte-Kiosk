@@ -38,9 +38,11 @@ CREATE PROCEDURE usp_PersonasPorReserva
 				INNER JOIN Lugar AS ld ON vd.IDDestino = ld.IDLugar)
 				INNER JOIN LugarGrupo AS lgd ON rdd.IDLugarGrupo = lgd.IDLugarGrupo)
 				LEFT JOIN Vehiculo AS vh ON v.IDVehiculo = vh.IDVehiculo
-			WHERE (@ReservaCodigo IS NOT NULL AND vd.ReservaCodigo = @ReservaCodigo)
-				OR (@ReservaCodigo IS NULL AND (vd.IDViaje = @IDViaje AND ISNULL(@GrupoNumero, 0) > 0 AND vd.GrupoNumero = @GrupoNumero))
-				OR (@ReservaCodigo IS NULL AND ISNULL(@GrupoNumero, 0) = 0 AND vd.IDViajeDetalle = @IDViajeDetalle)
+			WHERE ((@ReservaCodigo IS NOT NULL AND vd.ReservaCodigo = @ReservaCodigo)
+					OR (@ReservaCodigo IS NULL AND (vd.IDViaje = @IDViaje AND ISNULL(@GrupoNumero, 0) > 0 AND vd.GrupoNumero = @GrupoNumero))
+					OR (@ReservaCodigo IS NULL AND ISNULL(@GrupoNumero, 0) = 0 AND vd.IDViajeDetalle = @IDViajeDetalle))
+				AND vd.Realizado IS NULL
+			ORDER BY p.Apellido, p.Nombre
 	END
 GO
 

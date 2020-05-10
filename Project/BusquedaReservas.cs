@@ -127,8 +127,8 @@ namespace CSTransporteKiosko
                     dataReader.Read();
                     idViaje = SQLServer.DataReaderGetInteger(dataReader, "IDViaje");
                     idViajeDetalle = SQLServer.DataReaderGetInteger(dataReader, "IDViajeDetalle");
-                    reservaCodigo = SQLServer.DataReaderGetString(dataReader, "ReservaCodigo");
-                    grupoNumero = SQLServer.DataReaderGetByte(dataReader, "GrupoNumero");
+                    reservaCodigo = SQLServer.DataReaderGetStringSafeAsNull(dataReader, "ReservaCodigo");
+                    grupoNumero = SQLServer.DataReaderGetByteSafeAsMinValue(dataReader, "GrupoNumero");
 
                     dataReader.Close();
                     dataReader = null;
@@ -149,8 +149,6 @@ namespace CSTransporteKiosko
             catch (Exception)
             {
                 messageBox.Show("No se pudo obtener la información.");
-
-                command.Dispose();
                 command = null;
 
                 dataReader = null;
@@ -171,8 +169,22 @@ namespace CSTransporteKiosko
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@IDViaje", IDViaje);
                 command.Parameters.AddWithValue("@IDViajeDetalle", IDViajeDetalle);
-                command.Parameters.AddWithValue("@ReservaCodigo", ReservaCodigo);
-                command.Parameters.AddWithValue("@GrupoNumero", GrupoNumero);
+                if (ReservaCodigo == null)
+                {
+                    command.Parameters.AddWithValue("@ReservaCodigo", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@ReservaCodigo", ReservaCodigo);
+                }
+                if (GrupoNumero == byte.MinValue)
+                {
+                    command.Parameters.AddWithValue("@GrupoNumero", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@GrupoNumero", GrupoNumero);
+                }
 
                 dataReader = command.ExecuteReader(CommandBehavior.SingleResult);
                 command.Dispose();

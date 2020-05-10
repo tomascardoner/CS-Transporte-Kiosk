@@ -152,28 +152,30 @@ namespace CSTransporteKiosko
 
         #region CheckIn
 
-        public bool RealizarCheckIn(SqlConnection connection, int idViajeDetalle, string asientoIdentificacion)
+        public bool RealizarCheckIn(SqlConnection localConnection, SqlConnection empresaConnection, byte idKiosko, int idViajeDetalle, string asientoIdentificacion)
         {
             Cursor.Current = Cursors.WaitCursor;
 
             try
             {
-                SqlCommand command = new SqlCommand("usp_ViajeDetalle_RealizarCheckIn", connection);
+                SqlCommand command = new SqlCommand("usp_ViajeDetalle_RealizarCheckIn", empresaConnection);
                 command.CommandType = CommandType.StoredProcedure;
 
                 command.Parameters.AddWithValue("@IDViajeDetalle", idViajeDetalle);
-                command.Parameters.AddWithValue("@asientoIdentificacion", asientoIdentificacion);
+                command.Parameters.AddWithValue("@AsientoIdentificacion", asientoIdentificacion);
 
                 command.ExecuteNonQuery();
 
                 command.Dispose();
                 command = null;
 
+                Program.AgregarEventLog(localConnection, EventLog.TipoInformacion, idKiosko, "Se realizó el check-in correctamente.", $"IDViajeDetalle: {idViajeDetalle} - AsientoIdentificación: {asientoIdentificacion}");
                 Cursor.Current = Cursors.Default;
                 return true;
             }
             catch (Exception ex)
             {
+                Program.AgregarEventLog(localConnection, EventLog.TipoError, idKiosko, "No se pudo realizar el check-in correctamente.", $"IDViajeDetalle: {idViajeDetalle} - AsientoIdentificación: {AsientoIdentificacion} - Error: {ex.Message}");
                 Cursor.Current = Cursors.Default;
                 CardonerSistemas.Error.ProcessError(ex, "Error al hacer el check-in de la Reserva.");
                 return false;

@@ -2,6 +2,7 @@
 using CardonerSistemas.PointOfSale;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace CSTransporteKiosko
@@ -27,8 +28,8 @@ namespace CSTransporteKiosko
         SQLServer dbLocal;
         SQLServer dbEmpresa;
         Kiosko kiosko;
-        TicketPlantilla ticket = new TicketPlantilla();
-        Printer printer = new Printer();
+        TicketPlantilla ticket;
+        Printer printer;
 
         // Reservas
         List<BusquedaReservas.Persona> personas = new List<BusquedaReservas.Persona>();
@@ -81,7 +82,7 @@ namespace CSTransporteKiosko
             Icon = Properties.Resources.ICON_APP;
             BackColor = CardonerSistemas.Colors.SetColor(configuracion.ValorScreenBackColor, this.BackColor);
 
-            labelPasosVersion.Text = Application.ProductVersion;
+            labelPasosVersion.Text = $"v{Application.ProductVersion} ({System.IO.File.GetLastWriteTime(Assembly.GetExecutingAssembly().Location).ToString("yyyyMMddHHmm")})";
 
             // Media
             pictureboxPasosLogoCompaniaSoftware.Image = configuracion.ValorCompaniaSoftwareLogotipo;
@@ -146,11 +147,13 @@ namespace CSTransporteKiosko
             AvanzarPaso();
         }
 
-        internal void PrepararParaMostrar(SQLServer databaseLocal, SQLServer databaseEmpresa, Kiosko kioskoObj, FormMessageBox formMessageBox, TicketPlantilla ticket, CardonerSistemas.PointOfSale.Printer printer)
+        internal void PrepararParaMostrar(SQLServer databaseLocal, SQLServer databaseEmpresa, Kiosko kioskoObj, FormMessageBox formMessageBox, TicketPlantilla ticketObj, CardonerSistemas.PointOfSale.Printer printerObj)
         {
             dbLocal = databaseLocal;
             dbEmpresa = databaseEmpresa;
             kiosko = kioskoObj;
+            ticket = ticketObj;
+            printer = printerObj;
             messageBox = formMessageBox;
             pasoActual = 1;
             MostrarPasos();
@@ -166,6 +169,13 @@ namespace CSTransporteKiosko
                 case 2: // Introducción de los datos a buscar y búsqueda
                     if (paso2.Verificar(ref messageBox))
                     {
+                        // Verifico si es el mes, día, hora y minutos para salir del sistema
+                        if (paso2.ValorIngresado == DateTime.Now.ToString("MMddHHmm"))
+                        {
+                            DialogResult = DialogResult.Cancel;
+                            Close();
+                            return false;
+                        }
                         if (paso1.BusquedaPorDocumento)
                         {
                             return BusquedaReservas.BuscarViajesPorDocumento(dbEmpresa, kiosko.IdLugar, paso2.ValorIngresado, personas, kiosko.KioskoConfiguracion, messageBox);
@@ -286,7 +296,7 @@ namespace CSTransporteKiosko
             {
                 // Guardo el check-in de la reserva en la base de datos
                 ViajeDetalle viajeDetalle = new ViajeDetalle();
-                if (!viajeDetalle.RealizarCheckIn(dbEmpresa.Connection, persona.IDViajeDetalle, persona.AsientoIdentificacion))
+                if (!viajeDetalle.RealizarCheckIn(dbLocal.Connection, dbEmpresa.Connection, kiosko.IdKiosko, persona.IDViajeDetalle, persona.AsientoIdentificacion))
                 {
                     viajeDetalle = null;
                     return false;
