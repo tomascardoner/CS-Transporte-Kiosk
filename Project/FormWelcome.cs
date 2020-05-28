@@ -25,11 +25,11 @@ namespace CSTransporteKiosko
             labelIniciar.Font = configuracion.ValorInformacionSecundariaFont;
 
             // Media
-            wmPlayer.uiMode = "none";
-            wmPlayer.URL = configuracion.ValorVideo;
+            mediaPlayer.uiMode = "none";
+            mediaPlayer.URL = configuracion.ValorVideo;
         }
 
-        private void wmPlayer_Click(object sender, AxWMPLib._WMPOCXEvents_ClickEvent e)
+        private void mediaPlayer_ClickEvent(object sender, AxWMPLib._WMPOCXEvents_ClickEvent e)
         {
             Iniciar();
         }
@@ -42,11 +42,12 @@ namespace CSTransporteKiosko
         private void Iniciar()
         {
             // Si se está ejecutando el video, lo detengo
-            if (wmPlayer.playState == WMPLib.WMPPlayState.wmppsPlaying)
+            if (mediaPlayer.playState == WMPLib.WMPPlayState.wmppsPlaying)
             {
-                wmPlayer.Ctlcontrols.stop();
+                mediaPlayer.Ctlcontrols.stop();
             }
             this.Close();
         }
+
     }
 }

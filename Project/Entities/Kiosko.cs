@@ -26,8 +26,8 @@ namespace CSTransporteKiosko
         private const bool EntityDisplayNameIsFemale = false;
         private const string EntityDisplayName = "Kiosko";
 
-        private string EntityLoadByIdErrorMessage = String.Format("Error al cargar {0} {1} por Id.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
-        private string EntityLoadByMacAddressErrorMessage = String.Format("Error al cargar {0} {1} por MAC Address.", EntityDisplayNameIsFemale ? " la " : " el ", EntityDisplayName);
+        private string EntityLoadByIdErrorMessage = String.Format("Error al cargar {0} {1} por Id.", EntityDisplayNameIsFemale ? "la" : "el", EntityDisplayName);
+        private string EntityLoadByMacAddressErrorMessage = String.Format("Error al cargar {0} {1} por MAC Address.", EntityDisplayNameIsFemale ? "la" : "el", EntityDisplayName);
 
         private string EntityLoadErrorMessage;
         private string EntityLoadPropertiesErrorMessage;
